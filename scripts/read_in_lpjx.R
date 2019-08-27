@@ -1,14 +1,15 @@
-read_in_cabl <- function() {
+read_in_lpjx <- function() {
 
     ##################################################
     ##Read in output data and prepare data format
     ##################################################
     ## read cn amb obs
-    inDF1 <- read.csv("model_output/CABL/D1CABLEUCAMBAVG.csv",
-                      skip = 7, header=T)
+    inDF1 <- read.csv("model_output/LPJX/D1LPJXEUCAMBAVG.csv", skip=2)
     
-    inDF2 <- read.csv("model_output/CABL/D1CABLEUCELEAVG.csv",
-                      skip = 7, header=T)
+    inDF2 <- read.csv("model_output/LPJX/D1LPJXEUCELEAVG.csv", skip=2)
+    
+    inDF1[inDF1=="-9999"] <- 0
+    inDF2[inDF2=="-9999"] <- 0
     
     ### prepare a output df
     yr <- unique(inDF1$YEAR)
@@ -26,10 +27,10 @@ read_in_cabl <- function() {
         annDF1$CW[annDF1$YEAR == i] <- inDF1$CW[inDF1$YEAR==i&inDF1$DOY==1]
         annDF1$CCR[annDF1$YEAR == i] <- inDF1$CCR[inDF1$YEAR==i&inDF1$DOY==1]
         annDF1$CFR[annDF1$YEAR == i] <- inDF1$CFR[inDF1$YEAR==i&inDF1$DOY==1]
-        annDF1$CLIT1[annDF1$YEAR == i] <- inDF1$CLIT1[inDF1$YEAR==i&inDF1$DOY==1]
-        annDF1$CLIT2[annDF1$YEAR == i] <- inDF1$CLIT2[inDF1$YEAR==i&inDF1$DOY==1]
-        annDF1$CLIT3[annDF1$YEAR == i] <- inDF1$CLIT3[inDF1$YEAR==i&inDF1$DOY==1]
-        annDF1$CLIT4[annDF1$YEAR == i] <- inDF1$CLIT4[inDF1$YEAR==i&inDF1$DOY==1]
+        annDF1$CFLIT[annDF1$YEAR == i] <- inDF1$CFLIT[inDF1$YEAR==i&inDF1$DOY==1]
+        annDF1$CFLITA[annDF1$YEAR == i] <- inDF1$CFLITA[inDF1$YEAR==i&inDF1$DOY==1]
+        annDF1$CFLITB[annDF1$YEAR == i] <- inDF1$CFLITB[inDF1$YEAR==i&inDF1$DOY==1]
+        annDF1$CCLITB[annDF1$YEAR == i] <- inDF1$CCLITB[inDF1$YEAR==i&inDF1$DOY==1]
         annDF1$CSOIL[annDF1$YEAR == i] <- inDF1$CSOIL[inDF1$YEAR==i&inDF1$DOY==1]
         annDF1$TNC[annDF1$YEAR == i] <- inDF1$TNC[inDF1$YEAR==i&inDF1$DOY==1]
     }
@@ -40,10 +41,10 @@ read_in_cabl <- function() {
         annDF2$CW[annDF2$YEAR == i] <- inDF2$CW[inDF2$YEAR==i&inDF2$DOY==1]
         annDF2$CCR[annDF2$YEAR == i] <- inDF2$CCR[inDF2$YEAR==i&inDF2$DOY==1]
         annDF2$CFR[annDF2$YEAR == i] <- inDF2$CFR[inDF2$YEAR==i&inDF2$DOY==1]
-        annDF2$CLIT1[annDF2$YEAR == i] <- inDF2$CLIT1[inDF2$YEAR==i&inDF2$DOY==1]
-        annDF2$CLIT2[annDF2$YEAR == i] <- inDF2$CLIT2[inDF2$YEAR==i&inDF2$DOY==1]
-        annDF2$CLIT3[annDF2$YEAR == i] <- inDF2$CLIT3[inDF2$YEAR==i&inDF2$DOY==1]
-        annDF2$CLIT4[annDF2$YEAR == i] <- inDF2$CLIT4[inDF2$YEAR==i&inDF2$DOY==1]
+        annDF2$CFLIT[annDF2$YEAR == i] <- inDF2$CFLIT[inDF2$YEAR==i&inDF2$DOY==1]
+        annDF2$CFLITA[annDF2$YEAR == i] <- inDF2$CFLITA[inDF2$YEAR==i&inDF2$DOY==1]
+        annDF2$CFLITB[annDF2$YEAR == i] <- inDF2$CFLITB[inDF2$YEAR==i&inDF2$DOY==1]
+        annDF2$CCLITB[annDF2$YEAR == i] <- inDF2$CCLITB[inDF2$YEAR==i&inDF2$DOY==1]
         annDF2$CSOIL[annDF2$YEAR == i] <- inDF2$CSOIL[inDF2$YEAR==i&inDF2$DOY==1]
         annDF2$TNC[annDF2$YEAR == i] <- inDF2$TNC[inDF2$YEAR==i&inDF2$DOY==1]
     }
@@ -54,10 +55,10 @@ read_in_cabl <- function() {
         annDF1$delta_CW[annDF1$YEAR == i] <- inDF1$CW[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CW[inDF1$YEAR==i&inDF1$DOY==1]
         annDF1$delta_CCR[annDF1$YEAR == i] <- inDF1$CCR[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CCR[inDF1$YEAR==i&inDF1$DOY==1]
         annDF1$delta_CFR[annDF1$YEAR == i] <- inDF1$CFR[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CFR[inDF1$YEAR==i&inDF1$DOY==1]
-        annDF1$delta_CLIT1[annDF1$YEAR == i] <- inDF1$CLIT1[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CLIT1[inDF1$YEAR==i&inDF1$DOY==1]
-        annDF1$delta_CLIT2[annDF1$YEAR == i] <- inDF1$CLIT2[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CLIT2[inDF1$YEAR==i&inDF1$DOY==1]
-        annDF1$delta_CLIT3[annDF1$YEAR == i] <- inDF1$CLIT3[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CLIT3[inDF1$YEAR==i&inDF1$DOY==1]
-        annDF1$delta_CLIT4[annDF1$YEAR == i] <- inDF1$CLIT4[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CLIT4[inDF1$YEAR==i&inDF1$DOY==1]
+        annDF1$delta_CFLIT[annDF1$YEAR == i] <- inDF1$CFLIT[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CFLIT[inDF1$YEAR==i&inDF1$DOY==1]
+        annDF1$delta_CFLITA[annDF1$YEAR == i] <- inDF1$CFLITA[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CFLITA[inDF1$YEAR==i&inDF1$DOY==1]
+        annDF1$delta_CFLITB[annDF1$YEAR == i] <- inDF1$CFLITB[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CFLITB[inDF1$YEAR==i&inDF1$DOY==1]
+        annDF1$delta_CCLITB[annDF1$YEAR == i] <- inDF1$CCLITB[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CCLITB[inDF1$YEAR==i&inDF1$DOY==1]
         annDF1$delta_CSOIL[annDF1$YEAR == i] <- inDF1$CSOIL[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$CSOIL[inDF1$YEAR==i&inDF1$DOY==1]
         annDF1$delta_TNC[annDF1$YEAR == i] <- inDF1$TNC[inDF1$YEAR==(i+1)&inDF1$DOY==1]-inDF1$TNC[inDF1$YEAR==i&inDF1$DOY==1]
     }
@@ -67,10 +68,10 @@ read_in_cabl <- function() {
         annDF2$delta_CW[annDF2$YEAR == i] <- inDF2$CW[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CW[inDF2$YEAR==i&inDF2$DOY==1]
         annDF2$delta_CCR[annDF2$YEAR == i] <- inDF2$CCR[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CCR[inDF2$YEAR==i&inDF2$DOY==1]
         annDF2$delta_CFR[annDF2$YEAR == i] <- inDF2$CFR[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CFR[inDF2$YEAR==i&inDF2$DOY==1]
-        annDF2$delta_CLIT1[annDF2$YEAR == i] <- inDF2$CLIT1[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CLIT1[inDF2$YEAR==i&inDF2$DOY==1]
-        annDF2$delta_CLIT2[annDF2$YEAR == i] <- inDF2$CLIT2[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CLIT2[inDF2$YEAR==i&inDF2$DOY==1]
-        annDF2$delta_CLIT3[annDF2$YEAR == i] <- inDF2$CLIT3[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CLIT3[inDF2$YEAR==i&inDF2$DOY==1]
-        annDF2$delta_CLIT4[annDF2$YEAR == i] <- inDF2$CLIT4[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CLIT4[inDF2$YEAR==i&inDF2$DOY==1]
+        annDF2$delta_CFLIT[annDF2$YEAR == i] <- inDF2$CFLIT[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CFLIT[inDF2$YEAR==i&inDF2$DOY==1]
+        annDF2$delta_CFLITA[annDF2$YEAR == i] <- inDF2$CFLITA[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CFLITA[inDF2$YEAR==i&inDF2$DOY==1]
+        annDF2$delta_CFLITB[annDF2$YEAR == i] <- inDF2$CFLITB[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CFLITB[inDF2$YEAR==i&inDF2$DOY==1]
+        annDF2$delta_CCLITB[annDF2$YEAR == i] <- inDF2$CCLITB[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CCLITB[inDF2$YEAR==i&inDF2$DOY==1]
         annDF2$delta_CSOIL[annDF2$YEAR == i] <- inDF2$CSOIL[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$CSOIL[inDF2$YEAR==i&inDF2$DOY==1]
         annDF2$delta_TNC[annDF2$YEAR == i] <- inDF2$TNC[inDF2$YEAR==(i+1)&inDF2$DOY==1]-inDF2$TNC[inDF2$YEAR==i&inDF2$DOY==1]
     }
@@ -81,10 +82,10 @@ read_in_cabl <- function() {
     annDF1$delta_CW[annDF1$YEAR == i] <- inDF1$CW[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CW[inDF1$YEAR==i&inDF1$DOY==1]
     annDF1$delta_CCR[annDF1$YEAR == i] <- inDF1$CCR[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CCR[inDF1$YEAR==i&inDF1$DOY==1]
     annDF1$delta_CFR[annDF1$YEAR == i] <- inDF1$CFR[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CFR[inDF1$YEAR==i&inDF1$DOY==1]
-    annDF1$delta_CLIT1[annDF1$YEAR == i] <- inDF1$CLIT1[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CLIT1[inDF1$YEAR==i&inDF1$DOY==1]
-    annDF1$delta_CLIT2[annDF1$YEAR == i] <- inDF1$CLIT2[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CLIT2[inDF1$YEAR==i&inDF1$DOY==1]
-    annDF1$delta_CLIT3[annDF1$YEAR == i] <- inDF1$CLIT3[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CLIT3[inDF1$YEAR==i&inDF1$DOY==1]
-    annDF1$delta_CLIT4[annDF1$YEAR == i] <- inDF1$CLIT4[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CLIT4[inDF1$YEAR==i&inDF1$DOY==1]
+    annDF1$delta_CFLIT[annDF1$YEAR == i] <- inDF1$CFLIT[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CFLIT[inDF1$YEAR==i&inDF1$DOY==1]
+    annDF1$delta_CFLITA[annDF1$YEAR == i] <- inDF1$CFLITA[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CFLITA[inDF1$YEAR==i&inDF1$DOY==1]
+    annDF1$delta_CFLITB[annDF1$YEAR == i] <- inDF1$CFLITB[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CFLITB[inDF1$YEAR==i&inDF1$DOY==1]
+    annDF1$delta_CCLITB[annDF1$YEAR == i] <- inDF1$CCLITB[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CCLITB[inDF1$YEAR==i&inDF1$DOY==1]
     annDF1$delta_CSOIL[annDF1$YEAR == i] <- inDF1$CSOIL[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$CSOIL[inDF1$YEAR==i&inDF1$DOY==1]
     annDF1$delta_TNC[annDF1$YEAR == i] <- inDF1$TNC[inDF1$YEAR==i&inDF1$DOY==365]-inDF1$TNC[inDF1$YEAR==i&inDF1$DOY==1]
     
@@ -93,23 +94,12 @@ read_in_cabl <- function() {
     annDF2$delta_CW[annDF2$YEAR == i] <- inDF2$CW[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CW[inDF2$YEAR==i&inDF2$DOY==1]
     annDF2$delta_CCR[annDF2$YEAR == i] <- inDF2$CCR[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CCR[inDF2$YEAR==i&inDF2$DOY==1]
     annDF2$delta_CFR[annDF2$YEAR == i] <- inDF2$CFR[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CFR[inDF2$YEAR==i&inDF2$DOY==1]
-    annDF2$delta_CLIT1[annDF2$YEAR == i] <- inDF2$CLIT1[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CLIT1[inDF2$YEAR==i&inDF2$DOY==1]
-    annDF2$delta_CLIT2[annDF2$YEAR == i] <- inDF2$CLIT2[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CLIT2[inDF2$YEAR==i&inDF2$DOY==1]
-    annDF2$delta_CLIT3[annDF2$YEAR == i] <- inDF2$CLIT3[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CLIT3[inDF2$YEAR==i&inDF2$DOY==1]
-    annDF2$delta_CLIT4[annDF2$YEAR == i] <- inDF2$CLIT4[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CLIT4[inDF2$YEAR==i&inDF2$DOY==1]
+    annDF2$delta_CFLIT[annDF2$YEAR == i] <- inDF2$CFLIT[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CFLIT[inDF2$YEAR==i&inDF2$DOY==1]
+    annDF2$delta_CFLITA[annDF2$YEAR == i] <- inDF2$CFLITA[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CFLITA[inDF2$YEAR==i&inDF2$DOY==1]
+    annDF2$delta_CFLITB[annDF2$YEAR == i] <- inDF2$CFLITB[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CFLITB[inDF2$YEAR==i&inDF2$DOY==1]
+    annDF2$delta_CCLITB[annDF2$YEAR == i] <- inDF2$CCLITB[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CCLITB[inDF2$YEAR==i&inDF2$DOY==1]
     annDF2$delta_CSOIL[annDF2$YEAR == i] <- inDF2$CSOIL[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CSOIL[inDF2$YEAR==i&inDF2$DOY==1]
     annDF2$delta_TNC[annDF2$YEAR == i] <- inDF2$TNC[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$TNC[inDF2$YEAR==i&inDF2$DOY==1]
-    
-    ### force to zero
-    annDF1$GR <- annDF2$GR <- 0
-    annDF1$GREPR <- annDF2$GREPR <- 0
-    annDF1$CVOC <- annDF2$CVOC <- 0
-    annDF1$CFRLIN <- annDF2$CFRLIN <- 0
-    
-    annDF1$CFR <- annDF2$CFR <- 0
-    annDF1$CLIT4 <- annDF2$CLIT4 <- 0
-    annDF1$delta_CFR <- annDF2$delta_CFR <- 0
-    annDF1$delta_CLIT4 <- annDF2$delta_CLIT4 <- 0
     
     ### assign CO2 treatment
     annDF1$CO2 <- "aCO2"
