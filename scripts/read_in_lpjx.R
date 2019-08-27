@@ -105,7 +105,22 @@ read_in_lpjx <- function() {
     annDF1$CO2 <- "aCO2"
     annDF2$CO2 <- "eCO2"
     
+    
     outDF1 <- rbind(annDF1, annDF2)
+    
+    ### allocation coefficients
+    outDF1$ALEAF <- round(outDF1$GL / outDF1$NPP, 3)
+    outDF1$AWOOD <- round(outDF1$GW / outDF1$NPP,3)
+    outDF1$AFROOT <- round(outDF1$GR / outDF1$NPP,3)
+    outDF1$ACROOT <- round(outDF1$GCR / outDF1$NPP,3)
+    outDF1$AOTHER <- round(1 - outDF1$ALEAF - outDF1$AWOOD - outDF1$AFROOT - outDF1$ACROOT, 2)
+    
+    ### turnover rates
+    outDF1$tau_LEAF <- round(outDF1$CLLFALL/outDF1$CL,3)
+    outDF1$tau_WOOD <- round(outDF1$CWIN/outDF1$CW,3)
+    outDF1$tau_FROOT <- round(outDF1$CFRLIN/outDF1$CFR,3)
+    outDF1$tau_CROOT <- round(outDF1$CCRLIN/outDF1$CCR,3)
+    outDF1$tau_SOIL <- round(outDF1$RHET/outDF1$CSOIL, 3)
     
     outDF2 <- summaryBy(.~CO2, keep.names=T, data=outDF1, FUN=mean)
     

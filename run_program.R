@@ -5,6 +5,9 @@
 ##### m.jiang@westernsydney.edu.au
 
 ########################################################################################
+#### clear wk space
+rm(list=ls(all=TRUE))
+
 #### prepare
 source("prepare.R")
 
