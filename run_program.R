@@ -21,4 +21,6 @@ lpjxDF <- read_in_lpjx()
 ocnxDF <- read_in_ocnx()
 sdvmDF <- read_in_sdvm()
 
+#### combine all model results together
+allDF <- combine_all_model_output()
 

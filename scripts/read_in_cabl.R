@@ -117,6 +117,16 @@ read_in_cabl <- function() {
     
     outDF1 <- rbind(annDF1, annDF2)
     
+    names(outDF1)[names(outDF1) == "CLIT1"] <- "CFLIT"
+    names(outDF1)[names(outDF1) == "CLIT2"] <- "CFLITA"
+    names(outDF1)[names(outDF1) == "CLIT3"] <- "CFLITB"
+    names(outDF1)[names(outDF1) == "CLIT4"] <- "CCLITB"
+    
+    names(outDF1)[names(outDF1) == "delta_CLIT1"] <- "delta_CFLIT"
+    names(outDF1)[names(outDF1) == "delta_CLIT2"] <- "delta_CFLITA"
+    names(outDF1)[names(outDF1) == "delta_CLIT3"] <- "delta_CFLITB"
+    names(outDF1)[names(outDF1) == "delta_CLIT4"] <- "delta_CCLITB"
+    
     ### allocation coefficients
     outDF1$ALEAF <- round(outDF1$GL / outDF1$NPP, 3)
     outDF1$AWOOD <- round(outDF1$GW / outDF1$NPP,3)
