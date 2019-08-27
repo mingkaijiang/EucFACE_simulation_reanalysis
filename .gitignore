@@ -37,3 +37,4 @@ rsconnect/
 
 # all csv files
 *.csv
+*.DS_Store
