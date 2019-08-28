@@ -10,9 +10,31 @@ read_in_cabl <- function() {
     inDF2 <- read.csv("model_output/CABL/D1CABLEUCELEAVG.csv",
                       skip = 7, header=T)
     
+    inDF1[inDF1<=-900] <- 0
+    inDF2[inDF2<=-900] <- 0
+    
     ### prepare a output df
     yr <- unique(inDF1$YEAR)
     yr2 <- yr[1:11]
+    
+    ### Move coarseroot to fineroot because cable doesn't distinguish the two
+    inDF1$GR <- inDF1$GCR
+    inDF2$GR <- inDF2$GCR
+    
+    inDF1$GCR <- 0
+    inDF2$GCR <- 0
+    
+    inDF1$CFR <- inDF1$CCR
+    inDF2$CFR <- inDF2$CCR
+    
+    inDF1$CCR <- 0
+    inDF2$CCR <- 0
+    
+    inDF1$CFRLIN <- inDF1$CCRLIN
+    inDF2$CFRLIN <- inDF2$CCRLIN
+    
+    inDF1$CCRLIN <- 0
+    inDF2$CCRLIN <- 0
     
     annDF1 <- summaryBy(NEP+GPP+NPP+RECO+RAUTO+RLEAF+RWOOD+RROOT+RGROW+RHET+RSOIL+GL+GW+GCR+GR+GREPR+CLLFALL+CCRLIN+CFRLIN+CWIN+CVOC~YEAR,
                         data=inDF1, keep.names=T, FUN=sum)
@@ -100,17 +122,6 @@ read_in_cabl <- function() {
     annDF2$delta_CSOIL[annDF2$YEAR == i] <- inDF2$CSOIL[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CSOIL[inDF2$YEAR==i&inDF2$DOY==1]
     annDF2$delta_TNC[annDF2$YEAR == i] <- inDF2$TNC[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$TNC[inDF2$YEAR==i&inDF2$DOY==1]
     
-    ### force to zero
-    annDF1$GR <- annDF2$GR <- 0
-    annDF1$GREPR <- annDF2$GREPR <- 0
-    annDF1$CVOC <- annDF2$CVOC <- 0
-    annDF1$CFRLIN <- annDF2$CFRLIN <- 0
-    
-    annDF1$CFR <- annDF2$CFR <- 0
-    annDF1$CLIT4 <- annDF2$CLIT4 <- 0
-    annDF1$delta_CFR <- annDF2$delta_CFR <- 0
-    annDF1$delta_CLIT4 <- annDF2$delta_CLIT4 <- 0
-    
     ### assign CO2 treatment
     annDF1$CO2 <- "aCO2"
     annDF2$CO2 <- "eCO2"
@@ -145,6 +156,16 @@ read_in_cabl <- function() {
     
     outDF2$YEAR <- NULL
     
-    return(outDF2)
+    ### calculate the difference (eCO2 - aCO2) and percent difference
+    l <- dim(outDF2)[2]
+    test1 <- outDF2[outDF2$CO2=="eCO2",2:l] - outDF2[outDF2$CO2=="aCO2",2:l] 
+    test2 <- outDF2[outDF2$CO2=="eCO2",2:l] / outDF2[outDF2$CO2=="aCO2",2:l] 
+    
+    diff <- rbind(test1, test2)
+    diff$CO2 <- c("abs", "pct")
+    
+    outDF3 <- rbind(outDF2, diff)
+    
+    return(outDF3)
     
 }

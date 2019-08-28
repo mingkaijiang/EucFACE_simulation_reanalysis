@@ -8,7 +8,8 @@ if(!require(pacman))install.packages("pacman")
 pacman::p_load(doBy, 
                ggplot2,
                grid,
-               cowplot)  
+               cowplot,
+               reshape2)  
 
 #### Sourcing all R files in the modules subdirectory
 source_basic_scripts <- dir("scripts", pattern="[.]R$", recursive = TRUE, full.names = TRUE)

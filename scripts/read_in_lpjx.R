@@ -126,6 +126,16 @@ read_in_lpjx <- function() {
     
     outDF2$YEAR <- NULL
     
-    return(outDF2)
+    ### calculate the difference (eCO2 - aCO2) and percent difference
+    l <- dim(outDF2)[2]
+    test1 <- outDF2[outDF2$CO2=="eCO2",2:l] - outDF2[outDF2$CO2=="aCO2",2:l] 
+    test2 <- outDF2[outDF2$CO2=="eCO2",2:l] / outDF2[outDF2$CO2=="aCO2",2:l] 
+    
+    diff <- rbind(test1, test2)
+    diff$CO2 <- c("abs", "pct")
+    
+    outDF3 <- rbind(outDF2, diff)
+    
+    return(outDF3)
     
 }

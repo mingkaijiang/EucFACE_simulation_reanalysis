@@ -8,6 +8,10 @@ read_in_gday <- function() {
     
     inDF2 <- read.csv("model_output/GDAY/D1GDAYEUCELEAVG.csv", skip=3)
     
+    
+    inDF1[inDF1<=-999] <- 0
+    inDF2[inDF2<=-999] <- 0
+    
     ### prepare a output df
     yr <- unique(inDF1$YEAR)
     yr2 <- yr[1:11]
@@ -98,11 +102,6 @@ read_in_gday <- function() {
     annDF2$delta_CSOIL[annDF2$YEAR == i] <- inDF2$CSOIL[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CSOIL[inDF2$YEAR==i&inDF2$DOY==1]
     annDF2$delta_TNC[annDF2$YEAR == i] <- inDF2$TNC[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$TNC[inDF2$YEAR==i&inDF2$DOY==1]
     
-    ### force to zero
-    annDF1$GREPR <- annDF2$GREPR <- 0
-    annDF1$CVOC <- annDF2$CVOC <- 0
-    annDF1$CCLITB <- annDF2$CCLITB <- 0
-    annDF1$delta_CCLITB <- annDF2$delta_CCLITB <- 0
     
     ### assign CO2 treatment
     annDF1$CO2 <- "aCO2"
@@ -129,6 +128,16 @@ read_in_gday <- function() {
     
     outDF2$YEAR <- NULL
     
-    return(outDF2)
+    ### calculate the difference (eCO2 - aCO2) and percent difference
+    l <- dim(outDF2)[2]
+    test1 <- outDF2[outDF2$CO2=="eCO2",2:l] - outDF2[outDF2$CO2=="aCO2",2:l] 
+    test2 <- outDF2[outDF2$CO2=="eCO2",2:l] / outDF2[outDF2$CO2=="aCO2",2:l] 
+    
+    diff <- rbind(test1, test2)
+    diff$CO2 <- c("abs", "pct")
+    
+    outDF3 <- rbind(outDF2, diff)
+    
+    return(outDF3)
     
 }
