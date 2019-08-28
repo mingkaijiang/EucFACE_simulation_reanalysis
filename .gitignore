@@ -39,3 +39,6 @@ rsconnect/
 *.csv
 *.DS_Store
 *.pdf
+
+### old codes
+/old_code/*.R

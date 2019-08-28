@@ -45,12 +45,24 @@ combine_all_model_output <- function() {
     plotDF5 <- melt(plotDF5, id.vars = "model")
     plotDF6 <- melt(plotDF6, id.vars = "model")
     
+    
+    ### EucFACE outputs
+    eucDF1 <- eucDF[eucDF$CO2=="aCO2"&eucDF$variable%in%c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER"),]
+    eucDF3 <- eucDF[eucDF$CO2=="eCO2"&eucDF$variable%in%c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER"),]
+    eucDF5 <- eucDF[eucDF$CO2=="pct"&eucDF$variable%in%c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER"),]
+    
+    eucDF2 <- eucDF[eucDF$CO2=="aCO2"&eucDF$variable%in%c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL"),]
+    eucDF4 <- eucDF[eucDF$CO2=="eCO2"&eucDF$variable%in%c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL"),]
+    eucDF6 <- eucDF[eucDF$CO2=="pct"&eucDF$variable%in%c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL"),]
+    
+    
     ### make the bar plot
     p1 <- ggplot(plotDF1,
                  aes(variable, value)) + 
         geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
         geom_point(mapping=aes(x=variable, y=value, fill=model), 
                    size=4, shape=21,position = position_dodge(0.6))+
+        geom_point(data=eucDF1, aes(variable, value), color="black", size = 4, shape=19)+
         xlab("") + ylab(expression(aCO[2]))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -75,11 +87,13 @@ combine_all_model_output <- function() {
                            labels=c(0.2, 0.4, 0.6, 0.8))+
         ggtitle("Allocation coefficients")
     
+    
     p3 <- ggplot(plotDF3,
                  aes(variable, value)) + 
         geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
         geom_point(mapping=aes(x=variable, y=value, fill=model), 
                    size=4, shape=21,position = position_dodge(0.6))+
+        geom_point(data=eucDF3, aes(variable, value), color="black", size = 4, shape=19)+
         xlab("") + ylab(expression(eCO[2]))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -108,6 +122,7 @@ combine_all_model_output <- function() {
         geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
         geom_point(mapping=aes(x=variable, y=value, fill=model), 
                    size=4, shape=21,position = position_dodge(0.6))+
+        geom_point(data=eucDF5, aes(variable, value), color="black", size = 4, shape=19)+
         xlab("") + ylab(expression(eCO[2] * " / " * aCO[2]))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
@@ -126,7 +141,7 @@ combine_all_model_output <- function() {
                                   "Croot",
                                   "Other"))+
         #theme(legend.justification=c(1,0), legend.position=c(0.9,0.7))+
-        scale_y_continuous(limits=c(0.8, 1.22))
+        scale_y_continuous(limits=c(0.75, 1.22))
     
 
     p2 <- ggplot(plotDF2,
@@ -134,12 +149,13 @@ combine_all_model_output <- function() {
         geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
         geom_point(mapping=aes(x=variable, y=value, fill=model), 
                    size=4, shape=21,position = position_dodge(0.6))+
+        geom_point(data=eucDF2, aes(variable, value), color="black", size = 4, shape=19)+
         xlab("") + ylab(expression(aCO[2]))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=16), 
               axis.text.x = element_blank(),
-              axis.text.y=element_blank(),
+              axis.text.y=element_text(size=14),
               axis.title.y=element_blank(),
               legend.text=element_text(size=14),
               legend.title=element_text(size=16),
@@ -153,9 +169,9 @@ combine_all_model_output <- function() {
                                   "Froot",
                                   "Croot",
                                   "Soil"))+
-        scale_y_continuous(limits=c(0, 0.8), 
-                           breaks=c(0.2, 0.4, 0.6, 0.8),
-                           labels=c(0.2, 0.4, 0.6, 0.8))+
+        scale_y_continuous(limits=c(0, 1.4), 
+                           breaks=c(0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4),
+                           labels=c(0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4))+
         ggtitle(expression("Turnover rates ( " * yr^-1 * " )"))
     
     p4 <- ggplot(plotDF4,
@@ -163,12 +179,13 @@ combine_all_model_output <- function() {
         geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
         geom_point(mapping=aes(x=variable, y=value, fill=model), 
                    size=4, shape=21,position = position_dodge(0.6))+
+        geom_point(data=eucDF4, aes(variable, value), color="black", size = 4, shape=19)+
         xlab("") + ylab(expression(eCO[2]))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=16), 
               axis.text.x = element_blank(),
-              axis.text.y=element_blank(),
+              axis.text.y=element_text(size=14),
               axis.title.y=element_blank(),
               legend.text=element_text(size=14),
               legend.title=element_text(size=16),
@@ -180,9 +197,9 @@ combine_all_model_output <- function() {
                                   "Froot",
                                   "Croot",
                                   "Soil"))+
-        scale_y_continuous(limits=c(0, 0.8), 
-                           breaks=c(0.2, 0.4, 0.6, 0.8),
-                           labels=c(0.2, 0.4, 0.6, 0.8))
+        scale_y_continuous(limits=c(0, 1.4), 
+                           breaks=c(0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4),
+                           labels=c(0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4))
     
     
     p6 <- ggplot(plotDF6,
@@ -190,12 +207,13 @@ combine_all_model_output <- function() {
         geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
         geom_point(mapping=aes(x=variable, y=value, fill=model), 
                    size=4, shape=21,position = position_dodge(0.6))+
+        geom_point(data=eucDF6, aes(variable, value), color="black", size = 4, shape=19)+
         xlab("") + ylab(expression(eCO[2] * " / " * aCO[2]))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=16), 
               axis.text.x = element_text(size=14),
-              axis.text.y=element_blank(),
+              axis.text.y=element_text(size=14),
               axis.title.y=element_blank(),
               legend.text=element_text(size=14),
               legend.title=element_text(size=16),
@@ -207,7 +225,7 @@ combine_all_model_output <- function() {
                                   "Froot",
                                   "Croot",
                                   "Soil"))+
-        scale_y_continuous(limits=c(0.8, 1.22))
+        scale_y_continuous(limits=c(0.8, 1.3))
     
     
     ### combined plots + shared legend
