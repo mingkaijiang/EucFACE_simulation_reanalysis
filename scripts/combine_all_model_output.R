@@ -26,12 +26,15 @@ combine_all_model_output <- function() {
     
     ### get the dataframes
     plotDF1 <- outDF[outDF$CO2 == "aCO2",c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER", "model")]
+    #plotDF2 <- outDF[outDF$CO2 == "aCO2",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_LIT", "tau_SOIL", "model")]
     plotDF2 <- outDF[outDF$CO2 == "aCO2",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL", "model")]
     
     plotDF3 <- outDF[outDF$CO2 == "eCO2",c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER", "model")]
+    #plotDF4 <- outDF[outDF$CO2 == "eCO2",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_LIT", "tau_SOIL", "model")]
     plotDF4 <- outDF[outDF$CO2 == "eCO2",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL", "model")]
     
     plotDF5 <- outDF[outDF$CO2 == "pct",c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER", "model")]
+    #plotDF6 <- outDF[outDF$CO2 == "pct",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_LIT", "tau_SOIL", "model")]
     plotDF6 <- outDF[outDF$CO2 == "pct",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL", "model")]
     
     ### reshape
@@ -70,8 +73,7 @@ combine_all_model_output <- function() {
         scale_y_continuous(limits=c(0, 0.8), 
                            breaks=c(0.2, 0.4, 0.6, 0.8),
                            labels=c(0.2, 0.4, 0.6, 0.8))+
-        ggtitle("Allocation coeffients")
-    
+        ggtitle("Allocation coefficients")
     
     p3 <- ggplot(plotDF3,
                  aes(variable, value)) + 
@@ -126,7 +128,7 @@ combine_all_model_output <- function() {
         #theme(legend.justification=c(1,0), legend.position=c(0.9,0.7))+
         scale_y_continuous(limits=c(0.8, 1.22))
     
-    
+
     p2 <- ggplot(plotDF2,
                  aes(variable, value)) + 
         geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
@@ -155,7 +157,6 @@ combine_all_model_output <- function() {
                            breaks=c(0.2, 0.4, 0.6, 0.8),
                            labels=c(0.2, 0.4, 0.6, 0.8))+
         ggtitle(expression("Turnover rates ( " * yr^-1 * " )"))
-    
     
     p4 <- ggplot(plotDF4,
                  aes(variable, value)) + 
