@@ -25,5 +25,19 @@ sdvmDF <- read_in_sdvm()
 eucDF <- read_in_EucFACE_output()
 
 #### combine all model results together
-allDF <- combine_all_model_output()
+#### save a figure
+combine_all_model_output()
+
+#### traceability
+### CABLE
+### can save either CN model or C only
+traceability_framework_CABLE(CN.couple = "C only")
+
+traceability_framework_CABLE(CN.couple = "CN model")
+
+### EucFACE aCO2
+### can save either 9 pool structure or 5 pool structure
+traceability_framework_EucFACE_aCO2(pool.size = "9")
+traceability_framework_EucFACE_aCO2(pool.size = "5")
+
 
