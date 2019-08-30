@@ -81,7 +81,7 @@ tau.ag.lit.amb <- ((tau.leaf.amb * C.leaf.amb) - delta.C.ag.lit.amb) / C.ag.lit.
 tau.bg.lit.amb <- ((tau.froot.amb * C.froot.amb) - delta.C.bg.lit.amb) / C.bg.lit.amb
 
 tau.micr.amb <- tau.myco.amb
-tau.soil.amb <- 0.02
+tau.soil.amb <- 0.06
 
 
 ########################################## transfer fractions to next pool

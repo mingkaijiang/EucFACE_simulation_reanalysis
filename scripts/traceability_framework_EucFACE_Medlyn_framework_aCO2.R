@@ -74,6 +74,6 @@ traceability_framework_EucFACE_Medlyn_framework_aCO2 <- function() {
     print(paste0("C storage = ", tot_C, " kg m-2" ))
     
     tot_tau <- round(sum(tauE),2)
-    print(paste0("C storage = ", tot_tau, " yr" ))
+    print(paste0("C residence time = ", tot_tau, " yr" ))
     
 }
