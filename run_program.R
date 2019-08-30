@@ -11,6 +11,16 @@ rm(list=ls(all=TRUE))
 #### prepare
 source("prepare.R")
 
+source("initialize_constants.R")
+
+
+
+### EucFACE aCO2
+traceability_framework_EucFACE_Medlyn_framework_aCO2()
+
+
+
+###################################### Don't go to here for now!
 #### read in different model outputs
 cablDF <- read_in_cabl()
 clm4DF <- read_in_clm4()
@@ -34,10 +44,3 @@ combine_all_model_output()
 traceability_framework_CABLE(CN.couple = "C only")
 
 traceability_framework_CABLE(CN.couple = "CN model")
-
-### EucFACE aCO2
-### can save either 9 pool structure or 5 pool structure
-traceability_framework_EucFACE_aCO2(pool.size = "9")
-traceability_framework_EucFACE_aCO2(pool.size = "5")
-
-
