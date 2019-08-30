@@ -44,4 +44,4 @@ rsconnect/
 /old_code/*.R
 .Rproj.user
 
-model_outputs/*
+model_output/*
