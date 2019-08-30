@@ -42,3 +42,6 @@ rsconnect/
 
 ### old codes
 /old_code/*.R
+.Rproj.user
+
+model_outputs/*
