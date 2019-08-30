@@ -14,9 +14,11 @@ source("prepare.R")
 source("initialize_constants.R")
 
 
-
 ### EucFACE aCO2
 traceability_framework_EucFACE_Medlyn_framework_aCO2()
+
+## we need to fit the data to get the parameters so that Rhet matches observation. 
+## some restructuring is still needed. 
 
 
 
