@@ -1,6 +1,6 @@
 #### Define pools, parameters and fluxes
 
-#### Pool vector X
+########################################## Pools
 C.ol.amb <- 151
 C.ua.amb <- 156
 C.ins.amb <- 0.17
@@ -19,7 +19,25 @@ C.micr.amb <- 64
 C.soil.amb <- 2183
 
 
-#### fluxes
+############################################ Change in pools
+delta.C.ol.amb <- 0
+delta.C.ua.amb <- 0
+delta.C.ins.amb <- 0
+delta.C.leaf.amb <- delta.C.ol.amb + delta.C.ua.amb + delta.C.ins.amb
+
+delta.C.stem.amb <- 0
+delta.C.croot.amb <- 0
+delta.C.wood.amb <- delta.C.stem.amb + delta.C.croot.amb
+
+delta.C.froot.amb <- 0
+delta.C.myco.amb <- 0
+delta.C.ag.lit.amb <- 0
+delta.C.bg.lit.amb <- 0
+delta.C.micr.amb <- 0
+delta.C.soil.amb <- 0
+
+
+################################################ fluxes
 ### Rhetero
 Rhet.obs.amb <- 631
 
@@ -46,12 +64,27 @@ NPP.amb <- NPP.leaf.amb + NPP.wood.amb + NPP.froot.amb + NPP.myco.amb
 ### CUE
 CUE <- NPP.amb / GPP.amb
 
-### allocation coefficients
+############################################# allocation coefficients
 alloc.leaf.amb <- NPP.leaf.amb / NPP.amb
 alloc.wood.amb <- NPP.wood.amb / NPP.amb
 alloc.froot.amb <- NPP.froot.amb / NPP.amb
 alloc.myco.amb <- NPP.myco.amb / NPP.amb
 
+
+############################################# turnover rate of pools
+tau.leaf.amb <- (NPP.leaf.amb - delta.C.leaf.amb) / C.leaf.amb
+tau.wood.amb <- (NPP.wood.amb - delta.C.wood.amb) / C.wood.amb
+tau.froot.amb <- (NPP.froot.amb - delta.C.froot.amb) / C.froot.amb
+tau.myco.amb <- (NPP.myco.amb - delta.C.myco.amb) / C.myco.amb
+
+tau.ag.lit.amb <- ((tau.leaf.amb * C.leaf.amb) - delta.C.ag.lit.amb) / C.ag.lit.amb
+tau.bg.lit.amb <- ((tau.froot.amb * C.froot.amb) - delta.C.bg.lit.amb) / C.bg.lit.amb
+
+tau.micr.amb <- tau.myco.amb
+tau.soil.amb <- 0.02
+
+
+########################################## transfer fractions to next pool
 ### fractions of pool moved to the next pool
 ### the rest goes to Rhetero
 frac.myco.amb <- 0.5          
@@ -59,15 +92,5 @@ frac.ag.amb <- 0.5
 frac.bg.amb <- 0.5
 frac.micr.amb <- 0.5
 
-
-### turnover rate of pools
-tau.leaf.amb <- 1.183
-tau.wood.amb <- 0.008
-tau.froot.amb <- 1.042
-tau.myco.amb <- 12.3
-tau.ag.lit.amb <- 3.71
-tau.bg.lit.amb <- tau.ag.lit.amb
-tau.micr.amb <- tau.myco.amb
-tau.soil.amb <- 0.02
 
 
