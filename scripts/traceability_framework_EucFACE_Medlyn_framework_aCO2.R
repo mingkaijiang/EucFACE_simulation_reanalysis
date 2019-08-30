@@ -11,8 +11,7 @@ traceability_framework_EucFACE_Medlyn_framework_aCO2 <- function() {
                  nrow = 8) 
     
     X_obs <- round(sum(X2)/1000, 2)
-    print(paste0("C storage observed = ", X_obs, " kg m-2" ))
-    
+
     
     ### partitioning coefficients to plants, B
     B2 <- t(matrix(c(alloc.leaf.amb,
@@ -71,14 +70,27 @@ traceability_framework_EucFACE_Medlyn_framework_aCO2 <- function() {
     
     ### total ecosystem carbon storage capacity (kg m-2)
     tot_C <- round(sum(Xss) / 1000,2)
+    
+    ### C residence time
+    tot_tau <- round(sum(tauE),2)
+    
+    
+    ### total Rhet
+    Rhet <- round(C.ag.lit.amb * (1 - frac.ag.amb) * tau.ag.lit.amb +
+                      C.bg.lit.amb * (1 - frac.bg.amb) * tau.bg.lit.amb +
+                      C.micr.amb * (1 - frac.micr.amb) * tau.micr.amb +
+                      C.myco.amb * (1 - frac.myco.amb) * tau.myco.amb + 
+                      C.soil.amb * tau.soil.amb, 2)
+    
+    ### output stuffs
+    print(paste0("C storage observed = ", X_obs, " kg m-2" ))
+    
     print(paste0("C storage = ", tot_C, " kg m-2" ))
     
     print(paste0("Rhet observed = ", Rhet.obs.amb, " g m-2 yr-1"))
     
     print(paste0("Rhet = ", Rhet, " g m-2 yr-1"))
     
-    
-    tot_tau <- round(sum(tauE),2)
     print(paste0("C residence time = ", tot_tau, " yr" ))
     
 }
