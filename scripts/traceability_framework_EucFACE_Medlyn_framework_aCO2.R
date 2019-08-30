@@ -73,7 +73,12 @@ traceability_framework_EucFACE_Medlyn_framework_aCO2 <- function() {
     tot_C <- round(sum(Xss) / 1000,2)
     print(paste0("C storage = ", tot_C, " kg m-2" ))
     
+    print(paste0("Rhet observed = ", Rhet.obs.amb, " g m-2 yr-1"))
+    
+    print(paste0("Rhet = ", Rhet, " g m-2 yr-1"))
+    
+    
     tot_tau <- round(sum(tauE),2)
-    print(paste0("C storage = ", tot_tau, " yr" ))
+    print(paste0("C residence time = ", tot_tau, " yr" ))
     
 }
