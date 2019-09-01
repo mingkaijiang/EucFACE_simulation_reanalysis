@@ -9,7 +9,8 @@ pacman::p_load(doBy,
                ggplot2,
                grid,
                cowplot,
-               reshape2)  
+               reshape2,
+               lme4)  
 
 #### Sourcing all R files in the modules subdirectory
 source_basic_scripts <- dir("scripts", pattern="[.]R$", recursive = TRUE, full.names = TRUE)

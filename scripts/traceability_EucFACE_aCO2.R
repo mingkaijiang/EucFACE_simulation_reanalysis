@@ -1,5 +1,18 @@
-traceability_framework_EucFACE_Medlyn_framework_aCO2 <- function() {
+traceability_EucFACE_aCO2 <- function(params) {
     
+    
+    ### params
+    tau.micr.amb <- params[1]
+    tau.soil.amb <- params[2]
+    tau.bg.lit.amb <- params[3]
+    
+    frac.myco.amb <- params[4]
+    frac.ag.amb <- params[5]
+    frac.bg.amb <- params[6]
+    frac.micr.amb <- params[7]
+    
+    
+    ### pools
     X2 <- matrix(c(C.leaf.amb,
                    C.wood.amb,
                    C.froot.amb,
@@ -82,15 +95,11 @@ traceability_framework_EucFACE_Medlyn_framework_aCO2 <- function() {
                       C.myco.amb * (1 - frac.myco.amb) * tau.myco.amb + 
                       C.soil.amb * tau.soil.amb, 2)
     
-    ### output stuffs
-    print(paste0("C storage observed = ", X_obs, " kg m-2" ))
+    Rhet.diff <- abs(Rhet.obs.amb - Rhet)
     
-    print(paste0("C storage = ", tot_C, " kg m-2" ))
     
-    print(paste0("Rhet observed = ", Rhet.obs.amb, " g m-2 yr-1"))
-    
-    print(paste0("Rhet = ", Rhet, " g m-2 yr-1"))
-    
-    print(paste0("C residence time = ", tot_tau, " yr" ))
+    return(Rhet.diff)
+  
+
     
 }

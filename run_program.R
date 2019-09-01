@@ -15,10 +15,48 @@ source("initialize_constants.R")
 
 
 ### EucFACE aCO2
-traceability_framework_EucFACE_Medlyn_framework_aCO2()
+params <- c(0.1,          # tau.micr.amb
+            0.02,          # tau.soil.amb
+            1.55,         # tau.bg.lit.amb
+            0.5,          # frac.myco.amb
+            0.5,          # frac.ag.amb
+            0.5,          # frac.bg.amb
+            0.5           # frac.micr.amb
+)
+params.lower <- c(0.01,
+                  0.0001,
+                  0.1,
+                  0,
+                  0,
+                  0,
+                  0)
 
-## we need to fit the data to get the parameters so that Rhet matches observation. 
-## some restructuring is still needed. 
+
+params.upper <- c(100.0,
+                  1.0,
+                  5,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0)
+            
+
+test <- Nelder_Mead(traceability_EucFACE_aCO2, 
+                    params, 
+                    lower=params.lower, 
+                    upper=params.upper,
+                    control=list(verbose=1))
+
+### check results
+## the minimum function achieved
+test$fval
+
+## the value of the parameters providing the minimum
+test$par
+
+
+## check storage and heterotrophic respiration
+traceability_EucFACE_aCO2_output(test$par)
 
 
 

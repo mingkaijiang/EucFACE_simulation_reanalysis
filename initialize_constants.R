@@ -20,21 +20,21 @@ C.soil.amb <- 2183
 
 
 ############################################ Change in pools
-delta.C.ol.amb <- 151.2
-delta.C.ua.amb <- 4.3
-delta.C.ins.amb <- -0.8
+delta.C.ol.amb <- 16.72
+delta.C.ua.amb <- 4.32
+delta.C.ins.amb <- 0.18
 delta.C.leaf.amb <- delta.C.ol.amb + delta.C.ua.amb + delta.C.ins.amb
 
-delta.C.stem.amb <- 44.8
-delta.C.croot.amb <- 5.3
+delta.C.stem.amb <- 44.75
+delta.C.croot.amb <- 5.34
 delta.C.wood.amb <- delta.C.stem.amb + delta.C.croot.amb
 
-delta.C.froot.amb <- -28.8
-delta.C.myco.amb <- -1.7
+delta.C.froot.amb <- -32.21
+delta.C.myco.amb <- -1.57
 delta.C.ag.lit.amb <- 13.8
 delta.C.bg.lit.amb <- 0
-delta.C.micr.amb <- -14.7
-delta.C.soil.amb <- -58.6
+delta.C.micr.amb <- -13.5
+delta.C.soil.amb <- -58.61
 
 
 ################################################ fluxes
@@ -80,17 +80,17 @@ tau.myco.amb <- (NPP.myco.amb - delta.C.myco.amb) / C.myco.amb
 tau.ag.lit.amb <- ((tau.leaf.amb * C.leaf.amb) - delta.C.ag.lit.amb) / C.ag.lit.amb
 tau.bg.lit.amb <- ((tau.froot.amb * C.froot.amb) - delta.C.bg.lit.amb) / C.bg.lit.amb
 
-tau.micr.amb <- tau.myco.amb
-tau.soil.amb <- 0.2
+#tau.micr.amb <- tau.myco.amb
+#tau.soil.amb <- 0.2
 
 
 ########################################## transfer fractions to next pool
 ### fractions of pool moved to the next pool
 ### the rest goes to Rhetero
-frac.myco.amb <- 0.5          
-frac.ag.amb <- 0.5
-frac.bg.amb <- 0.5
-frac.micr.amb <- 0.5
+#frac.myco.amb <- 0.5          
+#frac.ag.amb <- 0.5
+#frac.bg.amb <- 0.5
+#frac.micr.amb <- 0.5
 
 
 
