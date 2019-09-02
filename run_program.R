@@ -11,7 +11,7 @@ rm(list=ls(all=TRUE))
 #### prepare
 source("prepare.R")
 
-source("initialize_constants.R")
+source("initialize_aCO2_constants.R")
 
 
 ### EucFACE aCO2
@@ -41,22 +41,28 @@ params.upper <- c(100.0,
                   1.0)
             
 
-test <- Nelder_Mead(traceability_EucFACE_aCO2, 
-                    params, 
-                    lower=params.lower, 
-                    upper=params.upper,
-                    control=list(verbose=1))
+aCO2.fitted <- Nelder_Mead(traceability_EucFACE_aCO2, 
+                           params, 
+                           lower=params.lower, 
+                           upper=params.upper,
+                           control=list(verbose=1))
 
 ### check results
 ## the minimum function achieved
-test$fval
+aCO2.fitted$fval
 
 ## the value of the parameters providing the minimum
-test$par
+aCO2.fitted$par
 
 
 ## check storage and heterotrophic respiration
-traceability_EucFACE_aCO2_output(test$par)
+traceability_EucFACE_aCO2_output(aCO2.fitted$par)
+
+
+## predict eCO2 response
+source("initialize_eCO2_constants.R")
+
+traceability_EucFACE_eCO2_output(aCO2.fitted$par)
 
 
 

@@ -1,6 +1,8 @@
 #### Define pools, parameters and fluxes
 
 ########################################## Pools
+
+### aCO2
 C.ol.amb <- 151
 C.ua.amb <- 156
 C.ins.amb <- 0.17
@@ -20,6 +22,7 @@ C.soil.amb <- 2183
 
 
 ############################################ Change in pools
+### aCO2
 delta.C.ol.amb <- 16.72
 delta.C.ua.amb <- 4.32
 delta.C.ins.amb <- 0.18
@@ -47,6 +50,7 @@ GPP.u.amb <- 497
 GPP.amb <- GPP.o.amb + GPP.u.amb
 
 ### NPP
+## aCO2
 NPP.ol.amb <- 192
 NPP.other.amb <- 107
 NPP.stem.amb <- 43.4
@@ -61,10 +65,12 @@ NPP.wood.amb <- NPP.stem.amb + NPP.croot.amb + NPP.other.amb
 
 NPP.amb <- NPP.leaf.amb + NPP.wood.amb + NPP.froot.amb + NPP.myco.amb
 
+
 ### CUE
-CUE <- NPP.amb / GPP.amb
+CUE.amb <- NPP.amb / GPP.amb
 
 ############################################# allocation coefficients
+## aCO2
 alloc.leaf.amb <- NPP.leaf.amb / NPP.amb
 alloc.wood.amb <- NPP.wood.amb / NPP.amb
 alloc.froot.amb <- NPP.froot.amb / NPP.amb
@@ -72,6 +78,7 @@ alloc.myco.amb <- NPP.myco.amb / NPP.amb
 
 
 ############################################# turnover rate of pools
+## aCO2
 tau.leaf.amb <- (NPP.leaf.amb - delta.C.leaf.amb) / C.leaf.amb
 tau.wood.amb <- (NPP.wood.amb - delta.C.wood.amb) / C.wood.amb
 tau.froot.amb <- (NPP.froot.amb - delta.C.froot.amb) / C.froot.amb
@@ -91,6 +98,8 @@ tau.bg.lit.amb <- ((tau.froot.amb * C.froot.amb) - delta.C.bg.lit.amb) / C.bg.li
 #frac.ag.amb <- 0.5
 #frac.bg.amb <- 0.5
 #frac.micr.amb <- 0.5
+
+
 
 
 
