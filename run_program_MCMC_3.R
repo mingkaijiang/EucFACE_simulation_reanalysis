@@ -22,16 +22,16 @@ source("initial_constants/initialize_aCO2_constants.R")
 #delta <- inDF[[4]]
 
 ### Assign inputs for MCMC
-chainLength <- 5000
+chainLength <- 10000
 # Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
 burn_in <- chainLength * 0.1 
 pChain <- matrix(0, nrow=chainLength, ncol = no.var+1)
 no.param=1
 
 ### Defining the variance-covariance matrix for proposal generation
-#vcovProposal = diag( (0.1*(params.upper-params.lower))^2 ) ;
-vcov = (0.1*(params.upper-params.lower))^2
-vcovProposal =  vcov 
+vcovProposal = diag( (0.9*(params.upper-params.lower))^2 ) ;
+#vcov = (0.5*(params.upper-params.lower))^2
+#vcovProposal =  vcov 
 
 
 ### Find the Prior probability density
@@ -68,12 +68,13 @@ pChain[1,] <- c(params,logL0)
 for (z in (2 : chainLength)) {
     candidatepValues = c()
     
-    for (i in 1:no.var) {
-        candidatepValues[i] = rmvnorm(n=1, mean=params[i],
-                                       sigma=diag(vcovProposal[i],no.param)) 
-        #candidatepValues = rmvnorm(n=1, mean=params,
-        #                              sigma=vcovProposal) 
-    }
+    candidatepValues = rmvnorm(n=1, mean=params,
+                               sigma=vcovProposal) 
+    
+    #for (i in 1:no.var) {
+    #    candidatepValues[i] = rmvnorm(n=1, mean=params[i],
+    #                                   sigma=diag(vcovProposal[i],no.param)) 
+    #}
 
     # Reflected back to generate another candidate value
     reflectionFromMin = pmin( unlist(matrix(0,nrow=no.param,ncol=no.var)), 
@@ -173,3 +174,5 @@ nAccepted = length(unique(pChain[,1]))
 acceptance = (paste("Total accepted: ", nAccepted, "out of ", chainLength-burn_in, "candidates accepted ( = ",
                     round(100*nAccepted/chainLength), "%)"))
 print(acceptance)
+
+print(output.final.set)
