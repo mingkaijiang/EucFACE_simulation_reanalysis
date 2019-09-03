@@ -3,7 +3,7 @@
 no.var <- 7
 
 ### EucFACE aCO2
-params <- c(0.1,          # tau.micr.amb
+params <- c(1.0,          # tau.micr.amb
             0.02,          # tau.soil.amb
             1.55,         # tau.bg.lit.amb
             0.5,          # frac.myco.amb
@@ -12,18 +12,18 @@ params <- c(0.1,          # tau.micr.amb
             0.5           # frac.micr.amb
 )
 
-params.lower <- c(0.01,
-                  0.0001,
-                  0.1,
-                  0,
-                  0,
-                  0,
-                  0)
-
-
-params.upper <- c(100.0,
+params.lower <- c(0.1,
+                  0.001,
                   1.0,
-                  5,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0)
+
+
+params.upper <- c(20.0,
+                  0.5,
+                  2.0,
                   1.0,
                   1.0,
                   1.0,
