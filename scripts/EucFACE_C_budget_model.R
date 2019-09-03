@@ -17,6 +17,7 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   GPP.u <- GPP[2]
   GPP.tot <- GPP.o + GPP.u
   
+
   ### input NPP
   NPP.ol <- NPP[1]
   NPP.other <- NPP[2]
@@ -111,14 +112,14 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   ###           determined by lignin/nitrogen ratio from plant to litter pools,
   ###           lignin fraction from litter to soil pools
   ###           and soil texture among soil pools
-  A2 <- diag(8)
+  A2 <- diag(1, 8, 8)
   
   A2[5,1] <- -1.0            # leaf to AG               
   A2[6,3] <- -1.0            # froot to BG
-  A2[7,4] <- -frac.myco      # mycorrhizae to microbe 
-  A2[7,5] <- -frac.ag        # AGlitter to microbe 
-  A2[7,6] <- -frac.bg        # BGlitter to microbe 
-  A2[8,7] <- -frac.micr      # microbe to soil 
+  A2[7,4] <- -as.numeric(frac.myco)      # mycorrhizae to microbe 
+  A2[7,5] <- -as.numeric(frac.ag)        # AGlitter to microbe 
+  A2[7,6] <- -as.numeric(frac.bg)        # BGlitter to microbe 
+  A2[8,7] <- -as.numeric(frac.micr)      # microbe to soil 
   
   
   ### matrix C, fraction of carbon left from pool after each time step
