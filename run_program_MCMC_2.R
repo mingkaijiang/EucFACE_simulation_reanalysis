@@ -15,19 +15,19 @@ source("prepare.R")
 source("initial_constants/initialize_aCO2_constants.R")
 
 ### prepare the input dataframe
-no.param <- 100
-
-inDF <- initialize_input_dataframe(n=no.param)
+inDF <- initialize_input_dataframe(n=100)
 GPP <- inDF[[1]]
 NPP <- inDF[[2]]
 Pools <- inDF[[3]]
 delta <- inDF[[4]]
 
+
 ### Assign inputs for MCMC
-chainLength <- 10000
+chainLength <- 1000000
 # Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
 burn_in <- chainLength * 0.1 
 pChain <- matrix(0, nrow=chainLength, ncol = no.var+1)
+no.param <- 1
 
 ### Defining the variance-covariance matrix for proposal generation
 vcov = (0.005*(params.upper-params.lower))^2
@@ -42,23 +42,18 @@ for (i in 1:no.var) {
 }
 logPrior0 <- sum(unlist(prior.dist))
 
-for (j in 1:no.param) {
-    output.set <- EucFACE_C_budget_model(params=params,   # you are not choosing parameters!
-                                         GPP=GPP[j,], 
-                                         NPP=NPP[j,], 
-                                         Pools=Pools[j,], 
-                                         delta=delta[j,])
+
+output.set <- EucFACE_C_budget_model(params=params, 
+                                     GPP=GPP.amb.mean, 
+                                     NPP=NPP.amb.mean, 
+                                     Pools=Pools.amb.mean, 
+                                     delta=Delta.amb.mean)
     
-    if (j == 1) {
-        output = output.set
-    }
-    if (j > 1) {
-        output = rbind(output,output.set)
-    }
-}
+output = output.set
+
 
 #### Calculate log likelihood of starting point of the chain
-logL0 <- log_likelihood(Rhet.mean = Rhet.amb.mean,
+logL0 <- log_likelihood_2(Rhet.mean = Rhet.amb.mean,
                        Rhet.sd = Rhet.amb.sd,
                        Rhet.pred = output) 
 
@@ -75,9 +70,9 @@ for (z in (2 : chainLength)) {
     }
 
     # Reflected back to generate another candidate value
-    reflectionFromMin = pmin( unlist(matrix(0,nrow=1,ncol=no.var)), 
+    reflectionFromMin = pmin( unlist(matrix(0,nrow=no.param,ncol=no.var)), 
                               unlist(candidatepValues-params.lower) )
-    reflectionFromMax = pmax( unlist(list(rep(0, 1))), 
+    reflectionFromMax = pmax( unlist(list(rep(0, no.param))), 
                               unlist(candidatepValues-params.upper) )
     candidatepValues = candidatepValues - 2 * reflectionFromMin - 2 * reflectionFromMax 
     
@@ -101,24 +96,19 @@ for (z in (2 : chainLength)) {
     
     # Calculating the outputs for the candidate parameter vector and then log likelihood
     if (Prior1 > 0) {
-        for (j in 1:no.param) {
-            out.cand.set <- EucFACE_C_budget_model(params=candidatepValues, 
-                                                 GPP=GPP[j,], 
-                                                 NPP=NPP[j,], 
-                                                 Pools=Pools[j,], 
-                                                 delta=delta[j,])
-            
-            
-            if (j == 1) {
-                out.cand = out.cand.set
-            }
-            if (j > 1) {
-                out.cand = rbind(out.cand,out.cand.set)
-            }
-        }
+        
+        out.cand.set <- EucFACE_C_budget_model(params=candidatepValues, 
+                                               GPP=GPP.amb.mean, 
+                                               NPP=NPP.amb.mean, 
+                                               Pools=Pools.amb.mean, 
+                                               delta=Delta.amb.mean)
+        
+        
+        out.cand = out.cand.set
+        
         
         # Calculate log likelihood
-        logL1 <- log_likelihood(Rhet.mean = Rhet.amb.mean,
+        logL1 <- log_likelihood_2(Rhet.mean = Rhet.amb.mean,
                                 Rhet.sd = Rhet.amb.sd,
                                 Rhet.pred = out.cand) 
         
@@ -137,7 +127,7 @@ for (z in (2 : chainLength)) {
 }
 
 
-# Discard the first 500 iterations for Burn-IN in MCMC
+# Discard the first 10% iterations for Burn-IN in MCMC
 pChain <- pChain[(burn_in+1):nrow(pChain),]
 pChain = as.data.frame(pChain)
 
@@ -159,6 +149,7 @@ names(param.final) <- c("tau.micr", "tau.soil", "tau.bg.lit",
 param.final[,1:7] = param.set
 param.final[,8:14] = param.SD
 
+param.set <- as.numeric(param.set)
 
 # Calculate final output set from the predicted parameter set
 output.final.set <- EucFACE_C_budget_model(params=param.set, 

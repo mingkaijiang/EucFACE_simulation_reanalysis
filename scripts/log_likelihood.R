@@ -3,7 +3,7 @@ log_likelihood <- function(Rhet.mean,     ### mean observed heterotrophic respir
                            Rhet.pred) {
     
     ### Initialising the logLi
-    logLi <- matrix(0, nrow=Rhet.pred, ncol = 1) 
+    logLi <- matrix(0, nrow=nrow(Rhet.pred), ncol = 1) 
     
     ### compute loglikelihood
     for (i in 1:nrow(Rhet.pred)) {
@@ -11,4 +11,7 @@ log_likelihood <- function(Rhet.mean,     ### mean observed heterotrophic respir
     }
     
     return(sum(logLi))
+    
+
+    
 }
