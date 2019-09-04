@@ -17,7 +17,7 @@ MCMC_model_fitting_2 <- function() {
     
     
     ### Defining the variance-covariance matrix for proposal generation
-    vcovProposal = diag( (0.8*(params.upper-params.lower))^2 ) 
+    vcovProposal = diag( (0.3*(params.upper-params.lower))^2 ) 
     #vcov = (0.5*(params.upper-params.lower))^2
     #vcovProposal =  vcov 
     
@@ -131,8 +131,8 @@ MCMC_model_fitting_2 <- function() {
     
     
     ### display acceptance rate
-    nAccepted = length(unique(pChain[,1]))
-    #nAccepted = length(pChain[pChain$Prior==1, "Prior"])
+    #nAccepted = length(unique(pChain[,1]))
+    nAccepted = length(pChain[pChain$Prior==1, "Prior"])
     
     acceptance = (paste("Total accepted: ", nAccepted, 
                         "out of ", chainLength-burn_in, 

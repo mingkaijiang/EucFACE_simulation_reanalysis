@@ -12,7 +12,7 @@ rm(list=ls(all=TRUE))
 source("prepare.R")
 
 ### source the constants
-source("initial_constants/initialize_aCO2_constants.R")
+source("initial_constants/initialize_aCO2_constants_2.R")
 
 ### reproduciable results
 set.seed(15)
@@ -27,13 +27,13 @@ aCO2.fitted <- Nelder_Mead(EucFACE_C_budget_model_prefit,
 
 ### the value of the parameters providing the minimum Rhet diff
 ### update the original parameter mean values
-params <- aCO2.fitted$par
+#params <- aCO2.fitted$par
 
 ### use fitted parameters to generate targeting tot C and tot tau
 targDF <- EucFACE_C_budget_model_prefit_output(params)
 
 obsDF <- data.frame(Rhet.amb.mean, targDF$tot.C, targDF$tot.tau, 
-           Rhet.amb.sd, targDF$tot.C/2, targDF$tot.tau/2)
+           Rhet.amb.sd, targDF$tot.C*0.1, targDF$tot.tau*0.1)
 colnames(obsDF) <- c("Rhet.amb.mean", "totC.amb.mean", "tau.amb.mean",
                      "Rhet.amb.sd", "totC.amb.sd", "tau.amb.sd")
 
@@ -44,16 +44,11 @@ colnames(obsDF) <- c("Rhet.amb.mean", "totC.amb.mean", "tau.amb.mean",
 #Pools <- inDF[[3]]
 #delta <- inDF[[4]]
 
-pChain <- MCMC_model_fitting()
+pChain <- MCMC_model_fitting_2()
 
-### look at subset
-#subDF <- pChain[pChain$Rhet >= (Rhet.amb.mean-Rhet.amb.sd) & pChain$Rhet <= (Rhet.amb.mean+Rhet.amb.sd), ]
-#dim(subDF)
-#Rhet.pred <- data.frame(round(mean(subDF$Rhet),2), 
-#                        round(sd(subDF$Rhet), 2), nrow(subDF))
-#colnames(Rhet.pred) <- c("Rhet.mean", "Rhet.sd", "sample")
-#
-#print(paste0("Final range = ", Rhet.pred$Rhet.mean, " (", Rhet.pred$Rhet.sd, ")"))
+### subset only accepted data
+#pChain <- subset(pChain, Prior == 1)
+#pChain <- pChain[40000:45000,]
 
 # Store the final parameter set values
 param.set = colMeans(pChain[, 1:7])
@@ -77,8 +72,9 @@ output.final.set <- EucFACE_C_budget_model(params=param.set,
                                            Pools=Pools.amb.mean, 
                                            delta=Delta.amb.mean)
 
+print(output.final.set)
+print(obsDF)
+
+
 print(param.set)
-print(param.final)
-print(paste0("Final predicted = ", output.final.set$Rhet))
-
-
+print(aCO2.fitted$par)

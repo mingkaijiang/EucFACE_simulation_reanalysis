@@ -116,4 +116,4 @@ NPP.amb.sd <- matrix(c(0.2,        # NPP.ol.amb
 
 ### Rhetero
 Rhet.amb.mean <- 631
-Rhet.amb.sd <- 134
+Rhet.amb.sd <- 13.4
