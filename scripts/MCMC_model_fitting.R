@@ -1,21 +1,23 @@
 MCMC_model_fitting <- function() {
     
-    ### ???
-    aic.bic = data.frame(matrix(ncol = 7, nrow = 10))
-    names(aic.bic) <- c("logLi","aic","bic","time","volume.group","no.param","volume")
-    
-    
     ### Assign chain length for MCMC parameter fitting
-    chainLength <- 20000
+    chainLength <- 500000
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
-    burn_in <- chainLength * 0.1 
+    burn_in <- chainLength * 0.5 
     
     ### prepare output df
-    pChain <- matrix(0, nrow=chainLength, ncol = no.var+7)
+    pChain <- matrix(0, nrow=chainLength, ncol = no.var+7+2)
     
     ### set up number of parameters to fit at each run
     no.param=1
+    
+    ### prepare model aic and bic comparison DF
+    k1 = 2 # k = 2 for the usual AIC
+    npar = no.param*no.var # npar = total number of parameters in the fitted model
+    k2 = log(1) # n being the number of observations for the so-called BIC
+    
+    
     
     ### Defining the variance-covariance matrix for proposal generation
     vcovProposal = diag( (0.5*(params.upper-params.lower))^2 ) 
@@ -52,7 +54,12 @@ MCMC_model_fitting <- function() {
                               Rhet.sd = Rhet.amb.sd,
                               Rhet.pred = out.init$Rhet) 
     
-    pChain[1,] <- c(params, logL0, as.numeric(out.init), Prior0)
+    aic <- -2*logL0 + k1*npar
+    bic <- -2*logL0 + k2*npar
+    
+    pChain[1,] <- c(params, logL0, as.numeric(out.init), Prior0, aic, bic)
+
+    
     
     ### Calculating the next candidate parameter vector, 
     ### as a multivariate normal jump away from the current point
@@ -119,9 +126,12 @@ MCMC_model_fitting <- function() {
             logPrior0 <- logPrior1
             logL0 <- logL1
             
+            aic <- -2*logL1 + k1*npar
+            bic <- -2*logL1 + k2*npar
+            
         }
         
-        pChain[z,] <- c(pValues, logL0, as.numeric(out.cand), Prior1)
+        pChain[z,] <- c(pValues, logL0, as.numeric(out.cand), Prior1, aic, bic)
         
     }
     
@@ -133,12 +143,13 @@ MCMC_model_fitting <- function() {
     ### assign names
     names(pChain) <- c("tau.micr", "tau.soil", "tau.bg.lit", 
                        "frac.myco", "frac.ag.lit", "frac.bg.lit", "frac.micr",
-                       "logli", "tot.C", "tot.tau", "tot.GPP", "tot.NPP", "Rhet", "Prior")
+                       "logli", "tot.C", "tot.tau", "tot.GPP", "tot.NPP", "Rhet", "Prior",
+                       "aic", "bic")
     
     
     ### display acceptance rate
-    #nAccepted = length(unique(pChain[,1]))
-    nAccepted = length(pChain[pChain$Prior==1, "Prior"])
+    nAccepted = length(unique(pChain[,1]))
+    #nAccepted = length(pChain[pChain$Prior==1, "Prior"])
     
     acceptance = (paste("Total accepted: ", nAccepted, 
                         "out of ", chainLength-burn_in, 

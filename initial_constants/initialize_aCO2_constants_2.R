@@ -1,6 +1,6 @@
 ####################################### Define pools, parameters and fluxes
 ### set number of parameter variables
-no.var <- 7
+no.var <- 11
 
 ### EucFACE aCO2
 params <- c(1.0,          # tau.micr.amb
@@ -9,25 +9,38 @@ params <- c(1.0,          # tau.micr.amb
             0.5,          # frac.myco.amb
             0.5,          # frac.ag.amb
             0.5,          # frac.bg.amb
-            0.5           # frac.micr.amb
+            0.5,          # frac.micr.amb
+            0.6,          # alloc leaf
+            0.1,          # alloc wood
+            0.1,          # alloc froot
+            0.2           # alloc myco
 )
 
-params.lower <- c(1.0,
+
+params.lower <- c(0.1,
                   0.001,
                   1.0,
-                  0.2,
-                  0.2,
-                  0.2,
-                  0.2)
+                  0.1,
+                  0.1,
+                  0.1,
+                  0.1,
+                  0.5,
+                  0.05,
+                  0.05,
+                  0.05)
 
 
 params.upper <- c(20.0,
-                  0.2,
+                  0.5,
                   2.0,
-                  0.8,
-                  0.8,
-                  0.8,
-                  0.8)
+                  0.9,
+                  0.9,
+                  0.9,
+                  0.9,
+                  0.7,
+                  0.2,
+                  0.4,
+                  0.5)
 
 ### Pools
 Pools.amb.mean <- matrix(c(151,        # C.ol.amb
