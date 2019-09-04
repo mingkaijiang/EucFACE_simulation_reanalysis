@@ -74,7 +74,8 @@ CBM.grouping <- function(chainLength, no.param.par.var, vol.group, with.storage,
             Mroot[1] <- data.set$Mroot[1]
             
 
-            output.set = model.without.storage(data.set$GPP,data.set$Rd,no.param,Mleaf,Mstem,Mroot,pValues$Y,pValues$af,pValues$as,pValues$sf)
+            output.set = model.without.storage(data.set$GPP,data.set$Rd,no.param,Mleaf,Mstem,Mroot,
+                                               pValues$Y,pValues$af,pValues$as,pValues$sf)
             
             
             output.set$volume = as.factor(vol[v[j]])
@@ -276,7 +277,8 @@ CBM.grouping <- function(chainLength, no.param.par.var, vol.group, with.storage,
 # various temporal scales to estimate Carbon pools (Cstorage,Cleaf,Cstem,Croot)
 #-----------------------------------------------------------------------------------------
 # Defining the model to iteratively calculate Cstorage, Cleaf, Cstem, Croot, Sleaf, Sstem, Sroot
-model <- function (GPP,Rd,no.param,Mleaf,Mstem,Mroot,tnc,Y,k,af,as,sf) {
+model <- function (GPP,Rd,no.param,Mleaf,Mstem,Mroot,tnc,
+                   Y,k,af,as,sf) {
     Cstorage = Sleaf = Sstem = Sroot = c()
     
     # From Duan's experiment for TNC partitioning to tree organs

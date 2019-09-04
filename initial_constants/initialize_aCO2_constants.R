@@ -4,7 +4,7 @@ no.var <- 7
 
 ### EucFACE aCO2
 params <- c(1.0,          # tau.micr.amb
-            0.02,          # tau.soil.amb
+            0.1,          # tau.soil.amb
             1.55,         # tau.bg.lit.amb
             0.5,          # frac.myco.amb
             0.5,          # frac.ag.amb
@@ -15,19 +15,19 @@ params <- c(1.0,          # tau.micr.amb
 params.lower <- c(0.1,
                   0.001,
                   1.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0)
+                  0.1,
+                  0.1,
+                  0.1,
+                  0.1)
 
 
 params.upper <- c(20.0,
                   0.5,
                   2.0,
-                  1.0,
-                  1.0,
-                  1.0,
-                  1.0)
+                  0.9,
+                  0.9,
+                  0.9,
+                  0.9)
 
 ### Pools
 Pools.amb.mean <- matrix(c(151,        # C.ol.amb

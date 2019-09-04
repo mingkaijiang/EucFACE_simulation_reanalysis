@@ -1,4 +1,4 @@
-EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
+EucFACE_C_budget_model_prefit <- function(params) {
   
   ######################################################################
   #### read in params and data
@@ -13,20 +13,20 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   frac.micr <- params[7]
   
   ### input GPP
-  GPP.o <- GPP[1]
-  GPP.u <- GPP[2]
+  GPP.o <- GPP.amb.mean[1]
+  GPP.u <- GPP.amb.mean[2]
   GPP.tot <- GPP.o + GPP.u
   
 
   ### input NPP
-  NPP.ol <- NPP[1]
-  NPP.other <- NPP[2]
-  NPP.stem <- NPP[3]
-  NPP.croot <- NPP[4]
-  NPP.froot <- NPP[5]
-  NPP.myco <- NPP[6]
-  NPP.ins <- NPP[7]
-  NPP.und <- NPP[8]
+  NPP.ol <- NPP.amb.mean[1]
+  NPP.other <- NPP.amb.mean[2]
+  NPP.stem <- NPP.amb.mean[3]
+  NPP.croot <- NPP.amb.mean[4]
+  NPP.froot <- NPP.amb.mean[5]
+  NPP.myco <- NPP.amb.mean[6]
+  NPP.ins <- NPP.amb.mean[7]
+  NPP.und <- NPP.amb.mean[8]
   
   NPP.leaf <- NPP.ol + NPP.und + NPP.ins
   NPP.wood <- NPP.stem + NPP.croot + NPP.other
@@ -42,39 +42,39 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   alloc.myco <- NPP.myco / NPP.tot
   
   ### Pools
-  C.ol <- Pools[1]
-  C.ua <- Pools[2]
-  C.ins <- Pools[3]
+  C.ol <- Pools.amb.mean[1]
+  C.ua <- Pools.amb.mean[2]
+  C.ins <- Pools.amb.mean[3]
   C.leaf <- C.ol + C.ua + C.ins
   
-  C.stem <- Pools[4]
-  C.croot <- Pools[5]
+  C.stem <- Pools.amb.mean[4]
+  C.croot <- Pools.amb.mean[5]
   C.wood <- C.stem + C.croot
   
-  C.froot <- Pools[6]
-  C.myco <- Pools[7]
-  C.ag.lit <- Pools[8]
-  C.bg.lit <- Pools[9]
+  C.froot <- Pools.amb.mean[6]
+  C.myco <- Pools.amb.mean[7]
+  C.ag.lit <- Pools.amb.mean[8]
+  C.bg.lit <- Pools.amb.mean[9]
   
-  C.micr <- Pools[10]
-  C.soil <- Pools[11]
+  C.micr <- Pools.amb.mean[10]
+  C.soil <- Pools.amb.mean[11]
   
   ### delta pools
-  delta.C.ol <- delta[1]
-  delta.C.ua <- delta[2]
-  delta.C.ins <- delta[3]
+  delta.C.ol <- Delta.amb.mean[1]
+  delta.C.ua <- Delta.amb.mean[2]
+  delta.C.ins <- Delta.amb.mean[3]
   delta.C.leaf <- delta.C.ol + delta.C.ua + delta.C.ins
   
-  delta.C.stem <- delta[4]
-  delta.C.croot <- delta[5]
+  delta.C.stem <- Delta.amb.mean[4]
+  delta.C.croot <- Delta.amb.mean[5]
   delta.C.wood <- delta.C.stem + delta.C.croot
   
-  delta.C.froot <- delta[6]
-  delta.C.myco <- delta[7]
-  delta.C.ag.lit <- delta[8]
-  delta.C.bg.lit <- delta[9]
-  delta.C.micr <- delta[10]
-  delta.C.soil <- delta[11]
+  delta.C.froot <- Delta.amb.mean[6]
+  delta.C.myco <- Delta.amb.mean[7]
+  delta.C.ag.lit <- Delta.amb.mean[8]
+  delta.C.bg.lit <- Delta.amb.mean[9]
+  delta.C.micr <- Delta.amb.mean[10]
+  delta.C.soil <- Delta.amb.mean[11]
   
   ### turnover rate of pools
   tau.leaf <- (NPP.leaf - delta.C.leaf) / C.leaf
@@ -121,6 +121,7 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   A2[7,6] <- -as.numeric(frac.bg)        # BGlitter to microbe 
   A2[8,7] <- -as.numeric(frac.micr)      # microbe to soil 
   
+  #browser()
   
   ### matrix C, fraction of carbon left from pool after each time step
   ###           potential decay rates of differen carbon pools
@@ -140,6 +141,9 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   ### ecosystem carbon residence time
   tauE_t <- solve(C2) %*% solve(A2) %*% B2
   
+  #browser()
+  
+  
   ### E2-1 * tauE_t
   tauE <- solve(E2) %*% tauE_t
   
@@ -155,7 +159,6 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   ### C residence time
   tot_tau <- round(sum(tauE),2)
   
-  
   ### total Rhet
   Rhet <- round(C.ag.lit * (1 - frac.ag) * tau.ag.lit +
                   C.bg.lit * (1 - frac.bg) * tau.bg.lit +
@@ -163,10 +166,7 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
                   C.myco * (1 - frac.myco) * tau.myco + 
                   C.soil * tau.soil, 2)
   
-  ### prepare output
-  outDF <- data.frame(tot_C, tot_tau, GPP.tot, NPP.tot, Rhet)
-  colnames(outDF) <- c("tot.C", "tot.tau", "tot.GPP", "tot.NPP", "Rhet")
+  Rhet.diff <- abs(Rhet.amb.mean - Rhet)
   
-  return(outDF)
-  
+  return(Rhet.diff)
 }
