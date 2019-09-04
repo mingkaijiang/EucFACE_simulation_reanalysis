@@ -3,7 +3,7 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   ######################################################################
   #### read in params and data
   ### params these are parameters we need to constrain
-  tau.micr <- params[1]
+  tau.micr <- params[1] 
   tau.soil <- params[2]
   tau.bg.lit <- params[3]
   
@@ -86,74 +86,14 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   tau.bg.lit <- ((tau.froot * C.froot) - delta.C.bg.lit) / C.bg.lit
   
   
-  ######################################################################
-  ### pools matrix
-  X2 <- matrix(c(C.leaf,
-                 C.wood,
-                 C.froot,
-                 C.myco,
-                 C.ag.lit,
-                 C.bg.lit,
-                 C.micr,
-                 C.soil),                
-               nrow = 8) 
-  
-  ### return in kg m-2
-  X_obs <- round(sum(X2)/1000, 2)
-  
-  ### partitioning coefficients to plants, B
-  B2 <- t(matrix(c(alloc.leaf,
-                   alloc.wood,
-                   alloc.froot,
-                   alloc.myco,
-                   0,0,0,0), nrow=1))
-  
-  ### A matrix: Carbon transfer matrix among pools
-  ###           determined by lignin/nitrogen ratio from plant to litter pools,
-  ###           lignin fraction from litter to soil pools
-  ###           and soil texture among soil pools
-  A2 <- diag(1, 8, 8)
-  
-  A2[5,1] <- -1.0            # leaf to AG               
-  A2[6,3] <- -1.0            # froot to BG
-  A2[7,4] <- -as.numeric(frac.myco)      # mycorrhizae to microbe 
-  A2[7,5] <- -as.numeric(frac.ag)        # AGlitter to microbe 
-  A2[7,6] <- -as.numeric(frac.bg)        # BGlitter to microbe 
-  A2[8,7] <- -as.numeric(frac.micr)      # microbe to soil 
-  
-  
-  ### matrix C, fraction of carbon left from pool after each time step
-  ###           potential decay rates of differen carbon pools
-  ###           firstly preset and then modified by lgnin fraction and soil texture in CABLE
-  C2 <- diag(c(tau.leaf,
-               tau.wood,
-               tau.froot,
-               tau.myco,
-               tau.ag.lit,
-               tau.bg.lit,
-               tau.micr,
-               tau.soil))        
-  
-  ### E: environmental scalar
-  E2 <- diag(c(1,1,1,1,1,1,1,1))
-  
-  ### ecosystem carbon residence time
-  tauE_t <- solve(C2) %*% solve(A2) %*% B2
-  
-  ### E2-1 * tauE_t
-  tauE <- solve(E2) %*% tauE_t
-  
-  ### U: NPP input 
-  U <- NPP.tot
-  
-  ### ecosystem carbon storage capacity
-  Xss <- tauE * U
-  
-  ### total ecosystem carbon storage capacity (kg m-2)
-  tot_C <- round(sum(Xss) / 1000,2)
-  
-  ### C residence time
-  tot_tau <- round(sum(tauE),2)
+  ### write equations for change in pools
+  delta.C.leaf.pred <- alloc.leaf * NPP.tot - tau.leaf * C.leaf
+  delta.C.froot.pred <- alloc.froot * NPP.tot - tau.froot * C.froot
+  delta.C.myco.pred <- alloc.myco * NPP.tot - tau.myco * C.myco
+  delta.C.ag.lit.pred <- tau.leaf * C.leaf - tau.ag.lit * C.ag.lit
+  delta.C.bg.lit.pred <- tau.froot * C.froot - tau.bg.lit * C.bg.lit
+  delta.C.micr.pred <- tau.ag.lit * C.ag.lit + tau.bg.lit * C.bg.lit + tau.myco * C.myco - tau.micr * C.micr
+  delta.C.soil.pred <- tau.micr * C.micr - tau.soil * C.soil
   
   
   ### total Rhet
@@ -164,8 +104,15 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
                   C.soil * tau.soil, 2)
   
   ### prepare output
-  outDF <- data.frame(tot_C, tot_tau, GPP.tot, NPP.tot, Rhet)
-  colnames(outDF) <- c("tot.C", "tot.tau", "tot.GPP", "tot.NPP", "Rhet")
+  outDF <- data.frame(GPP.tot, NPP.tot, 
+                      delta.C.leaf.pred, delta.C.froot.pred, delta.C.myco.pred, 
+                      delta.C.ag.lit.pred, delta.C.bg.lit.pred, 
+                      delta.C.micr.pred, delta.C.soil.pred, Rhet)
+  
+  colnames(outDF) <- c("tot.GPP", "tot.NPP", 
+                       "delta.Cleaf", "delta.Cfroot", "delta.Cmyco", 
+                       "delta.Cag", "delta.Cbg",
+                       "delta.Cmicr", "delta.Csoil", "Rhet")
   
   return(outDF)
   

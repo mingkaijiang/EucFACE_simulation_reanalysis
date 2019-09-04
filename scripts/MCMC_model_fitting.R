@@ -7,7 +7,7 @@ MCMC_model_fitting <- function() {
     burn_in <- chainLength * 0.1 
     
     ### prepare output df
-    pChain <- matrix(0, nrow=chainLength, ncol = no.var+7+2)
+    pChain <- matrix(0, nrow=chainLength, ncol = no.var+4+10)
     
     ### prepare model aic and bic comparison DF
     k1 = 2 # k = 2 for the usual AIC
@@ -43,9 +43,7 @@ MCMC_model_fitting <- function() {
     
     #### Calculate log likelihood of starting point of the chain
     #### the best we can get is -4.89784 if pred = obs
-    logL0 <- log_likelihood(Rhet.mean = Rhet.amb.mean,
-                              Rhet.sd = Rhet.amb.sd,
-                              Rhet.pred = out.init$Rhet) 
+    logL0 <- log_likelihood(obs = obsDF, pred = out.init) 
     
     aic <- -2*logL0 + k1*npar
     bic <- -2*logL0 + k2*npar
@@ -100,9 +98,7 @@ MCMC_model_fitting <- function() {
             
             
             # Calculate log likelihood
-            logL1 <- log_likelihood(Rhet.mean = Rhet.amb.mean,
-                                      Rhet.sd = Rhet.amb.sd,
-                                      Rhet.pred = out.cand$Rhet) 
+            logL1 <- log_likelihood(obs = obsDF, pred = out.cand) 
             
             # Calculating the logarithm of the Metropolis ratio
             logalpha <- (logPrior1+logL1) - (logPrior0+logL0) 
@@ -129,8 +125,11 @@ MCMC_model_fitting <- function() {
     ### assign names
     names(pChain) <- c("tau.micr", "tau.soil", "tau.bg.lit", 
                        "frac.myco", "frac.ag.lit", "frac.bg.lit", "frac.micr",
-                       "logli", "tot.C", "tot.tau", "tot.GPP", "tot.NPP", "Rhet", "Prior",
-                       "aic", "bic")
+                       "logli", "tot.GPP", "tot.NPP", 
+                       "delta.Cleaf", "delta.Cfroot", "delta.Cmyco", 
+                       "delta.Cag", "delta.Cbg",
+                       "delta.Cmicr", "delta.Csoil", "Rhet", 
+                       "Prior","aic", "bic")
     
     
     ### display acceptance rate

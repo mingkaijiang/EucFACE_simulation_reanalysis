@@ -4,10 +4,10 @@
 ##### Mingkai Jiang
 ##### m.jiang@westernsydney.edu.au
 ########################################################################################
-#### clear wk space
+### clear wk space
 rm(list=ls(all=TRUE))
 
-#### prepare
+### prepare
 source("prepare.R")
 
 ### source the constants
@@ -33,22 +33,16 @@ targDF <- EucFACE_C_budget_model_prefit_output(params)
 
 
 ### prepare the input dataframe
-#inDF <- initialize_input_dataframe(n=100)
-#GPP <- inDF[[1]]
-#NPP <- inDF[[2]]
-#Pools <- inDF[[3]]
-#delta <- inDF[[4]]
+obsDF <- initialize_obs_dataframe(GPP.mean = GPP.amb.mean, NPP.mean = NPP.amb.mean,
+                                  Pools.mean = Pools.amb.mean, delta.mean = Delta.amb.mean,
+                                  GPP.sd = GPP.amb.sd, NPP.sd = NPP.amb.sd,
+                                  Pools.sd = Pools.amb.sd, delta.sd = Delta.amb.sd,
+                                  Rhet.mean = Rhet.amb.mean, Rhet.sd = Rhet.amb.sd)
 
+
+### Run MCMC
 pChain <- MCMC_model_fitting()
 
-### look at subset
-#subDF <- pChain[pChain$Rhet >= (Rhet.amb.mean-Rhet.amb.sd) & pChain$Rhet <= (Rhet.amb.mean+Rhet.amb.sd), ]
-#dim(subDF)
-#Rhet.pred <- data.frame(round(mean(subDF$Rhet),2), 
-#                        round(sd(subDF$Rhet), 2), nrow(subDF))
-#colnames(Rhet.pred) <- c("Rhet.mean", "Rhet.sd", "sample")
-#
-#print(paste0("Final range = ", Rhet.pred$Rhet.mean, " (", Rhet.pred$Rhet.sd, ")"))
 
 # Store the final parameter set values
 param.set = colMeans(pChain[, 1:7])

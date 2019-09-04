@@ -17,8 +17,8 @@ MCMC_model_fitting_2 <- function() {
     
     
     ### Defining the variance-covariance matrix for proposal generation
-    vcovProposal = diag( (0.3*(params.upper-params.lower))^2 ) 
-    #vcov = (0.5*(params.upper-params.lower))^2
+    vcovProposal = diag( (0.8*(params.upper-params.lower))^2 ) 
+    #vcov = (0.3*(params.upper-params.lower))^2
     #vcovProposal =  vcov 
     
     
@@ -50,8 +50,7 @@ MCMC_model_fitting_2 <- function() {
     
     pChain[1,] <- c(params, logL0, as.numeric(out.init), Prior0, aic, bic)
 
-    
-    
+
     ### Calculating the next candidate parameter vector, 
     ### as a multivariate normal jump away from the current point
     for (z in (2 : chainLength)) {
