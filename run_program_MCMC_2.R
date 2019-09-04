@@ -32,6 +32,10 @@ params <- aCO2.fitted$par
 ### use fitted parameters to generate targeting tot C and tot tau
 targDF <- EucFACE_C_budget_model_prefit_output(params)
 
+obsDF <- data.frame(Rhet.amb.mean, targDF$tot.C, targDF$tot.tau, 
+           Rhet.amb.sd, targDF$tot.C/2, targDF$tot.tau/2)
+colnames(obsDF) <- c("Rhet.amb.mean", "totC.amb.mean", "tau.amb.mean",
+                     "Rhet.amb.sd", "totC.amb.sd", "tau.amb.sd")
 
 ### prepare the input dataframe
 #inDF <- initialize_input_dataframe(n=100)
@@ -52,7 +56,7 @@ pChain <- MCMC_model_fitting()
 #print(paste0("Final range = ", Rhet.pred$Rhet.mean, " (", Rhet.pred$Rhet.sd, ")"))
 
 # Store the final parameter set values
-param.set = colMeans(pChain[ , 1:7])
+param.set = colMeans(pChain[, 1:7])
 param.SD = apply(pChain[ , 1:7], 2, sd)
 param.final = data.frame(matrix(ncol = (no.var)*2, nrow = 1))
 
@@ -64,7 +68,7 @@ names(param.final) <- c("tau.micr", "tau.soil", "tau.bg.lit",
 param.final[,1:7] = param.set
 param.final[,8:14] = param.SD
 
-param.set <- as.numeric(param.set)
+param.set <- round(as.numeric(param.set),3)
 
 # Calculate final output set from the predicted parameter set
 output.final.set <- EucFACE_C_budget_model(params=param.set, 

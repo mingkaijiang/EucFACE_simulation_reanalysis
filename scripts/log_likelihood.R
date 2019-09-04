@@ -4,9 +4,8 @@ log_likelihood <- function(Rhet.mean,     ### mean observed heterotrophic respir
     
 
     ### why this equation? log likelihood never equals zero!
-    #logLi = -0.5*((Rhet.pred - Rhet.mean)/Rhet.sd)^2 - log(Rhet.sd) - log(2*pi)^0.5
-    logLi = -0.5*((Rhet.pred-Rhet.mean)/Rhet.sd)^2 -log(Rhet.sd)
-    
+    logLi = -0.5*((Rhet.pred - Rhet.mean)/Rhet.sd)^2 - log(Rhet.sd) - log(2*pi)^0.5
+
     return(logLi)
 }
 

@@ -3,7 +3,6 @@
 #####
 ##### Mingkai Jiang
 ##### m.jiang@westernsydney.edu.au
-
 ########################################################################################
 #### clear wk space
 rm(list=ls(all=TRUE))
@@ -43,39 +42,39 @@ targDF <- EucFACE_C_budget_model_prefit_output(params)
 pChain <- MCMC_model_fitting()
 
 ### look at subset
-subDF <- pChain[pChain$Rhet >= (Rhet.amb.mean-Rhet.amb.sd) & pChain$Rhet <= (Rhet.amb.mean+Rhet.amb.sd), ]
-dim(subDF)
+#subDF <- pChain[pChain$Rhet >= (Rhet.amb.mean-Rhet.amb.sd) & pChain$Rhet <= (Rhet.amb.mean+Rhet.amb.sd), ]
+#dim(subDF)
+#Rhet.pred <- data.frame(round(mean(subDF$Rhet),2), 
+#                        round(sd(subDF$Rhet), 2), nrow(subDF))
+#colnames(Rhet.pred) <- c("Rhet.mean", "Rhet.sd", "sample")
+#
+#print(paste0("Final range = ", Rhet.pred$Rhet.mean, " (", Rhet.pred$Rhet.sd, ")"))
 
 # Store the final parameter set values
-#param.set = colMeans(subDF[ , 1:no.var])
-#param.SD = apply(subDF[ , 1:no.var], 2, sd)
-#param.final = data.frame(matrix(ncol = (no.var)*2, nrow = no.param))
-#
-#names(param.final) <- c("tau.micr", "tau.soil", "tau.bg.lit", 
-#                        "frac.myco", "frac.ag.lit", "frac.bg.lit", "frac.micr",
-#                        "tau.micr.sd", "tau.soil.sd", "tau.bg.lit.sd", 
-#                        "frac.myco.sd", "frac.ag.lit.sd", "frac.bg.lit.sd", "frac.micr.sd")
-#
-#param.final[,1:7] = param.set
-#param.final[,8:14] = param.SD
-#
-#param.set <- as.numeric(param.set)
-#
-## Calculate final output set from the predicted parameter set
-#output.final.set <- EucFACE_C_budget_model(params=param.set, 
-#                                           GPP=GPP.amb.mean, 
-#                                           NPP=NPP.amb.mean, 
-#                                           Pools=Pools.amb.mean, 
-#                                           delta=Delta.amb.mean)
-#
-#print(param.set)
-#print(param.final)
+param.set = colMeans(pChain[, 1:7])
+param.SD = apply(pChain[ , 1:7], 2, sd)
+param.final = data.frame(matrix(ncol = (no.var)*2, nrow = 1))
 
-Rhet.pred <- data.frame(round(mean(subDF$Rhet),2), 
-                        round(sd(subDF$Rhet), 2), nrow(subDF))
-colnames(Rhet.pred) <- c("Rhet.mean", "Rhet.sd", "sample")
+names(param.final) <- c("tau.micr", "tau.soil", "tau.bg.lit", 
+                        "frac.myco", "frac.ag.lit", "frac.bg.lit", "frac.micr",
+                        "tau.micr.sd", "tau.soil.sd", "tau.bg.lit.sd", 
+                        "frac.myco.sd", "frac.ag.lit.sd", "frac.bg.lit.sd", "frac.micr.sd")
 
-#print(paste0("Final predicted = ", output.final.set))
-print(paste0("Final range = ", Rhet.pred$Rhet.mean, " (", Rhet.pred$Rhet.sd, ")"))
+param.final[,1:7] = param.set
+param.final[,8:14] = param.SD
+
+param.set <- round(as.numeric(param.set),3)
+
+# Calculate final output set from the predicted parameter set
+output.final.set <- EucFACE_C_budget_model(params=param.set, 
+                                           GPP=GPP.amb.mean, 
+                                           NPP=NPP.amb.mean, 
+                                           Pools=Pools.amb.mean, 
+                                           delta=Delta.amb.mean)
+
+print(param.set)
+print(param.final)
+print(paste0("Final predicted = ", output.final.set$Rhet))
+
 
 

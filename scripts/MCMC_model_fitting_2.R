@@ -1,4 +1,4 @@
-MCMC_model_fitting <- function() {
+MCMC_model_fitting_2 <- function() {
     
     ### Assign chain length for MCMC parameter fitting
     chainLength <- 50000
@@ -42,10 +42,8 @@ MCMC_model_fitting <- function() {
     
     
     #### Calculate log likelihood of starting point of the chain
-    #### the best we can get is -4.89784 if pred = obs
-    logL0 <- log_likelihood(Rhet.mean = Rhet.amb.mean,
-                              Rhet.sd = Rhet.amb.sd,
-                              Rhet.pred = out.init$Rhet) 
+    logL0 <- log_likelihood_2(obs=obsDF,
+                              pred=out.init) 
     
     aic <- -2*logL0 + k1*npar
     bic <- -2*logL0 + k2*npar
@@ -100,9 +98,8 @@ MCMC_model_fitting <- function() {
             
             
             # Calculate log likelihood
-            logL1 <- log_likelihood(Rhet.mean = Rhet.amb.mean,
-                                      Rhet.sd = Rhet.amb.sd,
-                                      Rhet.pred = out.cand$Rhet) 
+            logL1 <- log_likelihood_2(obs=obsDF,
+                                      pred=out.cand) 
             
             # Calculating the logarithm of the Metropolis ratio
             logalpha <- (logPrior1+logL1) - (logPrior0+logL0) 
