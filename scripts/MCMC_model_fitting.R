@@ -48,7 +48,7 @@ MCMC_model_fitting <- function() {
     
     #### Calculate log likelihood of starting point of the chain
     #### the best we can get is -4.89784 if pred = obs
-    logL0 <- log_likelihood_3(Rhet.mean = Rhet.amb.mean,
+    logL0 <- log_likelihood(Rhet.mean = Rhet.amb.mean,
                               Rhet.sd = Rhet.amb.sd,
                               Rhet.pred = out.init$Rhet) 
     
@@ -107,7 +107,7 @@ MCMC_model_fitting <- function() {
             
             
             # Calculate log likelihood
-            logL1 <- log_likelihood_3(Rhet.mean = Rhet.amb.mean,
+            logL1 <- log_likelihood(Rhet.mean = Rhet.amb.mean,
                                       Rhet.sd = Rhet.amb.sd,
                                       Rhet.pred = out.cand$Rhet) 
             
