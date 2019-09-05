@@ -1,26 +1,32 @@
 ####################################### Define pools, parameters and fluxes
-### set number of parameter variables
-no.var <- 10
 
-### EucFACE aCO2
+### parameter space
 params <- c(0.6,          # alloc leaf
             0.1,          # alloc froot 
             0.1,          # alloc myco
-            10.0,         # tau.micr.amb
-            0.1,          # tau.soil.amb
-            1.55,         # tau.bg.lit.amb
-            0.5,          # frac.myco.amb
-            0.5,          # frac.ag.amb
-            0.5,          # frac.bg.amb
-            0.5           # frac.micr.amb
+            1.0,          # tau leaf
+            1.0,          # tau froot
+            10.0,          # tau myco
+            1.0,          # tau ag.lit    
+            1.55,         # tau.bg.lit
+            10.0,         # tau.micr
+            0.1,          # tau.soil
+            0.5,          # frac.myco
+            0.5,          # frac.ag
+            0.5,          # frac.bg
+            0.5           # frac.micr
 )
 
 params.lower <- c(0.55,
                   0.05,
                   0.05,
-                  1.0,
-                  0.01,
-                  1.0,
+                  0.5,          # tau leaf
+                  0.5,          # tau froot
+                  1.0,          # tau myco
+                  0.5,          # tau ag.lit    
+                  1.0,          # tau.bg.lit
+                  1.0,          # tau.micr.lit
+                  0.01,         # tau.soil.lit
                   0.4,
                   0.4,
                   0.4,
@@ -28,16 +34,22 @@ params.lower <- c(0.55,
 
 
 params.upper <- c(0.65,
-                  #0.25,           # alloc to wood, assumed to be the difference
                   0.15,
                   0.15,
-                  20.0,
-                  0.2,
-                  2.0,
+                  1.5,          # tau leaf
+                  2.0,          # tau froot
+                  20.0,          # tau myco
+                  2.0,          # tau ag.lit   
+                  2.0,          # tau.bg.lit
+                  20.0,         # tau.micr.lit
+                  0.2,          # tau.soil.lit
                   0.6,
                   0.6,
                   0.6,
                   0.6)
+
+### set number of parameter variables
+no.var <- length(params)
 
 ### Pools
 Pools.amb.mean <- matrix(c(151,        # C.ol.amb
@@ -110,15 +122,13 @@ Ra.amb.sd <- 165.8
 #Ra.ele.sd <- 151.3
 
 ### NPP
-NPP.amb.mean <- data.frame(192 + 25.5 + 146,
-                           107 + 43.4 + 5.2,
-                           89.6, 
-                           91)
+NPP.amb.mean <- data.frame(192 + 25.5 + 146,     # leaf
+                           107 + 43.4 + 5.2,     # wood
+                           89.6)                 # froot
 
-NPP.amb.sd <- data.frame(0.2 + 4.3 + 22,
-                         6.0 + 14.3 + 2.1,
-                         50.2,
-                         10.0)      # guess value
+NPP.amb.sd <- data.frame(0.2 + 4.3 + 22,         # leaf
+                         6.0 + 14.3 + 2.1,       # wood
+                         50.2)                   # froot
 
-colnames(NPP.amb.mean) <- colnames(NPP.amb.sd) <- c("NPP.leaf", "NPP.wood", "NPP.froot", "NPP.myco")
+colnames(NPP.amb.mean) <- colnames(NPP.amb.sd) <- c("NPP.leaf", "NPP.wood", "NPP.froot")
 
