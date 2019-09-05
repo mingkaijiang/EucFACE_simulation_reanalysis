@@ -1,7 +1,7 @@
 MCMC_model_fitting <- function() {
     
     ### Assign chain length for MCMC parameter fitting
-    chainLength <- 100000
+    chainLength <- 10000
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 
@@ -17,7 +17,7 @@ MCMC_model_fitting <- function() {
     
     
     ### Defining the variance-covariance matrix for proposal generation
-    vcovProposal = diag( (0.8*(params.upper-params.lower))^2 ) 
+    vcovProposal = diag( (0.3*(params.upper-params.lower))^2 ) 
     #vcov = (0.5*(params.upper-params.lower))^2
     #vcovProposal =  vcov 
     

@@ -1,52 +1,52 @@
 ####################################### Define pools, parameters and fluxes
 
 ### parameter space
-params <- c(0.6,          # alloc leaf
-            0.1,          # alloc froot 
-            0.1,          # alloc myco
+params <- c(0.55,          # alloc leaf
+            0.13,          # alloc froot 
+            0.13,          # alloc myco
             1.0,          # tau leaf
-            1.0,          # tau froot
-            10.0,          # tau myco
-            1.0,          # tau ag.lit    
-            1.55,         # tau.bg.lit
-            10.0,         # tau.micr
-            0.1,          # tau.soil
-            0.5,          # frac.myco
-            0.5,          # frac.ag
-            0.5,          # frac.bg
-            0.5           # frac.micr
+            1.5,          # tau froot
+            8.0,          # tau myco
+            3.5,          # tau ag.lit    
+            1.5,          # tau.bg.lit
+            8.0,          # tau.micr
+            0.08,          # tau.soil
+            0.6,          # frac.myco
+            0.6,          # frac.ag
+            0.6,          # frac.bg
+            0.6           # frac.micr
 )
 
-params.lower <- c(0.55,
-                  0.05,
-                  0.05,
+params.lower <- c(0.5,
+                  0.1,
+                  0.1,
                   0.5,          # tau leaf
-                  0.5,          # tau froot
-                  1.0,          # tau myco
-                  0.5,          # tau ag.lit    
+                  1.0,          # tau froot
+                  4.0,          # tau myco
+                  3.0,          # tau ag.lit    
                   1.0,          # tau.bg.lit
-                  1.0,          # tau.micr.lit
+                  4.0,          # tau.micr.lit
                   0.01,         # tau.soil.lit
-                  0.4,
-                  0.4,
-                  0.4,
-                  0.4)
+                  0.4,          # frac.myco
+                  0.4,          # frac.ag
+                  0.4,          # frac.bg
+                  0.4)          # frac.micr
 
 
-params.upper <- c(0.65,
-                  0.15,
-                  0.15,
+params.upper <- c(0.6,
+                  0.16,
+                  0.16,
                   1.5,          # tau leaf
                   2.0,          # tau froot
-                  20.0,          # tau myco
-                  2.0,          # tau ag.lit   
+                  12.0,          # tau myco
+                  4.0,          # tau ag.lit   
                   2.0,          # tau.bg.lit
-                  20.0,         # tau.micr.lit
-                  0.2,          # tau.soil.lit
-                  0.6,
-                  0.6,
-                  0.6,
-                  0.6)
+                  12.0,         # tau.micr.lit
+                  0.15,         # tau.soil.lit
+                  0.8,          # frac.myco
+                  0.8,          # frac.ag
+                  0.8,          # frac.bg
+                  0.8)          # frac.micr
 
 ### set number of parameter variables
 no.var <- length(params)
