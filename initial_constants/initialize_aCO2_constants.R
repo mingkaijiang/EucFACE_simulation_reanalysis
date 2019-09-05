@@ -41,8 +41,8 @@ params.upper <- c(0.6,
                   12.0,          # tau myco
                   4.0,          # tau ag.lit   
                   2.0,          # tau.bg.lit
-                  12.0,         # tau.micr.lit
-                  0.15,         # tau.soil.lit
+                  20.0,         # tau.micr.lit
+                  0.2,         # tau.soil.lit
                   0.8,          # frac.myco
                   0.8,          # frac.ag
                   0.8,          # frac.bg
