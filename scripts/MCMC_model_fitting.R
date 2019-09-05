@@ -1,13 +1,13 @@
 MCMC_model_fitting <- function() {
     
     ### Assign chain length for MCMC parameter fitting
-    chainLength <- 50000
+    chainLength <- 10000
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 
     
     ### prepare output df
-    pChain <- matrix(0, nrow=chainLength, ncol = no.var+4+10)
+    pChain <- matrix(0, nrow=chainLength, ncol = no.var+8+no.var)
     
     ### prepare model aic and bic comparison DF
     k1 = 2 # k = 2 for the usual AIC
@@ -36,7 +36,7 @@ MCMC_model_fitting <- function() {
     ### return initial output
     out.init <- EucFACE_C_budget_model(params=params, 
                                        GPP=GPP.amb.mean, 
-                                       NPP=NPP.amb.mean, 
+                                       Ra=Ra.amb.mean, 
                                        Pools=Pools.amb.mean, 
                                        delta=Delta.amb.mean)
     
@@ -92,7 +92,7 @@ MCMC_model_fitting <- function() {
             
             out.cand <- EucFACE_C_budget_model(params=candidatepValues, 
                                                GPP=GPP.amb.mean, 
-                                               NPP=NPP.amb.mean, 
+                                               Ra=Ra.amb.mean, 
                                                Pools=Pools.amb.mean, 
                                                delta=Delta.amb.mean)
             
@@ -123,9 +123,11 @@ MCMC_model_fitting <- function() {
     pChain <- as.data.frame(pChain)
     
     ### assign names
-    names(pChain) <- c("tau.micr", "tau.soil", "tau.bg.lit", 
+    names(pChain) <- c("alloc.leaf", "alloc.froot", "alloc.myco",
+                       "tau.micr", "tau.soil", "tau.bg.lit", 
                        "frac.myco", "frac.ag.lit", "frac.bg.lit", "frac.micr",
-                       "logli", "tot.GPP", "tot.NPP", 
+                       "logli", "GPP", "NPP", 
+                       "NPP.leaf", "NPP.wood", "NPP.froot", "NPP.myco",
                        "delta.Cleaf", "delta.Cfroot", "delta.Cmyco", 
                        "delta.Cag", "delta.Cbg",
                        "delta.Cmicr", "delta.Csoil", "Rhet", 

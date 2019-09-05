@@ -37,21 +37,26 @@ initialize_obs_dataframe <- function(GPP.mean, NPP.mean, Pools.mean, delta.mean,
     delta.C.micr.sd <- delta.sd[10]
     delta.C.soil.sd <- delta.sd[11]
     
+    
     ### set outDF
-    out <- data.frame(delta.C.leaf.mean, delta.C.froot.mean, delta.C.myco.mean, 
+    out <- data.frame(NPP.mean, NPP.sd,
+        delta.C.leaf.mean, delta.C.froot.mean, delta.C.myco.mean, 
                       delta.C.ag.lit.mean, delta.C.bg.lit.mean, delta.C.micr.mean,
                       delta.C.soil.mean,
                       delta.C.leaf.sd, delta.C.froot.sd, delta.C.myco.sd, 
                       delta.C.ag.lit.sd, delta.C.bg.lit.sd, delta.C.micr.sd,
                       delta.C.soil.sd,
                       Rhet.mean, Rhet.sd)
+
     
     ## colnames
-    colnames(out) <- c("delta.Cleaf.amb.mean", "delta.Cfroot.amb.mean", "delta.Cmyco.amb.mean", "delta.Cag.amb.mean",
-                       "delta.Cbg.amb.mean", "delta.Cmicr.amb.mean", "delta.Csoil.amb.mean",
-                       "delta.Cleaf.amb.sd", "delta.Cfroot.amb.sd", "delta.Cmyco.amb.sd", "delta.Cag.amb.sd",
-                       "delta.Cbg.amb.sd", "delta.Cmicr.amb.sd", "delta.Csoil.amb.sd",
-                       "Rhet.amb.mean", "Rhet.amb.sd")
+    colnames(out) <- c("NPP.leaf.mean", "NPP.wood.mean", "NPP.froot.mean", "NPP.myco.mean",
+                       "NPP.leaf.sd", "NPP.wood.sd", "NPP.froot.sd", "NPP.myco.sd",
+                       "delta.Cleaf.mean", "delta.Cfroot.mean", "delta.Cmyco.mean", "delta.Cag.mean",
+                       "delta.Cbg.mean", "delta.Cmicr.mean", "delta.Csoil.mean",
+                       "delta.Cleaf.sd", "delta.Cfroot.sd", "delta.Cmyco.sd", "delta.Cag.sd",
+                       "delta.Cbg.sd", "delta.Cmicr.sd", "delta.Csoil.sd",
+                       "Rhet.mean", "Rhet.sd")
 
     return(out)
 }

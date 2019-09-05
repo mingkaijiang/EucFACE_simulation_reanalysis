@@ -16,22 +16,6 @@ source("initial_constants/initialize_aCO2_constants.R")
 ### reproduciable results
 set.seed(15)
 
-### optimize parameters to constrain the parameter space
-### this is based on aCO2 pools and fluxes
-aCO2.fitted <- Nelder_Mead(EucFACE_C_budget_model_prefit, 
-                           params, 
-                           lower=params.lower, 
-                           upper=params.upper)
-
-
-### the value of the parameters providing the minimum Rhet diff
-### update the original parameter mean values
-params <- aCO2.fitted$par
-
-### use fitted parameters to generate targeting tot C and tot tau
-targDF <- EucFACE_C_budget_model_prefit_output(params)
-
-
 ### prepare the input dataframe
 obsDF <- initialize_obs_dataframe(GPP.mean = GPP.amb.mean, NPP.mean = NPP.amb.mean,
                                   Pools.mean = Pools.amb.mean, delta.mean = Delta.amb.mean,

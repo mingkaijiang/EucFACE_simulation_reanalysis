@@ -1,45 +1,33 @@
-EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
+EucFACE_C_budget_model <- function(params, GPP, Ra, Pools, delta) {
   
   ######################################################################
   #### read in params and data
   ### params these are parameters we need to constrain
-  tau.micr <- params[1] 
-  tau.soil <- params[2]
-  tau.bg.lit <- params[3]
+  alloc.leaf <- params[1]
+  alloc.froot <- params[2]
+  alloc.myco <- params[3]
+  alloc.wood <- 1 - alloc.leaf - alloc.froot - alloc.myco
   
-  frac.myco <- params[4]
-  frac.ag <- params[5]
-  frac.bg <- params[6]
-  frac.micr <- params[7]
+  tau.micr <- params[4] 
+  tau.soil <- params[5]
+  tau.bg.lit <- params[6]
   
-  ### input GPP
-  GPP.o <- GPP[1]
-  GPP.u <- GPP[2]
-  GPP.tot <- GPP.o + GPP.u
+  frac.myco <- params[7]
+  frac.ag <- params[8]
+  frac.bg <- params[9]
+  frac.micr <- params[10]
   
-
-  ### input NPP
-  NPP.ol <- NPP[1]
-  NPP.other <- NPP[2]
-  NPP.stem <- NPP[3]
-  NPP.croot <- NPP[4]
-  NPP.froot <- NPP[5]
-  NPP.myco <- NPP[6]
-  NPP.ins <- NPP[7]
-  NPP.und <- NPP[8]
-  
-  NPP.leaf <- NPP.ol + NPP.und + NPP.ins
-  NPP.wood <- NPP.stem + NPP.croot + NPP.other
-  NPP.tot <- NPP.leaf + NPP.wood + NPP.froot + NPP.myco
+  ### get total NPP
+  NPP.tot <- GPP - Ra
   
   ### CUE
-  CUE <- NPP.tot / GPP.tot
+  CUE <- NPP.tot / GPP
   
-  ### compute allocation coefficients
-  alloc.leaf <- NPP.leaf / NPP.tot
-  alloc.wood <- NPP.wood / NPP.tot
-  alloc.froot <- NPP.froot / NPP.tot
-  alloc.myco <- NPP.myco / NPP.tot
+  ### individual NPP fluxes
+  NPP.leaf <- NPP.tot * alloc.leaf
+  NPP.wood <- NPP.tot * alloc.wood
+  NPP.froot <- NPP.tot * alloc.froot
+  NPP.myco <- NPP.tot * alloc.myco
   
   ### Pools
   C.ol <- Pools[1]
@@ -59,22 +47,18 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   C.micr <- Pools[10]
   C.soil <- Pools[11]
   
-  ### delta pools
-  delta.C.ol <- delta[1]
-  delta.C.ua <- delta[2]
-  delta.C.ins <- delta[3]
-  delta.C.leaf <- delta.C.ol + delta.C.ua + delta.C.ins
   
-  delta.C.stem <- delta[4]
-  delta.C.croot <- delta[5]
-  delta.C.wood <- delta.C.stem + delta.C.croot
+  ### write equations for change in pools
+  delta.C.leaf <- NPP.leaf - tau.leaf * C.leaf
+  delta.C.froot <- NPP.froot - tau.froot * C.froot
+  delta.C.myco <- NPP.myco - tau.myco * C.myco
   
-  delta.C.froot <- delta[6]
-  delta.C.myco <- delta[7]
-  delta.C.ag.lit <- delta[8]
-  delta.C.bg.lit <- delta[9]
-  delta.C.micr <- delta[10]
-  delta.C.soil <- delta[11]
+  delta.C.ag.lit <- tau.leaf * C.leaf - tau.ag.lit * C.ag.lit
+  delta.C.bg.lit <- tau.froot * C.froot - tau.bg.lit * C.bg.lit
+  
+  delta.C.micr <- tau.ag.lit * C.ag.lit + tau.bg.lit * C.bg.lit + tau.myco * C.myco - tau.micr * C.micr
+  delta.C.soil <- tau.micr * C.micr - tau.soil * C.soil
+  
   
   ### turnover rate of pools
   tau.leaf <- (NPP.leaf - delta.C.leaf) / C.leaf
@@ -86,14 +70,7 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
   tau.bg.lit <- ((tau.froot * C.froot) - delta.C.bg.lit) / C.bg.lit
   
   
-  ### write equations for change in pools
-  delta.C.leaf.pred <- alloc.leaf * NPP.tot - tau.leaf * C.leaf
-  delta.C.froot.pred <- alloc.froot * NPP.tot - tau.froot * C.froot
-  delta.C.myco.pred <- alloc.myco * NPP.tot - tau.myco * C.myco
-  delta.C.ag.lit.pred <- tau.leaf * C.leaf - tau.ag.lit * C.ag.lit
-  delta.C.bg.lit.pred <- tau.froot * C.froot - tau.bg.lit * C.bg.lit
-  delta.C.micr.pred <- tau.ag.lit * C.ag.lit + tau.bg.lit * C.bg.lit + tau.myco * C.myco - tau.micr * C.micr
-  delta.C.soil.pred <- tau.micr * C.micr - tau.soil * C.soil
+
   
   
   ### total Rhet
@@ -104,12 +81,14 @@ EucFACE_C_budget_model <- function(params, GPP, NPP, Pools, delta) {
                   C.soil * tau.soil, 2)
   
   ### prepare output
-  outDF <- data.frame(GPP.tot, NPP.tot, 
+  outDF <- data.frame(GPP, NPP.tot, 
+                      NPP.leaf, NPP.wood, NPP.froot, NPP.myco,
                       delta.C.leaf.pred, delta.C.froot.pred, delta.C.myco.pred, 
                       delta.C.ag.lit.pred, delta.C.bg.lit.pred, 
                       delta.C.micr.pred, delta.C.soil.pred, Rhet)
   
-  colnames(outDF) <- c("tot.GPP", "tot.NPP", 
+  colnames(outDF) <- c("GPP", "NPP", 
+                       "NPP.leaf", "NPP.wood", "NPP.froot", "NPP.myco",
                        "delta.Cleaf", "delta.Cfroot", "delta.Cmyco", 
                        "delta.Cag", "delta.Cbg",
                        "delta.Cmicr", "delta.Csoil", "Rhet")
