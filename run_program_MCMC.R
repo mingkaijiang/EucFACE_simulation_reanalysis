@@ -28,31 +28,7 @@ obsDF <- initialize_obs_dataframe(GPP.mean = GPP.amb.mean, NPP.mean = NPP.amb.me
 pChain <- MCMC_model_fitting()
 
 
-# Store the final parameter set values
-param.set = colMeans(pChain[, 1:7])
-param.SD = apply(pChain[ , 1:7], 2, sd)
-param.final = data.frame(matrix(ncol = (no.var)*2, nrow = 1))
-
-names(param.final) <- c("tau.micr", "tau.soil", "tau.bg.lit", 
-                        "frac.myco", "frac.ag.lit", "frac.bg.lit", "frac.micr",
-                        "tau.micr.sd", "tau.soil.sd", "tau.bg.lit.sd", 
-                        "frac.myco.sd", "frac.ag.lit.sd", "frac.bg.lit.sd", "frac.micr.sd")
-
-param.final[,1:7] = param.set
-param.final[,8:14] = param.SD
-
-param.set <- round(as.numeric(param.set),3)
-
-# Calculate final output set from the predicted parameter set
-output.final.set <- EucFACE_C_budget_model(params=param.set, 
-                                           GPP=GPP.amb.mean, 
-                                           NPP=NPP.amb.mean, 
-                                           Pools=Pools.amb.mean, 
-                                           delta=Delta.amb.mean)
-
-print(param.set)
-print(param.final)
-print(paste0("Final predicted = ", output.final.set$Rhet))
-
+### predict final output
+predict_final_output(pChain = pChain, return.option = "Check result")
 
 

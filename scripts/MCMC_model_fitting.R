@@ -1,7 +1,7 @@
 MCMC_model_fitting <- function() {
     
     ### Assign chain length for MCMC parameter fitting
-    chainLength <- 10000
+    chainLength <- 100000
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 

@@ -64,19 +64,6 @@ EucFACE_C_budget_model <- function(params, GPP, Ra, Pools, delta) {
   delta.C.soil <- tau.micr * C.micr - tau.soil * C.soil
   
   
-  ### turnover rate of pools
-  #tau.leaf <- (NPP.leaf - delta.C.leaf) / C.leaf
-  #tau.wood <- (NPP.wood - delta.C.wood) / C.wood
-  #tau.froot <- (NPP.froot - delta.C.froot) / C.froot
-  #tau.myco <- (NPP.myco - delta.C.myco) / C.myco
-  #
-  #tau.ag.lit <- ((tau.leaf * C.leaf) - delta.C.ag.lit) / C.ag.lit
-  #tau.bg.lit <- ((tau.froot * C.froot) - delta.C.bg.lit) / C.bg.lit
-  
-  
-
-  
-  
   ### total Rhet
   Rhet <- round(C.ag.lit * (1 - frac.ag) * tau.ag.lit +
                   C.bg.lit * (1 - frac.bg) * tau.bg.lit +

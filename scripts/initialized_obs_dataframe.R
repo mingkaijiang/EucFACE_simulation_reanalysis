@@ -50,8 +50,8 @@ initialize_obs_dataframe <- function(GPP.mean, NPP.mean, Pools.mean, delta.mean,
 
     
     ## colnames
-    colnames(out) <- c("NPP.leaf.mean", "NPP.wood.mean", "NPP.froot.mean", #"NPP.myco.mean",
-                       "NPP.leaf.sd", "NPP.wood.sd", "NPP.froot.sd", #"NPP.myco.sd",
+    colnames(out) <- c("NPP.leaf.mean", "NPP.wood.mean", "NPP.froot.mean", 
+                       "NPP.leaf.sd", "NPP.wood.sd", "NPP.froot.sd",
                        "delta.Cleaf.mean", "delta.Cfroot.mean", "delta.Cmyco.mean", "delta.Cag.mean",
                        "delta.Cbg.mean", "delta.Cmicr.mean", "delta.Csoil.mean",
                        "delta.Cleaf.sd", "delta.Cfroot.sd", "delta.Cmyco.sd", "delta.Cag.sd",
