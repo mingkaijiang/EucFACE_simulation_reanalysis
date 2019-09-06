@@ -60,6 +60,7 @@ EucFACE_C_budget_model <- function(params, GPP, Ra, Pools, delta) {
   delta.C.micr <- frac.ag * tau.ag.lit * C.ag.lit + frac.bg * tau.bg.lit * C.bg.lit + frac.myco * tau.myco * C.myco - tau.micr * C.micr
   delta.C.soil <- frac.micr * tau.micr * C.micr - tau.soil * C.soil
   
+  #browser()
   
   ### total Rhet
   Rhet <- round(C.ag.lit * (1 - frac.ag) * tau.ag.lit +

@@ -1,7 +1,7 @@
 MCMC_model_fitting <- function() {
     
     ### Assign chain length for MCMC parameter fitting
-    chainLength <- 100000
+    chainLength <- 50000
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 
@@ -10,27 +10,30 @@ MCMC_model_fitting <- function() {
     pChain <- matrix(0, nrow=chainLength, ncol = no.var+4+15)
     
     ### prepare model aic and bic comparison DF
-    k1 = 2 # k = 2 for the usual AIC
-    npar = no.var # npar = total number of parameters in the fitted model
-    k2 = log(1) # n being the number of observations for the so-called BIC
+    k1 <- 2 # k = 2 for the usual AIC
+    npar <- no.var # npar = total number of parameters in the fitted model
+    k2 <- log(1) # n being the number of observations for the so-called BIC
     
     
     
     ### Defining the variance-covariance matrix for proposal generation
-    vcovProposal = diag( (0.0001*(params.upper-params.lower))^2 ) 
-    #vcov = (0.5*(params.upper-params.lower))^2
-    #vcovProposal =  vcov 
+    #vcovProposal <- diag( (0.05*(params.upper-params.lower))^2) 
+    vcov <- (0.1*(params.upper-params.lower))^2
+    vcovProposal <-  vcov 
     
     
     ### Find the Prior probability density
-    prior.dist = vector("list", no.var)
+    prior.dist <- vector("list", no.var)
     for (i in 1:no.var) {
         # Prior normal gaussian distribution
-        prior.dist[i] = list(log(dnorm(params[i], (params.lower[i] + params.upper[i])/2, 
+        prior.dist[i] <- list(log(dnorm(params[i], (params.lower[i] + params.upper[i])/2, 
                                        (params.upper[i] - params.lower[i])/3))) 
     }
     logPrior0 <- sum(unlist(prior.dist))
     Prior0 <- exp(logPrior0)
+    
+    #logPrior0 <- sum(log(dunif(params, min=params.lower, max=params.upper)))
+    #Prior0 <- exp(logPrior0)
     
     ### Run the model, with initial parameter settings
     ### return initial output
@@ -56,9 +59,10 @@ MCMC_model_fitting <- function() {
     for (z in (2 : chainLength)) {
         candidatepValues = c()
         
-        candidatepValues = rmvnorm(n=1, mean=params,
-                                   sigma=vcovProposal) 
-
+        for (i in 1:no.var) {
+            candidatepValues[i] = rmvnorm(n=1, mean=params[i],
+                                           sigma=diag(vcovProposal[i],1)) 
+        }
         
         ### Reflected back to generate another candidate value
         reflectionFromMin = pmin( unlist(matrix(0,nrow=1,ncol=no.var)), 
@@ -79,7 +83,10 @@ MCMC_model_fitting <- function() {
                                              (params.upper[i] - params.lower[i])/3))) 
             }
             logPrior1 <- sum(unlist(uni.dist))
-            Prior1 = 1
+            Prior1 = exp(logPrior1)
+            
+            #Prior1 <- prod(dunif(candidatepValues, params.lower, params.upper))
+            #logPrior1 <- log(Prior1)
             
         } else {
             Prior1 <- 0
@@ -100,26 +107,21 @@ MCMC_model_fitting <- function() {
             
             # Calculating the logarithm of the Metropolis ratio
             logalpha <- (logPrior1+logL1) - (logPrior0+logL0) 
-            
+
             # Accepting or rejecting the candidate vector
             if ( log(runif(1, min = 0, max =1)) < logalpha && candidatepValues[1] + candidatepValues[2] + candidatepValues[3] <= 1
                  && candidatepValues[1] >= 0 && candidatepValues[2] >= 0 && candidatepValues[3] >= 0) {
-                pValues <- candidatepValues
+                
+                params <- candidatepValues
                 logPrior0 <- logPrior1
                 logL0 <- logL1
-                
+        
                 aic <- -2*logL1 + k1*npar
                 bic <- -2*logL1 + k2*npar
             }
-                
-            #pValues <- candidatepValues
-            #logPrior0 <- logPrior1
-            #logL0 <- logL1
-            
         }
         
-        pChain[z,] <- c(pValues, logL0, as.numeric(out.cand), Prior1, aic, bic)
-        
+        pChain[z,] <- c(params, logL0, as.numeric(out.cand), Prior1, aic, bic)
     }
     
     

@@ -25,13 +25,9 @@ initialize_obs_dataframe <- function(GPP.mean, NPP.mean, Pools.mean, delta.mean,
     ### set outDF
     out <- data.frame(NPP.mean, NPP.sd,
                       delta.C.leaf.mean, delta.C.froot.mean, delta.C.myco.mean, 
-                      delta.C.ag.lit.mean, 
-                      delta.C.micr.mean,
-                      delta.C.soil.mean,
+                      delta.C.ag.lit.mean, delta.C.micr.mean, delta.C.soil.mean,
                       delta.C.leaf.sd, delta.C.froot.sd, delta.C.myco.sd, 
-                      delta.C.ag.lit.sd, 
-                      delta.C.micr.sd,
-                      delta.C.soil.sd,
+                      delta.C.ag.lit.sd, delta.C.micr.sd, delta.C.soil.sd,
                       Rhet.mean, Rhet.sd)
 
     
