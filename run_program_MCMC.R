@@ -27,8 +27,12 @@ obsDF <- initialize_obs_dataframe(GPP.mean = GPP.amb.mean, NPP.mean = NPP.amb.me
 ### Run MCMC
 pChain <- MCMC_model_fitting()
 
+### briefly check the results
 summary(pChain)
-#apply(pChain, 2, sd)
+apply(pChain, 2, sd)
+
+### make some plots
+plot_posterior()
 
 ### predict final output
 predict_final_output(pChain = pChain, return.option = "Check result")
