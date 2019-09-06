@@ -23,12 +23,26 @@ obsDF <- initialize_obs_dataframe(GPP.mean = GPP.amb.mean, NPP.mean = NPP.amb.me
                                   Pools.sd = Pools.amb.sd, delta.sd = Delta.amb.sd,
                                   Rhet.mean = Rhet.amb.mean, Rhet.sd = Rhet.amb.sd)
 
+### return initial output
+out.init <- EucFACE_C_budget_model(params=params, 
+                                   GPP=GPP.amb.mean, 
+                                   Ra=Ra.amb.mean, 
+                                   Pools=Pools.amb.mean, 
+                                   delta=Delta.amb.mean)
+
+
+#### Calculate log likelihood of starting point of the chain
+logL0 <- log_likelihood(obs = obsDF, pred = out.init) 
+
+
+out <- metrop(log_likelihood, params, 1e3)
+
 
 ### Run MCMC
 pChain <- MCMC_model_fitting()
 
 summary(pChain)
-#apply(pChain, 2, sd)
+apply(pChain, 2, sd)
 
 ### predict final output
 predict_final_output(pChain = pChain, return.option = "Check result")

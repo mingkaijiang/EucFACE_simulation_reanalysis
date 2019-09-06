@@ -8,13 +8,13 @@ log_likelihood <- function(obs, pred) {
     logLi <- logLi - 0.5*((pred$NPP.froot - obs$NPP.froot.mean)/obs$NPP.froot.sd)^2 - log(obs$NPP.froot.sd) - log(2*pi)^0.5
     #logLi <- logLi - 0.5*((pred$NPP.myco - obs$NPP.myco.mean)/obs$NPP.myco.sd)^2 - log(obs$NPP.myco.sd) - log(2*pi)^0.5
     
-
+    #browser()
+    
     ### delta
     logLi <- logLi - 0.5*((pred$delta.Cleaf - obs$delta.Cleaf.mean)/obs$delta.Cleaf.sd)^2 - log(obs$delta.Cleaf.sd) - log(2*pi)^0.5
     logLi <- logLi - 0.5*((pred$delta.Cfroot - obs$delta.Cfroot.mean)/obs$delta.Cfroot.sd)^2 - log(obs$delta.Cfroot.sd) - log(2*pi)^0.5
     logLi <- logLi - 0.5*((pred$delta.Cmyco - obs$delta.Cmyco.mean)/obs$delta.Cmyco.sd)^2 - log(obs$delta.Cmyco.sd) - log(2*pi)^0.5
     logLi <- logLi - 0.5*((pred$delta.Cag - obs$delta.Cag.mean)/obs$delta.Cag.sd)^2 - log(obs$delta.Cag.sd) - log(2*pi)^0.5
-    logLi <- logLi - 0.5*((pred$delta.Cbg - obs$delta.Cbg.mean)/obs$delta.Cbg.sd)^2 - log(obs$delta.Cbg.sd) - log(2*pi)^0.5
     logLi <- logLi - 0.5*((pred$delta.Cmicr - obs$delta.Cmicr.mean)/obs$delta.Cmicr.sd)^2 - log(obs$delta.Cmicr.sd) - log(2*pi)^0.5
     logLi <- logLi - 0.5*((pred$delta.Csoil - obs$delta.Csoil.mean)/obs$delta.Csoil.sd)^2 - log(obs$delta.Csoil.sd) - log(2*pi)^0.5
     

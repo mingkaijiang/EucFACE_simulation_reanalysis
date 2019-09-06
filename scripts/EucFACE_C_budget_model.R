@@ -15,11 +15,13 @@ EucFACE_C_budget_model <- function(params, GPP, Ra, Pools, delta) {
   tau.bg.lit <- params[8]
   tau.micr <- params[9] 
   tau.soil <- params[10]
+  
+  C.bg.lit <- params[11]
 
-  frac.myco <- params[11]
-  frac.ag <- params[12]
-  frac.bg <- params[13]
-  frac.micr <- params[14]
+  frac.myco <- params[12]
+  frac.ag <- params[13]
+  frac.bg <- params[14]
+  frac.micr <- params[15]
   
   ### get total NPP
   NPP.tot <- GPP - Ra
@@ -33,23 +35,16 @@ EucFACE_C_budget_model <- function(params, GPP, Ra, Pools, delta) {
   NPP.froot <- NPP.tot * alloc.froot
   NPP.myco <- NPP.tot * alloc.myco
   
+  #browser()
+  
   ### Pools
-  C.ol <- Pools[1]
-  C.ua <- Pools[2]
-  C.ins <- Pools[3]
-  C.leaf <- C.ol + C.ua + C.ins
-  
-  C.stem <- Pools[4]
-  C.croot <- Pools[5]
-  C.wood <- C.stem + C.croot
-  
-  C.froot <- Pools[6]
-  C.myco <- Pools[7]
-  C.ag.lit <- Pools[8]
-  C.bg.lit <- Pools[9]
-  
-  C.micr <- Pools[10]
-  C.soil <- Pools[11]
+  C.leaf <- Pools[1]
+  C.wood <- Pools[2]
+  C.froot <- Pools[3]
+  C.myco <- Pools[4]
+  C.ag.lit <- Pools[5]
+  C.micr <- Pools[6]
+  C.soil <- Pools[7]
   
   
   ### write equations for change in pools
@@ -58,6 +53,8 @@ EucFACE_C_budget_model <- function(params, GPP, Ra, Pools, delta) {
   delta.C.myco <- NPP.myco - tau.myco * C.myco
   
   delta.C.ag.lit <- tau.leaf * C.leaf - tau.ag.lit * C.ag.lit
+  
+  ### this is unconstrained
   delta.C.bg.lit <- tau.froot * C.froot - tau.bg.lit * C.bg.lit
   
   delta.C.micr <- frac.ag * tau.ag.lit * C.ag.lit + frac.bg * tau.bg.lit * C.bg.lit + frac.myco * tau.myco * C.myco - tau.micr * C.micr

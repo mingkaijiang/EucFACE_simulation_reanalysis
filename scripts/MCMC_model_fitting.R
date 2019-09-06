@@ -1,7 +1,7 @@
 MCMC_model_fitting <- function() {
     
     ### Assign chain length for MCMC parameter fitting
-    chainLength <- 10000
+    chainLength <- 100000
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 
@@ -17,7 +17,7 @@ MCMC_model_fitting <- function() {
     
     
     ### Defining the variance-covariance matrix for proposal generation
-    vcovProposal = diag( (0.3*(params.upper-params.lower))^2 ) 
+    vcovProposal = diag( (0.0001*(params.upper-params.lower))^2 ) 
     #vcov = (0.5*(params.upper-params.lower))^2
     #vcovProposal =  vcov 
     
@@ -42,7 +42,6 @@ MCMC_model_fitting <- function() {
     
     
     #### Calculate log likelihood of starting point of the chain
-    #### the best we can get is -4.89784 if pred = obs
     logL0 <- log_likelihood(obs = obsDF, pred = out.init) 
     
     aic <- -2*logL0 + k1*npar
@@ -86,7 +85,6 @@ MCMC_model_fitting <- function() {
             Prior1 <- 0
         }
         
-        
         ### Calculating the outputs for the candidate parameter vector and then log likelihood
         if (Prior1 > 0) {
             
@@ -104,12 +102,19 @@ MCMC_model_fitting <- function() {
             logalpha <- (logPrior1+logL1) - (logPrior0+logL0) 
             
             # Accepting or rejecting the candidate vector
-            pValues <- candidatepValues
-            logPrior0 <- logPrior1
-            logL0 <- logL1
-            
-            aic <- -2*logL1 + k1*npar
-            bic <- -2*logL1 + k2*npar
+            if ( log(runif(1, min = 0, max =1)) < logalpha && candidatepValues[1] + candidatepValues[2] + candidatepValues[3] <= 1
+                 && candidatepValues[1] >= 0 && candidatepValues[2] >= 0 && candidatepValues[3] >= 0) {
+                pValues <- candidatepValues
+                logPrior0 <- logPrior1
+                logL0 <- logL1
+                
+                aic <- -2*logL1 + k1*npar
+                bic <- -2*logL1 + k2*npar
+            }
+                
+            #pValues <- candidatepValues
+            #logPrior0 <- logPrior1
+            #logL0 <- logL1
             
         }
         
@@ -126,6 +131,7 @@ MCMC_model_fitting <- function() {
     names(pChain) <- c("alloc.leaf", "alloc.froot", "alloc.myco",
                        "tau.leaf", "tau.froot", "tau.myco",
                        "tau.ag.lit", "tau.bg.lit", "tau.micr", "tau.soil", 
+                       "C.bg.lit",
                        "frac.myco", "frac.ag.lit", "frac.bg.lit", "frac.micr",
                        "logli", "GPP", "NPP", "CUE",
                        "NPP.leaf", "NPP.wood", "NPP.froot", "NPP.myco",

@@ -10,7 +10,8 @@ params <- c(0.55,          # alloc leaf
             3.5,          # tau ag.lit    
             1.5,          # tau.bg.lit
             8.0,          # tau.micr
-            0.08,          # tau.soil
+            0.08,         # tau.soil
+            78.6,         # C.bg.lit
             0.6,          # frac.myco
             0.6,          # frac.ag
             0.6,          # frac.bg
@@ -27,6 +28,7 @@ params.lower <- c(0.5,
                   1.0,          # tau.bg.lit
                   4.0,          # tau.micr.lit
                   0.01,         # tau.soil.lit
+                  10,           # C.bg.lit
                   0.4,          # frac.myco
                   0.4,          # frac.ag
                   0.4,          # frac.bg
@@ -38,11 +40,12 @@ params.upper <- c(0.6,
                   0.16,
                   1.5,          # tau leaf
                   2.0,          # tau froot
-                  12.0,          # tau myco
+                  12.0,         # tau myco
                   4.0,          # tau ag.lit   
                   2.0,          # tau.bg.lit
                   20.0,         # tau.micr.lit
-                  0.2,         # tau.soil.lit
+                  0.2,          # tau.soil.lit
+                  120,          # C.bg.lit
                   0.8,          # frac.myco
                   0.8,          # frac.ag
                   0.8,          # frac.bg
@@ -52,60 +55,40 @@ params.upper <- c(0.6,
 no.var <- length(params)
 
 ### Pools
-Pools.amb.mean <- matrix(c(151,        # C.ol.amb
-                           156,        # C.ua.amb
-                           0.17,       # C.ins.amb
-                           4966,       # C.stem.amb
-                           777,        # C.croot.amb
-                           78.6,       # C.froot.amb
-                           7.4,        # C.myco.amb
-                           91,         # C.ag.lit.amb
-                           78.6,       # C.bg.lit.amb
-                           64,         # C.micr.amb
-                           2183),       # C.soil.amb
-                         nrow=1, ncol=11, byrow=T)
+Pools.amb.mean <- data.frame(151 + 156 + 0.17,     # C.leaf
+                             4966 + 777,           # C.wood
+                             78.6,                 # C.froot
+                             7.4,                  # C.myco
+                             91,                   # C.ag.lit
+                             64,                   # C.micr
+                             2183)                 # C.soil
+
+Pools.amb.sd <- data.frame(14 + 20 + 0.03,     # C.leaf
+                           344 + 62,           # C.wood
+                           6.3,                # C.froot
+                           1.6,                # C.myco
+                           20.0,               # C.ag.lit
+                           5.3,                # C.micr
+                           280.0)              # C.soil
 
 
-Pools.amb.sd <- matrix(c(14,          # C.ol.amb
-                         20,          # C.ua.amb
-                         0.03,        # C.ins.amb
-                         344,         # C.stem.amb
-                         62,          # C.croot.amb
-                         6.3,         # C.froot.amb
-                         1.6,         # C.myco.amb
-                         20,          # C.ag.lit.amb
-                         6.3,         # C.bg.lit.amb
-                         5.3,         # C.micr.amb
-                         280),        # C.soil.amb
-                       nrow=1, ncol=11, byrow=T)
 
 ### Change in pools
-Delta.amb.mean <- matrix(c(16.72,        # C.ol.amb
-                           4.32,         # C.ua.amb
-                           0.18,         # C.ins.amb
-                           44.75,        # C.stem.amb
-                           5.34,         # C.croot.amb
-                           -32.21,       # C.froot.amb
-                           -1.57,        # C.myco.amb
-                           13.8,         # C.ag.lit.amb
-                           0.0,          # C.bg.lit.amb
-                           -13.5,        # C.micr.amb
-                           -58.61),      # C.soil.amb
-                         nrow=1, ncol=11, byrow=T)
+Delta.amb.mean <- data.frame(16.72 + 4.32 + 0.18,     # C.leaf
+                           44.75 + 5.34,              # C.wood
+                           -32.21,                    # C.froot
+                           -1.57,                     # C.myco
+                           13.8,                      # C.ag.lit
+                           -13.5,                     # C.micr
+                           -58.61)                    # C.soil
 
-Delta.amb.sd <- matrix(c(9.5,          # C.ol.amb
-                         21.8,         # C.ua.amb
-                         0.07,         # C.ins.amb
-                         30.5,         # C.stem.amb
-                         4.1,          # C.croot.amb
-                         13.6,         # C.froot.amb
-                         0.7,          # C.myco.amb
-                         3.2,          # C.ag.lit.amb
-                         13.6,         # C.bg.lit.amb
-                         4.8,          # C.micr.amb
-                         72.6),        # C.soil.amb
-                       nrow=1, ncol=11, byrow=T)
-
+Delta.amb.sd <- data.frame(9.5 + 21.8 + 0.07,     # C.leaf
+                           30.5 + 4.1,              # C.wood
+                           13.6,                    # C.froot
+                           0.7,                     # C.myco
+                           3.2,                      # C.ag.lit
+                           4.8,                     # C.micr
+                           72.6)                    # C.soil
 
 ### GPP
 GPP.amb.mean <- 1563+497
