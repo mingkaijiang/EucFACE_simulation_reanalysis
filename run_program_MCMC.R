@@ -24,6 +24,8 @@ obsDF <- initialize_obs_dataframe(GPP.mean = GPP.amb.mean, NPP.mean = NPP.amb.me
                                   Rhet.mean = Rhet.amb.mean, Rhet.sd = Rhet.amb.sd)
 
 
+obsDF <- initialize_obs_amb_dataframe()
+
 ### Run MCMC
 pChain <- MCMC_model_fitting()
 

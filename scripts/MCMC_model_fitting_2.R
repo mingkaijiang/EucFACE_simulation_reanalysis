@@ -1,4 +1,4 @@
-MCMC_model_fitting <- function() {
+MCMC_model_fitting_2 <- function() {
     
     ### Assign chain length for MCMC parameter fitting
     chainLength <- 1000
