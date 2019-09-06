@@ -1,7 +1,7 @@
 MCMC_model_fitting <- function() {
     
     ### Assign chain length for MCMC parameter fitting
-    chainLength <- 50000
+    chainLength <- 1000
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 
@@ -17,8 +17,7 @@ MCMC_model_fitting <- function() {
     
     
     ### Defining the variance-covariance matrix for proposal generation
-    #vcovProposal <- diag( (0.05*(params.upper-params.lower))^2) 
-    vcov <- (0.1*(params.upper-params.lower))^2
+    vcov <- (0.012*(params.upper-params.lower))^2
     vcovProposal <-  vcov 
     
     
@@ -67,7 +66,7 @@ MCMC_model_fitting <- function() {
         ### Reflected back to generate another candidate value
         reflectionFromMin = pmin( unlist(matrix(0,nrow=1,ncol=no.var)), 
                                   unlist(candidatepValues-params.lower) )
-        reflectionFromMax = pmax( unlist(list(rep(0, no.var))), 
+        reflectionFromMax = pmax( unlist(list(rep(0, 1))), 
                                   unlist(candidatepValues-params.upper) )
         candidatepValues = candidatepValues - 2 * reflectionFromMin - 2 * reflectionFromMax 
         
@@ -83,7 +82,7 @@ MCMC_model_fitting <- function() {
                                              (params.upper[i] - params.lower[i])/3))) 
             }
             logPrior1 <- sum(unlist(uni.dist))
-            Prior1 = exp(logPrior1)
+            Prior1 <- exp(logPrior1)
             
             #Prior1 <- prod(dunif(candidatepValues, params.lower, params.upper))
             #logPrior1 <- log(Prior1)
@@ -145,8 +144,7 @@ MCMC_model_fitting <- function() {
     
     ### display acceptance rate
     nAccepted = length(unique(pChain[,1]))
-    #nAccepted = length(pChain[pChain$Prior==1, "Prior"])
-    
+
     acceptance = (paste("Total accepted: ", nAccepted, 
                         "out of ", chainLength-burn_in, 
                         "candidates accepted ( = ",

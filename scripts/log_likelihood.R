@@ -4,20 +4,20 @@ log_likelihood <- function(obs, pred) {
     
     
     ### NPP
-    logLi <- -0.5*((pred$NPP.leaf - obs$NPP.leaf.mean)/obs$NPP.leaf.sd)^2 - log(obs$NPP.leaf.sd) #- log(2*pi)^0.5
-    logLi <- logLi - 0.5*((pred$NPP.wood - obs$NPP.wood.mean)/obs$NPP.wood.sd)^2 - log(obs$NPP.wood.sd) #- log(2*pi)^0.5
-    logLi <- logLi - 0.5*((pred$NPP.froot - obs$NPP.froot.mean)/obs$NPP.froot.sd)^2 - log(obs$NPP.froot.sd) #- log(2*pi)^0.5
+    logLi <- -0.5*((pred$NPP.leaf - obs$NPP.leaf.mean)/obs$NPP.leaf.sd)^2 - log(obs$NPP.leaf.sd) - log(2*pi)^0.5
+    logLi <- logLi - 0.5*((pred$NPP.wood - obs$NPP.wood.mean)/obs$NPP.wood.sd)^2 - log(obs$NPP.wood.sd) - log(2*pi)^0.5
+    logLi <- logLi - 0.5*((pred$NPP.froot - obs$NPP.froot.mean)/obs$NPP.froot.sd)^2 - log(obs$NPP.froot.sd) - log(2*pi)^0.5
 
     ### delta
-    logLi <- logLi - 0.5*((pred$delta.Cleaf - obs$delta.Cleaf.mean)/obs$delta.Cleaf.sd)^2 - log(obs$delta.Cleaf.sd) #- log(2*pi)^0.5
-    logLi <- logLi - 0.5*((pred$delta.Cfroot - obs$delta.Cfroot.mean)/obs$delta.Cfroot.sd)^2 - log(obs$delta.Cfroot.sd) #- log(2*pi)^0.5
-    logLi <- logLi - 0.5*((pred$delta.Cmyco - obs$delta.Cmyco.mean)/obs$delta.Cmyco.sd)^2 - log(obs$delta.Cmyco.sd) #- log(2*pi)^0.5
-    logLi <- logLi - 0.5*((pred$delta.Cag - obs$delta.Cag.mean)/obs$delta.Cag.sd)^2 - log(obs$delta.Cag.sd) #- log(2*pi)^0.5
-    logLi <- logLi - 0.5*((pred$delta.Cmicr - obs$delta.Cmicr.mean)/obs$delta.Cmicr.sd)^2 - log(obs$delta.Cmicr.sd) #- log(2*pi)^0.5
-    logLi <- logLi - 0.5*((pred$delta.Csoil - obs$delta.Csoil.mean)/obs$delta.Csoil.sd)^2 - log(obs$delta.Csoil.sd) #- log(2*pi)^0.5
+    logLi <- logLi - 0.5*((pred$delta.Cleaf - obs$delta.Cleaf.mean)/obs$delta.Cleaf.sd)^2 - log(obs$delta.Cleaf.sd) - log(2*pi)^0.5
+    logLi <- logLi - 0.5*((pred$delta.Cfroot - obs$delta.Cfroot.mean)/obs$delta.Cfroot.sd)^2 - log(obs$delta.Cfroot.sd) - log(2*pi)^0.5
+    logLi <- logLi - 0.5*((pred$delta.Cmyco - obs$delta.Cmyco.mean)/obs$delta.Cmyco.sd)^2 - log(obs$delta.Cmyco.sd) - log(2*pi)^0.5
+    logLi <- logLi - 0.5*((pred$delta.Cag - obs$delta.Cag.mean)/obs$delta.Cag.sd)^2 - log(obs$delta.Cag.sd) - log(2*pi)^0.5
+    logLi <- logLi - 0.5*((pred$delta.Cmicr - obs$delta.Cmicr.mean)/obs$delta.Cmicr.sd)^2 - log(obs$delta.Cmicr.sd) - log(2*pi)^0.5
+    logLi <- logLi - 0.5*((pred$delta.Csoil - obs$delta.Csoil.mean)/obs$delta.Csoil.sd)^2 - log(obs$delta.Csoil.sd) - log(2*pi)^0.5
     
     ### Rhet
-    logLi <- logLi - 0.5*((pred$Rhet - obs$Rhet.mean)/obs$Rhet.sd)^2 - log(obs$Rhet.sd) #- log(2*pi)^0.5
+    logLi <- logLi - 0.5*((pred$Rhet - obs$Rhet.mean)/obs$Rhet.sd)^2 - log(obs$Rhet.sd) - log(2*pi)^0.5
     
     sumlogLi <- sum(logLi)
 
