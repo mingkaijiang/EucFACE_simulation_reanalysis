@@ -11,7 +11,8 @@ pacman::p_load(doBy,
                cowplot,
                reshape2,
                lme4,
-               mcmc)  
+               mcmc,
+               mvtnorm)  
 
 #### Sourcing all R files in the modules subdirectory
 source_basic_scripts <- dir("scripts", pattern="[.]R$", recursive = TRUE, full.names = TRUE)

@@ -16,19 +16,22 @@ source("prepare.R")
 set.seed(15)
 
 ### Assign chain length for MCMC parameter fitting
-chainLength <- 1000
+chainLength <- 100000
 
 ### set up step size for aCO2 and eCO2 
 step.size.aCO2 <- 0.012
 
 ### set up distribution type for parameter space
-dist.type <- "normal"
+dist.type <- "uniform"
 
 ########################################################################################
 #### B. Estimate parameter uncertainties for ambient CO2 treatment
 ### step 1:
 ### source the parameter space
-source("initial_constants/initialize_aCO2_parameters.R")
+#source("initial_constants/initialize_aCO2_parameters.R")
+
+## this initial parameters explore wider parameter space
+source("initial_constants/initialize_aCO2_parameters_wide.R")
 
 ### step 2: 
 ### prepare the input dataframe for aCO2 treatment
@@ -44,6 +47,8 @@ pChain_aCO2_1 <- MCMC_model_fitting(params = params.aCO2,
                                     chainLength=chainLength,
                                     dist.type=dist.type,
                                     step.size=step.size.aCO2)
+
+summary(pChain_aCO2_1)
 
 ## Ring 3
 pChain_aCO2_2 <- MCMC_model_fitting(params = params.aCO2, 

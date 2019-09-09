@@ -17,7 +17,7 @@ MCMC_model_fitting <- function(params,
     npar <- no.var # npar = total number of parameters in the fitted model
     k2 <- log(1) # n being the number of observations for the so-called BIC
     
-    
+    #browser()
     
     ### Defining the variance-covariance matrix for proposal generation
     #vcov <- (0.012*(params.upper-params.lower))^2
