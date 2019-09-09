@@ -71,7 +71,7 @@ apply(pChain_aCO2_1, 2, sd)
 ### combine the results, and make some plots
 pChain.aCO2 <- rbind(pChain_aCO2_1, pChain_aCO2_2, pChain_aCO2_3)
 
-plot_posterior(inDF = pChain, Trt = "aCO2", dist.type = dist.type)
+plot_posterior(inDF = pChain.aCO2, Trt = "aCO2", dist.type = dist.type)
 
 ### step 6: 
 ### predict final output, at mean aCO2
@@ -151,3 +151,10 @@ predict_final_output(pChain = pChain.eCO2,
                      obs = eco2DF[4,],
                      return.option = "Check result")
 
+
+
+########################################################################################
+#### D: Make aCO2 and eCO2 summary and comparison summaries
+### step 1:
+### compute a output table to summarize parameters and their uncertainties
+make_parameter_summary_table()
