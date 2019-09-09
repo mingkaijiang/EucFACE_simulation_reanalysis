@@ -1,4 +1,4 @@
-EucFACE_C_budget_model <- function(params, GPP, Ra, Pools, delta) {
+EucFACE_C_budget_model <- function(params, obs) {
   
   ######################################################################
   #### read in params and data
@@ -24,10 +24,10 @@ EucFACE_C_budget_model <- function(params, GPP, Ra, Pools, delta) {
   frac.micr <- params[15]
   
   ### get total NPP
-  NPP.tot <- GPP - Ra
+  NPP.tot <- obs$GPP.mean - obs$Ra.mean
   
   ### CUE
-  CUE <- NPP.tot / GPP
+  CUE <- NPP.tot / obs$GPP.mean
   
   ### individual NPP fluxes
   NPP.leaf <- NPP.tot * alloc.leaf
@@ -38,13 +38,13 @@ EucFACE_C_budget_model <- function(params, GPP, Ra, Pools, delta) {
   #browser()
   
   ### Pools
-  C.leaf <- Pools[1]
-  C.wood <- Pools[2]
-  C.froot <- Pools[3]
-  C.myco <- Pools[4]
-  C.ag.lit <- Pools[5]
-  C.micr <- Pools[6]
-  C.soil <- Pools[7]
+  C.leaf <- obs$C.leaf.mean 
+  C.wood <- obs$C.wood.mean 
+  C.froot <- obs$C.froot.mean 
+  C.myco <- obs$C.myco.mean 
+  C.ag.lit <- obs$C.ag.lit.mean 
+  C.micr <- obs$C.micr.mean 
+  C.soil <- obs$C.soil.mean 
   
   
   ### write equations for change in pools
@@ -72,7 +72,7 @@ EucFACE_C_budget_model <- function(params, GPP, Ra, Pools, delta) {
   #browser()
   
   ### prepare output
-  outDF <- data.frame(GPP, NPP.tot, CUE,
+  outDF <- data.frame(obs$GPP.mean, NPP.tot, CUE,
                       NPP.leaf, NPP.wood, NPP.froot, NPP.myco,
                       delta.C.leaf, delta.C.froot, delta.C.myco, 
                       delta.C.ag.lit, delta.C.bg.lit, 

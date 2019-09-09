@@ -1,4 +1,5 @@
-MCMC_model_fitting <- function() {
+MCMC_model_fitting <- function(params,
+                               obs) {
     
     ### Assign chain length for MCMC parameter fitting
     chainLength <- 1000
@@ -38,14 +39,11 @@ MCMC_model_fitting <- function() {
     ### Run the model, with initial parameter settings
     ### return initial output
     out.init <- EucFACE_C_budget_model(params=params, 
-                                       GPP=GPP.amb.mean, 
-                                       Ra=Ra.amb.mean, 
-                                       Pools=Pools.amb.mean, 
-                                       delta=Delta.amb.mean)
+                                       obs=obs)
     
     
     #### Calculate log likelihood of starting point of the chain
-    logL0 <- log_likelihood(obs = obsDF, pred = out.init) 
+    logL0 <- log_likelihood(obs = obs, pred = out.init) 
     
     aic <- -2*logL0 + k1*npar
     bic <- -2*logL0 + k2*npar
@@ -96,14 +94,11 @@ MCMC_model_fitting <- function() {
         if (Prior1 > 0) {
             
             out.cand <- EucFACE_C_budget_model(params=candidatepValues, 
-                                               GPP=GPP.amb.mean, 
-                                               Ra=Ra.amb.mean, 
-                                               Pools=Pools.amb.mean, 
-                                               delta=Delta.amb.mean)
+                                               obs=obs)
             
             
             # Calculate log likelihood
-            logL1 <- log_likelihood(obs = obsDF, pred = out.cand) 
+            logL1 <- log_likelihood(obs = obs, pred = out.cand) 
             
             # Calculating the logarithm of the Metropolis ratio
             logalpha <- (logPrior1+logL1) - (logPrior0+logL0) 

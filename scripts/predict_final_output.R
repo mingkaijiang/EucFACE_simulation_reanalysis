@@ -8,10 +8,12 @@ predict_final_output <- function(pChain, return.option) {
     names(param.final) <- c("alloc.leaf", "alloc.froot", "alloc.myco",
                             "tau.leaf", "tau.froot", "tau.myco",
                             "tau.ag.lit", "tau.bg.lit", "tau.micr", "tau.soil", 
+                            "C.bg.lit",
                             "frac.myco", "frac.ag.lit", "frac.bg.lit", "frac.micr",
                             "alloc.leaf.sd", "alloc.froot.sd", "alloc.myco.sd",
                             "tau.leaf.sd", "tau.froot.sd", "tau.myco.sd",
                             "tau.ag.lit.sd", "tau.bg.lit.sd", "tau.micr.sd", "tau.soil.sd", 
+                            "C.bg.lit.sd",
                             "frac.myco.sd", "frac.ag.lit.sd", "frac.bg.lit.sd", "frac.micr.sd")
     
     param.final[,1:no.var] = param.set
@@ -21,10 +23,7 @@ predict_final_output <- function(pChain, return.option) {
     
     # Calculate final output set from the predicted parameter set
     output.final.set <- EucFACE_C_budget_model(params=param.set, 
-                                               GPP=GPP.amb.mean, 
-                                               Ra=Ra.amb.mean, 
-                                               Pools=Pools.amb.mean, 
-                                               delta=Delta.amb.mean)
+                                               obs=obsDF[4,])
     
     if (return.option == "Check result") {
         print(param.final)
