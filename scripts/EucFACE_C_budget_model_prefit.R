@@ -1,5 +1,4 @@
-EucFACE_C_budget_model <- function(params, 
-                                   obs) {
+EucFACE_C_budget_model_prefit <- function(params) {
   
   ######################################################################
   #### read in params and data
@@ -85,6 +84,7 @@ EucFACE_C_budget_model <- function(params,
                        "delta.Cag", "delta.Cbg",
                        "delta.Cmicr", "delta.Csoil", "Rhet")
   
-  return(outDF)
+  return(abs(obs$Rhet.mean - outDF$Rhet))
   
+
 }

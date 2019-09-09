@@ -1,4 +1,4 @@
-predict_final_output <- function(pChain, return.option) {
+predict_final_output <- function(pChain, obs, return.option) {
     
     # Store the final parameter set values
     param.set = colMeans(pChain[, 1:no.var])
@@ -23,7 +23,7 @@ predict_final_output <- function(pChain, return.option) {
     
     # Calculate final output set from the predicted parameter set
     output.final.set <- EucFACE_C_budget_model(params=param.set, 
-                                               obs=obsDF[4,])
+                                               obs=obs)
     
     if (return.option == "Check result") {
         print(param.final)

@@ -1,8 +1,8 @@
 MCMC_model_fitting <- function(params,
-                               obs) {
-    
-    ### Assign chain length for MCMC parameter fitting
-    chainLength <- 1000
+                               params.lower,
+                               params.upper,
+                               obs,
+                               chainLength) {
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 
@@ -44,6 +44,8 @@ MCMC_model_fitting <- function(params,
     
     #### Calculate log likelihood of starting point of the chain
     logL0 <- log_likelihood(obs = obs, pred = out.init) 
+    
+    #browser()
     
     aic <- -2*logL0 + k1*npar
     bic <- -2*logL0 + k2*npar

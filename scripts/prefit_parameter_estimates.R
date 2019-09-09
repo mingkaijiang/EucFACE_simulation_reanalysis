@@ -1,12 +1,13 @@
 prefit_parameter_estimates <- function() {
     
-    GPP=GPP.amb.mean
-    Ra=Ra.amb.mean
-    Pools=Pools.amb.mean
-    delta=Delta.amb.mean
+    obs <- eco2DF[4,]
+    params <- params.eCO2
     
     fit <- optim(params, EucFACE_C_budget_model_prefit, method="BFGS",hessian=T)
     fit$par
+    
+    params.lower <- params.eCO2.lower
+    params.upper <- params.eCO2.upper
     
     fitted <- Nelder_Mead(EucFACE_C_budget_model_prefit, 
                           fit$par, 
