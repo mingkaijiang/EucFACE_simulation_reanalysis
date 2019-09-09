@@ -24,16 +24,16 @@ params.eCO2.lower <- c(0.4,
                        0.25,
                        0.8,          # tau leaf
                        1.0,          # tau froot
-                       10.0,          # tau myco
-                       4.0,          # tau ag.lit    
+                       4.0,          # tau myco
+                       1.0,          # tau ag.lit    
                        1.0,          # tau.bg.lit
                        4.0,          # tau.micr.lit
                        0.01,         # tau.soil.lit
                        10,           # C.bg.lit
-                       0.4,          # frac.myco
-                       0.4,          # frac.ag
-                       0.4,          # frac.bg
-                       0.4)          # frac.micr
+                       0.1,          # frac.myco
+                       0.1,          # frac.ag
+                       0.1,          # frac.bg
+                       0.1)          # frac.micr
 
 
 params.eCO2.upper <- c(0.6,
@@ -43,14 +43,14 @@ params.eCO2.upper <- c(0.6,
                        2.0,          # tau froot
                        50.0,         # tau myco
                        8.0,          # tau ag.lit   
-                       2.0,          # tau.bg.lit
-                       10.0,         # tau.micr.lit
+                       8.0,          # tau.bg.lit
+                       50.0,         # tau.micr.lit
                        0.2,          # tau.soil.lit
                        120,          # C.bg.lit
-                       0.8,          # frac.myco
-                       0.8,          # frac.ag
-                       0.8,          # frac.bg
-                       0.8)          # frac.micr
+                       0.9,          # frac.myco
+                       0.9,          # frac.ag
+                       0.9,          # frac.bg
+                       0.9)          # frac.micr
                            
 
 ### set number of parameter variables

@@ -2,7 +2,9 @@ MCMC_model_fitting <- function(params,
                                params.lower,
                                params.upper,
                                obs,
-                               chainLength) {
+                               chainLength,
+                               dist.type,
+                               step.size) {
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 
@@ -18,23 +20,29 @@ MCMC_model_fitting <- function(params,
     
     
     ### Defining the variance-covariance matrix for proposal generation
-    vcov <- (0.012*(params.upper-params.lower))^2
+    #vcov <- (0.012*(params.upper-params.lower))^2
+    vcov <- (step.size*(params.upper-params.lower))^2
+    
     vcovProposal <-  vcov 
     
-    
-    ### Find the Prior probability density - normal gaussian distribution
-    prior.dist <- vector("list", no.var)
-    for (i in 1:no.var) {
-        # Prior normal gaussian distribution
-        prior.dist[i] <- list(log(dnorm(params[i], (params.lower[i] + params.upper[i])/2, 
-                                       (params.upper[i] - params.lower[i])/3))) 
+
+    ### Find the Prior probability density
+    if (dist.type == "normal") {
+        ### normal gaussian distribution
+        prior.dist <- vector("list", no.var)
+        for (i in 1:no.var) {
+            # Prior normal gaussian distribution
+            prior.dist[i] <- list(log(dnorm(params[i], (params.lower[i] + params.upper[i])/2, 
+                                            (params.upper[i] - params.lower[i])/3))) 
+        }
+        logPrior0 <- sum(unlist(prior.dist))
+        Prior0 <- exp(logPrior0)
+        
+    } else if (dist.type == "uniform") {
+        ### alternative - uniform distribution
+        logPrior0 <- sum(log(dunif(params, min=params.lower, max=params.upper)))
+        Prior0 <- exp(logPrior0)
     }
-    logPrior0 <- sum(unlist(prior.dist))
-    Prior0 <- exp(logPrior0)
-    
-    ### alternative - uniform distribution
-    #logPrior0 <- sum(log(dunif(params, min=params.lower, max=params.upper)))
-    #Prior0 <- exp(logPrior0)
     
     ### Run the model, with initial parameter settings
     ### return initial output
@@ -73,20 +81,23 @@ MCMC_model_fitting <- function(params,
         
         ### Calculating the prior probability density for the candidate parameter vector
         if (all(candidatepValues>params.lower) && all(candidatepValues<params.upper)){
-            uni.dist = vector("list", no.var)
             
-            # Prior normal gaussian distribution
-            for (i in 1:no.var) {
-                uni.dist[i] = list(log(dnorm(candidatepValues[i], 
-                                             (params.lower[i] + params.upper[i])/2, 
-                                             (params.upper[i] - params.lower[i])/3))) 
+            if (dist.type == "normal") {
+                uni.dist = vector("list", no.var)
+                # Prior normal gaussian distribution
+                for (i in 1:no.var) {
+                    uni.dist[i] = list(log(dnorm(candidatepValues[i], 
+                                                 (params.lower[i] + params.upper[i])/2, 
+                                                 (params.upper[i] - params.lower[i])/3))) 
+                }
+                logPrior1 <- sum(unlist(uni.dist))
+                Prior1 <- exp(logPrior1)
+            } else if (dist.type == "uniform") {
+                
+                # alternative - uniform distribution
+                logPrior1 <- sum(log(dunif(candidatepValues, min=params.lower, max=params.upper)))
+                Prior1 <- exp(logPrior0)
             }
-            logPrior1 <- sum(unlist(uni.dist))
-            Prior1 <- exp(logPrior1)
-            
-            # alternative - uniform distribution
-            #logPrior1 <- sum(log(dunif(candidatepValues, min=params.lower, max=params.upper)))
-            #Prior1 <- exp(logPrior0)
             
         } else {
             Prior1 <- 0

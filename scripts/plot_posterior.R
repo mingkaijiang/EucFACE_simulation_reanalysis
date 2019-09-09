@@ -1,4 +1,4 @@
-plot_posterior <- function(inDF, Trt) {
+plot_posterior <- function(inDF, Trt, dist.type) {
     
     ### colmeans
     mDF <- colMeans(inDF)
@@ -19,7 +19,7 @@ plot_posterior <- function(inDF, Trt) {
                "delta.Cmicr", "delta.Csoil", "Rhet", 
                "Prior","aic", "bic")
     
-    pdf(paste0("output/posterior_distributions_", Trt, ".pdf"))
+    pdf(paste0("output/posterior_distributions_", Trt, "_", dist.type, ".pdf"))
     for (i in 1:col) {
         hist(inDF[,i], main = names[i],
              prob=TRUE,col="black",border="white")
