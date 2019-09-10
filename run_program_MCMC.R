@@ -106,7 +106,7 @@ predict_final_output(pChain = pChain.aCO2,
 source("initial_constants/initialize_eCO2_parameters.R")
 
 ### set up step size for aCO2 and eCO2 
-chainLength <- 5000
+chainLength <- 100000
 step.size.eCO2 <- 0.001
 
 ### step 3:
