@@ -16,10 +16,10 @@ source("prepare.R")
 set.seed(15)
 
 ### Assign chain length for MCMC parameter fitting
-chainLength <- 100000
+chainLength <- 10000
 
 ### set up step size for aCO2 and eCO2 
-step.size.aCO2 <- 0.012
+step.size.aCO2 <- 0.02#0.012
 
 ### set up distribution type for parameter space
 dist.type <- "uniform"
@@ -48,7 +48,13 @@ pChain_aCO2_1 <- MCMC_model_fitting(params = params.aCO2,
                                     dist.type=dist.type,
                                     step.size=step.size.aCO2)
 
-summary(pChain_aCO2_1)
+plot_parameter_trace_within_parameter_space(params= params.aCO2, 
+                                            params.lower = params.aCO2.lower,
+                                            params.upper = params.aCO2.upper,
+                                            inDF = pChain_aCO2_1,
+                                            dist.type=dist.type,
+                                            step.size=step.size.aCO2,
+                                            chainLength=chainLength)
 
 ## Ring 3
 pChain_aCO2_2 <- MCMC_model_fitting(params = params.aCO2, 
@@ -69,14 +75,15 @@ pChain_aCO2_3 <- MCMC_model_fitting(params = params.aCO2,
                                     step.size=step.size.aCO2)
 
 ## briefly check the results
-summary(pChain_aCO2_1)
-apply(pChain_aCO2_1, 2, sd)
+#summary(pChain_aCO2_1)
+#apply(pChain_aCO2_1, 2, sd)
 
 ### step 5: 
 ### combine the results, and make some plots
 pChain.aCO2 <- rbind(pChain_aCO2_1, pChain_aCO2_2, pChain_aCO2_3)
 
-plot_posterior(inDF = pChain.aCO2, Trt = "aCO2", dist.type = dist.type)
+plot_posterior(inDF = pChain.aCO2, Trt = "aCO2", dist.type = dist.type,
+               chainLength = chainLength)
 
 ### step 6: 
 ### predict final output, at mean aCO2
@@ -146,7 +153,8 @@ summary(pChain_eCO2_1)
 ### combine the results, and make some plots
 pChain.eCO2 <- rbind(pChain_eCO2_1, pChain_eCO2_2, pChain_eCO2_3)
 
-plot_posterior(inDF = pChain.eCO2, Trt = "eCO2", dist.type = dist.type)
+plot_posterior(inDF = pChain.eCO2, Trt = "eCO2", dist.type = dist.type,
+               chainLength = chainLength)
 
 ### step 5: 
 ### predict final output, at mean eCO2 values
