@@ -16,10 +16,10 @@ source("prepare.R")
 set.seed(15)
 
 ### Assign chain length for MCMC parameter fitting
-chainLength <- 10000
+chainLength <- 100000
 
 ### set up step size for aCO2 and eCO2 
-step.size.aCO2 <- 0.02#0.012
+step.size.aCO2 <- 0.004
 
 ### set up distribution type for parameter space
 dist.type <- "uniform"
@@ -55,6 +55,9 @@ plot_parameter_trace_within_parameter_space(params= params.aCO2,
                                             dist.type=dist.type,
                                             step.size=step.size.aCO2,
                                             chainLength=chainLength)
+
+summary(pChain_aCO2_1)
+
 
 ## Ring 3
 pChain_aCO2_2 <- MCMC_model_fitting(params = params.aCO2, 
