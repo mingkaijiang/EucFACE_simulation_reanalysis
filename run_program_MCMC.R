@@ -116,7 +116,7 @@ predict_final_output(pChain = pChain.aCO2,
 source("initial_constants/initialize_eCO2_parameters_wide.R")
 
 ### set up step size for aCO2 and eCO2 
-#chainLength <- 100000
+chainLength <- 500000
 #step.size.eCO2 <- 0.001
 step.size.eCO2 <- step.size.aCO2
 
@@ -129,6 +129,8 @@ pChain_eCO2_1 <- MCMC_model_fitting(params = params.eCO2,
                                     chainLength=chainLength,
                                     dist.type=dist.type,
                                     step.size=step.size.eCO2)
+
+summary(pChain_eCO2_1)
 
 
 pChain_eCO2_2 <- MCMC_model_fitting(params = params.eCO2, 
