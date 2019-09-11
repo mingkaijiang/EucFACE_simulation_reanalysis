@@ -1,4 +1,6 @@
-predict_final_output <- function(pChain, obs, return.option) {
+predict_final_output <- function(pChain, 
+                                 obs, 
+                                 return.option) {
     
     # Store the final parameter set values
     param.set = colMeans(pChain[, 1:no.var])

@@ -20,7 +20,6 @@ MCMC_model_fitting <- function(params,
     #browser()
     
     ### Defining the variance-covariance matrix for proposal generation
-    #vcov <- (0.012*(params.upper-params.lower))^2
     vcov <- (step.size*(params.upper-params.lower))^2
     
     vcovProposal <-  vcov 
