@@ -1,18 +1,13 @@
-EucFACE_C_budget_model <- function(params, 
+EucFACE_C_budget_model_2 <- function(params, 
                                    obs) {
   
   ######################################################################
   #### read in params and data
   ### params these are parameters we need to constrain
   alloc.leaf <- params[1]
-  alloc.wood <- params[2]
-  alloc.froot <- params[3]
-  alloc.myco <- 1 - alloc.leaf - alloc.froot - alloc.wood
-  
-  if (alloc.myco < 0) {
-    alloc.myco <- 0
-    alloc.wood <- 1 - alloc.leaf - alloc.froot
-  } 
+  alloc.froot <- params[2]
+  alloc.myco <- params[3]
+  alloc.wood <- 1 - alloc.leaf - alloc.froot - alloc.myco
   
   tau.leaf <- params[4]
   tau.froot <- params[5]
@@ -22,12 +17,13 @@ EucFACE_C_budget_model <- function(params,
   tau.micr <- params[9] 
   tau.soil <- params[10]
   
-  C.bg.lit <- params[11]
+  C.ag.lit <- params[11]
+  C.bg.lit <- params[12]
 
-  frac.myco <- params[12]
-  frac.ag <- params[13]
-  frac.bg <- params[14]
-  frac.micr <- params[15]
+  frac.myco <- params[13]
+  frac.ag <- params[14]
+  frac.bg <- params[15]
+  frac.micr <- params[16]
   
   ### get total NPP
   NPP.tot <- obs$GPP.mean - obs$Ra.mean
@@ -48,7 +44,6 @@ EucFACE_C_budget_model <- function(params,
   C.wood <- obs$C.wood.mean 
   C.froot <- obs$C.froot.mean 
   C.myco <- obs$C.myco.mean 
-  C.ag.lit <- obs$C.ag.lit.mean 
   C.micr <- obs$C.micr.mean 
   C.soil <- obs$C.soil.mean 
   

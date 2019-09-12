@@ -16,7 +16,7 @@ source("prepare.R")
 set.seed(15)
 
 ### Assign chain length for MCMC parameter fitting
-chainLength <- 10000
+chainLength <- 500000
 
 ### set up step size for aCO2 
 step.size.aCO2 <- 0.003
@@ -31,22 +31,22 @@ dist.type <- "uniform"
 #source("initial_constants/initialize_aCO2_parameters.R")
 
 ## this initial parameters explore wider parameter space
-source("initial_constants/initialize_aCO2_parameters_wide.R")
+source("initial_constants/initialize_aCO2_parameters_wide_2.R")
 
 ### step 2: 
 ### prepare the input dataframe for aCO2 treatment
-obsDF <- initialize_obs_amb_dataframe()
+obsDF <- initialize_obs_amb_dataframe_2()
 
 ### step 3:
 ### Run MCMC - at aCO2 for each ring
 ## Ring 2
-pChain_aCO2_1 <- MCMC_model_fitting(params = params.aCO2, 
-                                    params.lower = params.aCO2.lower,
-                                    params.upper = params.aCO2.upper,
-                                    obs=obsDF[1,],
-                                    chainLength=chainLength,
-                                    dist.type=dist.type,
-                                    step.size=step.size.aCO2)
+pChain_aCO2_1 <- MCMC_model_fitting_2(params = params.aCO2, 
+                                      params.lower = params.aCO2.lower,
+                                      params.upper = params.aCO2.upper,
+                                      obs=obsDF[1,],
+                                      chainLength=chainLength,
+                                      dist.type=dist.type,
+                                      step.size=step.size.aCO2)
 
 plot_parameter_trace_within_parameter_space(params= params.aCO2, 
                                             params.lower = params.aCO2.lower,
@@ -57,7 +57,7 @@ plot_parameter_trace_within_parameter_space(params= params.aCO2,
                                             chainLength=chainLength,
                                             Trt = "aCO2_1")
 
-summary(pChain_aCO2_1)
+#summary(pChain_aCO2_1)
 
 
 ## Ring 3

@@ -4,7 +4,8 @@ plot_parameter_trace_within_parameter_space <- function(params,
                                                         inDF,
                                                         dist.type,
                                                         step.size,
-                                                        chainLength) {
+                                                        chainLength,
+                                                        Trt) {
     
     ### assign y value
     inDF$y <- 1
@@ -20,7 +21,7 @@ plot_parameter_trace_within_parameter_space <- function(params,
     
     ### plotting
     pdf(paste0("output/parameter_trace_", dist.type, "_", 
-               step.size, "_", chainLength,
+               step.size, "_", chainLength, "_", Trt,
                ".pdf"), width=8, height=4)
     
     par(mfrow=c(1,2))

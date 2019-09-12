@@ -1,10 +1,10 @@
-MCMC_model_fitting <- function(params,
-                               params.lower,
-                               params.upper,
-                               obs,
-                               chainLength,
-                               dist.type,
-                               step.size) {
+MCMC_model_fitting_2 <- function(params,
+                                 params.lower,
+                                 params.upper,
+                                 obs,
+                                 chainLength,
+                                 dist.type,
+                                 step.size) {
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 
@@ -45,8 +45,8 @@ MCMC_model_fitting <- function(params,
     
     ### Run the model, with initial parameter settings
     ### return initial output
-    out.init <- EucFACE_C_budget_model(params=params, 
-                                       obs=obs)
+    out.init <- EucFACE_C_budget_model_2(params=params, 
+                                         obs=obs)
     
     
     #### Calculate log likelihood of starting point of the chain
