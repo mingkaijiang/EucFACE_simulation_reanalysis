@@ -5,7 +5,7 @@ initialize_obs_amb_dataframe_2 <- function() {
     ##################################### read csv delta
     deltaDF1 <- read.csv("initial_constants/delta_pool.csv")
     
-    deltaDF2 <- as.data.frame(matrix(ncol=14, nrow = 4))
+    deltaDF2 <- as.data.frame(matrix(ncol=12, nrow = 4))
     colnames(deltaDF2) <- c("delta.C.leaf.mean", "delta.C.wood.mean", "delta.C.froot.mean",
                             "delta.C.myco.mean", #"delta.C.ag.lit.mean", 
                             "delta.C.micr.mean", "delta.C.soil.mean", 
@@ -366,7 +366,7 @@ initialize_obs_amb_dataframe_2 <- function() {
     ##################################### read csv pool
     poolDF1 <- read.csv("initial_constants/pool.csv")
     
-    poolDF2 <- as.data.frame(matrix(ncol=14, nrow = 4))
+    poolDF2 <- as.data.frame(matrix(ncol=12, nrow = 4))
     colnames(poolDF2) <- c("C.leaf.mean", "C.wood.mean", "C.froot.mean",
                            "C.myco.mean", #"C.ag.lit.mean", 
                            "C.micr.mean", "C.soil.mean", 
@@ -526,6 +526,10 @@ initialize_obs_amb_dataframe_2 <- function() {
     
     poolDF2[4,"C.soil.sd"] <- sum(poolDF1$aCO2_sd[poolDF1$term=="Soil C"])
     
+    
+    ### turnover rate for leaf litter pool
+    poolDF2$tau.ag.lit.mean <- 365 * c(0.0059, 0.0035, 0.0072, mean(c(0.0059, 0.0035, 0.0072)))
+    poolDF2$tau.ag.lit.sd <- 365 * rep(sd(c(0.0059, 0.0035, 0.0072)), 4)
     
     ### set outDF
     out <- data.frame(gppDF2, nppDF2, deltaDF2, poolDF2)

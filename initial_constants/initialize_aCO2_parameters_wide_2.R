@@ -8,7 +8,7 @@ params.aCO2 <- c(0.4,          # alloc leaf
                  1.0,          # tau leaf
                  1.5,          # tau froot
                  12.0,         # tau myco
-                 3.5,          # tau ag.lit    
+                 #3.5,          # tau ag.lit    
                  1.5,          # tau.bg.lit
                  5.5,          # tau.micr
                  0.145,        # tau.soil
@@ -25,7 +25,7 @@ params.aCO2.lower <- c(0.1,
                        0.5,          # tau leaf
                        1.0,          # tau froot
                        4.0,          # tau myco
-                       1.0,          # tau ag.lit    
+                       #1.0,          # tau ag.lit    
                        1.0,          # tau.bg.lit
                        2.0,          # tau.micr.lit
                        0.01,         # tau.soil.lit
@@ -43,7 +43,7 @@ params.aCO2.upper <- c(0.6,
                        1.5,          # tau leaf
                        2.0,          # tau froot
                        50.0,         # tau myco
-                       8.0,          # tau ag.lit   
+                       #8.0,          # tau ag.lit   
                        8.0,          # tau.bg.lit
                        50.0,         # tau.micr.lit
                        0.25,         # tau.soil.lit

@@ -137,7 +137,7 @@ MCMC_model_fitting <- function(params,
     pChain <- as.data.frame(pChain)
     
     ### assign names
-    names(pChain) <- c("alloc.leaf", "alloc.froot", "alloc.myco",
+    names(pChain) <- c("alloc.leaf", "alloc.wood", "alloc.froot",
                        "tau.leaf", "tau.froot", "tau.myco",
                        "tau.ag.lit", "tau.bg.lit", "tau.micr", "tau.soil", 
                        "C.bg.lit",

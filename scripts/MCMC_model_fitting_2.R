@@ -50,7 +50,7 @@ MCMC_model_fitting_2 <- function(params,
     
     
     #### Calculate log likelihood of starting point of the chain
-    logL0 <- log_likelihood(obs = obs, pred = out.init) 
+    logL0 <- log_likelihood_2(obs = obs, pred = out.init) 
     
     #browser()
     
@@ -105,12 +105,12 @@ MCMC_model_fitting_2 <- function(params,
         ### Calculating the outputs for the candidate parameter vector and then log likelihood
         if (Prior1 > 0) {
             
-            out.cand <- EucFACE_C_budget_model(params=candidatepValues, 
+            out.cand <- EucFACE_C_budget_model_2(params=candidatepValues, 
                                                obs=obs)
             
             
             # Calculate log likelihood
-            logL1 <- log_likelihood(obs = obs, pred = out.cand) 
+            logL1 <- log_likelihood_2(obs = obs, pred = out.cand) 
             
             # Calculating the logarithm of the Metropolis ratio
             logalpha <- (logPrior1+logL1) - (logPrior0+logL0) 
@@ -137,7 +137,7 @@ MCMC_model_fitting_2 <- function(params,
     pChain <- as.data.frame(pChain)
     
     ### assign names
-    names(pChain) <- c("alloc.leaf", "alloc.froot", "alloc.myco",
+    names(pChain) <- c("alloc.leaf", "alloc.wood", "alloc.froot",
                        "tau.leaf", "tau.froot", "tau.myco",
                        "tau.ag.lit", "tau.bg.lit", "tau.micr", "tau.soil", 
                        "C.bg.lit",

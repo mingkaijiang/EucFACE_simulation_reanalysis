@@ -5,25 +5,32 @@ EucFACE_C_budget_model_2 <- function(params,
   #### read in params and data
   ### params these are parameters we need to constrain
   alloc.leaf <- params[1]
-  alloc.froot <- params[2]
-  alloc.myco <- params[3]
-  alloc.wood <- 1 - alloc.leaf - alloc.froot - alloc.myco
+  alloc.wood <- params[2]
+  alloc.froot <- params[3]
+  alloc.myco <- 1 - alloc.leaf - alloc.froot - alloc.wood
+  
+  if (alloc.myco < 0) {
+    alloc.myco <- 0
+    alloc.wood <- 1 - alloc.leaf - alloc.froot
+  } 
   
   tau.leaf <- params[4]
   tau.froot <- params[5]
   tau.myco <- params[6]
-  tau.ag.lit <- params[7]
-  tau.bg.lit <- params[8]
-  tau.micr <- params[9] 
-  tau.soil <- params[10]
   
-  C.ag.lit <- params[11]
-  C.bg.lit <- params[12]
+  tau.ag.lit <- obs$tau.ag.lit.mean
+  
+  tau.bg.lit <- params[7]
+  tau.micr <- params[8] 
+  tau.soil <- params[9]
+  
+  C.ag.lit <- params[10]
+  C.bg.lit <- params[11]
 
-  frac.myco <- params[13]
-  frac.ag <- params[14]
-  frac.bg <- params[15]
-  frac.micr <- params[16]
+  frac.myco <- params[12]
+  frac.ag <- params[13]
+  frac.bg <- params[14]
+  frac.micr <- params[15]
   
   ### get total NPP
   NPP.tot <- obs$GPP.mean - obs$Ra.mean

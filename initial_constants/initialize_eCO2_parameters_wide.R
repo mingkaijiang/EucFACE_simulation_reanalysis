@@ -37,7 +37,7 @@ params.eCO2.lower <- c(0.1,
 
 params.eCO2.upper <- c(0.6,
                        0.2,
-                       0.2,
+                       0.15,
                        1.5,          # tau leaf
                        2.0,          # tau froot
                        50.0,         # tau myco

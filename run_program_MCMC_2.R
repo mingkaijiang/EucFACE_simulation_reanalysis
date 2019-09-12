@@ -16,7 +16,7 @@ source("prepare.R")
 set.seed(15)
 
 ### Assign chain length for MCMC parameter fitting
-chainLength <- 500000
+chainLength <- 1000
 
 ### set up step size for aCO2 
 step.size.aCO2 <- 0.003
