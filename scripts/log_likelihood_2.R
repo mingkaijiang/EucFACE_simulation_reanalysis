@@ -12,9 +12,13 @@ log_likelihood_2 <- function(obs, pred) {
     logLi <- logLi - 0.5*((pred$delta.Cleaf - obs$delta.C.leaf.mean)/obs$delta.C.leaf.sd)^2 - log(obs$delta.C.leaf.sd) - log(2*pi)^0.5
     logLi <- logLi - 0.5*((pred$delta.Cfroot - obs$delta.C.froot.mean)/obs$delta.C.froot.sd)^2 - log(obs$delta.C.froot.sd) - log(2*pi)^0.5
     logLi <- logLi - 0.5*((pred$delta.Cmyco - obs$delta.C.myco.mean)/obs$delta.C.myco.sd)^2 - log(obs$delta.C.myco.sd) - log(2*pi)^0.5
-    #logLi <- logLi - 0.5*((pred$delta.Cag - obs$delta.C.ag.lit.mean)/obs$delta.C.ag.lit.sd)^2 - log(obs$delta.C.ag.lit.sd) - log(2*pi)^0.5
     logLi <- logLi - 0.5*((pred$delta.Cmicr - obs$delta.C.micr.mean)/obs$delta.C.micr.sd)^2 - log(obs$delta.C.micr.sd) - log(2*pi)^0.5
     logLi <- logLi - 0.5*((pred$delta.Csoil - obs$delta.C.soil.mean)/obs$delta.C.soil.sd)^2 - log(obs$delta.C.soil.sd) - log(2*pi)^0.5
+    
+    ### delta litter pool should be none
+    logLi <- logLi - 0.5*((pred$delta.Cag - 0.0)/5.0)^2 - log(5.0) - log(2*pi)^0.5
+    logLi <- logLi - 0.5*((pred$delta.Cbg - 0.0)/5.0)^2 - log(5.0) - log(2*pi)^0.5
+    
     
     ### Rhet
     logLi <- logLi - 0.5*((pred$Rhet - obs$Rhet.mean)/obs$Rhet.sd)^2 - log(obs$Rhet.sd) - log(2*pi)^0.5

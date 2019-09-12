@@ -47,8 +47,8 @@ params.aCO2.upper <- c(0.6,
                        8.0,          # tau.bg.lit
                        50.0,         # tau.micr.lit
                        0.25,         # tau.soil.lit
-                       350.0,        # C.ag.lit
-                       120,          # C.bg.lit
+                       150.0,        # C.ag.lit
+                       100,          # C.bg.lit
                        0.9,          # frac.myco
                        0.9,          # frac.ag
                        0.9,          # frac.bg

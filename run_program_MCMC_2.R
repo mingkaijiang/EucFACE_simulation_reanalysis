@@ -16,7 +16,7 @@ source("prepare.R")
 set.seed(15)
 
 ### Assign chain length for MCMC parameter fitting
-chainLength <- 1000
+chainLength <- 10000
 
 ### set up step size for aCO2 
 step.size.aCO2 <- 0.003
@@ -57,11 +57,11 @@ plot_parameter_trace_within_parameter_space(params= params.aCO2,
                                             chainLength=chainLength,
                                             Trt = "aCO2_1")
 
-#summary(pChain_aCO2_1)
+summary(pChain_aCO2_1)
 
 
 ## Ring 3
-pChain_aCO2_2 <- MCMC_model_fitting(params = params.aCO2, 
+pChain_aCO2_2 <- MCMC_model_fitting_2(params = params.aCO2, 
                                     params.lower = params.aCO2.lower,
                                     params.upper = params.aCO2.upper,
                                     obs=obsDF[2,],
@@ -70,7 +70,7 @@ pChain_aCO2_2 <- MCMC_model_fitting(params = params.aCO2,
                                     step.size=step.size.aCO2)
 
 ## Ring 6
-pChain_aCO2_3 <- MCMC_model_fitting(params = params.aCO2, 
+pChain_aCO2_3 <- MCMC_model_fitting_2(params = params.aCO2, 
                                     params.lower = params.aCO2.lower,
                                     params.upper = params.aCO2.upper,
                                     obs=obsDF[3,],
