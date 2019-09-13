@@ -20,17 +20,17 @@ EucFACE_C_budget_model_2 <- function(params,
   
   tau.ag.lit <- obs$tau.ag.lit.mean
   
-  #tau.bg.lit <- params[7]
-  tau.micr <- params[7] 
-  tau.soil <- params[8]
+  tau.bg.lit <- params[7]
+  tau.micr <- params[8] 
+  tau.soil <- params[9]
   
-  C.ag.lit <- params[9]
-  #C.bg.lit <- params[11]
+  C.ag.lit <- params[10]
+  C.bg.lit <- params[11]
 
-  frac.myco <- params[10]
-  frac.ag <- params[11]
-  frac.bg <- params[12]
-  frac.micr <- params[13]
+  frac.myco <- params[12]
+  frac.ag <- params[13]
+  frac.bg <- params[14]
+  frac.micr <- params[15]
   
   ### get total NPP
   NPP.tot <- obs$GPP.mean - obs$Ra.mean
@@ -63,18 +63,17 @@ EucFACE_C_budget_model_2 <- function(params,
   delta.C.ag.lit <- tau.leaf * C.leaf - tau.ag.lit * C.ag.lit
   
   ### this is unconstrained
-  # delta.C.bg.lit <- tau.froot * C.froot - tau.bg.lit * C.bg.lit
+  delta.C.bg.lit <- tau.froot * C.froot - tau.bg.lit * C.bg.lit
   
-  #delta.C.micr <- frac.ag * tau.ag.lit * C.ag.lit + frac.bg * tau.bg.lit * C.bg.lit + frac.myco * tau.myco * C.myco - tau.micr * C.micr
-  delta.C.micr <- frac.ag * tau.ag.lit * C.ag.lit + frac.bg * tau.froot * C.froot + frac.myco * tau.myco * C.myco - tau.micr * C.micr
-  
+  delta.C.micr <- frac.ag * tau.ag.lit * C.ag.lit + frac.bg * tau.bg.lit * C.bg.lit + frac.myco * tau.myco * C.myco - tau.micr * C.micr
+
   delta.C.soil <- frac.micr * tau.micr * C.micr - tau.soil * C.soil
   
   #browser()
   
   ### total Rhet
   Rhet <- round(C.ag.lit * (1 - frac.ag) * tau.ag.lit +
-                  C.froot * (1 - frac.bg) * tau.froot +
+                  C.bg.lit * (1 - frac.bg) * tau.bg.lit +
                   C.micr * (1 - frac.micr) * tau.micr +
                   C.myco * (1 - frac.myco) * tau.myco + 
                   C.soil * tau.soil, 2)
@@ -85,13 +84,13 @@ EucFACE_C_budget_model_2 <- function(params,
   outDF <- data.frame(obs$GPP.mean, NPP.tot, CUE,
                       NPP.leaf, NPP.wood, NPP.froot, NPP.myco,
                       delta.C.leaf, delta.C.froot, delta.C.myco, 
-                      delta.C.ag.lit, #delta.C.bg.lit, 
+                      delta.C.ag.lit, delta.C.bg.lit, 
                       delta.C.micr, delta.C.soil, Rhet)
   
   colnames(outDF) <- c("GPP", "NPP", "CUE",
                        "NPP.leaf", "NPP.wood", "NPP.froot", "NPP.myco",
                        "delta.Cleaf", "delta.Cfroot", "delta.Cmyco", 
-                       "delta.Cag", #"delta.Cbg",
+                       "delta.Cag", "delta.Cbg",
                        "delta.Cmicr", "delta.Csoil", "Rhet")
   
   return(outDF)

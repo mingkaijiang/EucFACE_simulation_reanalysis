@@ -9,15 +9,15 @@ predict_final_output_2 <- function(pChain,
     
     names(param.final) <- c("alloc.leaf", "alloc.wood", "alloc.froot",
                             "tau.leaf", "tau.froot", "tau.myco",
-                            #"tau.bg.lit", 
+                            "tau.bg.lit", 
                             "tau.micr", "tau.soil", 
-                            "C.ag.lit", #"C.bg.lit",
+                            "C.ag.lit", "C.bg.lit",
                             "frac.myco", "frac.ag.lit", "frac.bg.lit", "frac.micr",
                             "alloc.leaf.sd", "alloc.wood.sd", "alloc.froot.sd",
                             "tau.leaf.sd", "tau.froot.sd", "tau.myco.sd",
-                            #"tau.bg.lit.sd", 
+                            "tau.bg.lit.sd", 
                             "tau.micr.sd", "tau.soil.sd", 
-                            "C.ag.lit.sd", #"C.bg.lit.sd",
+                            "C.ag.lit.sd", "C.bg.lit.sd",
                             "frac.myco.sd", "frac.ag.lit.sd", "frac.bg.lit.sd", "frac.micr.sd")
     
     param.final[,1:no.var] = param.set

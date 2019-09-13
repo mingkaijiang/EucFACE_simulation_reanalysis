@@ -46,7 +46,7 @@ generate_most_likely_outcome <- function(inDF, obs) {
     outDF$delta.Cfroot[outDF$Cat=="Observed"] <- obs$delta.C.froot.mean
     outDF$delta.Cmyco[outDF$Cat=="Observed"] <- obs$delta.C.myco.mean
     outDF$delta.Cag[outDF$Cat=="Observed"] <- 0.0
-    #outDF$delta.Cbg[outDF$Cat=="Observed"] <- 0.0
+    outDF$delta.Cbg[outDF$Cat=="Observed"] <- 0.0
     
     outDF$delta.Cmicr[outDF$Cat=="Observed"] <- obs$delta.C.micr.mean
     outDF$delta.Csoil[outDF$Cat=="Observed"] <- obs$delta.C.soil.mean

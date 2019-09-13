@@ -16,7 +16,7 @@ source("prepare.R")
 set.seed(15)
 
 ### Assign chain length for MCMC parameter fitting
-chainLength <- 100000
+chainLength <- 10000
 
 ### set up step size for aCO2 
 step.size.aCO2 <- 0.004 # 0.003
@@ -138,7 +138,7 @@ predict_final_output_2(pChain = pChain.aCO2,
 source("initial_constants/initialize_eCO2_parameters_wide_2.R")
 
 ### set up step size for aCO2 and eCO2 
-chainLength <- 500000
+chainLength <- 5000
 step.size.eCO2 <- 0.0004
 dist.type <- "uniform"
 
