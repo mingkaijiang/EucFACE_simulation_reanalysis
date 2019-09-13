@@ -1,5 +1,5 @@
 EucFACE_C_budget_model_2 <- function(params, 
-                                   obs) {
+                                     obs) {
   
   ######################################################################
   #### read in params and data
