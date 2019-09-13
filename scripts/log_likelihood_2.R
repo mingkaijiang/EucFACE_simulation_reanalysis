@@ -17,7 +17,7 @@ log_likelihood_2 <- function(obs, pred) {
     
     ### delta litter pool should be none
     logLi <- logLi - 0.5*(abs((pred$delta.Cag - 0.0))/5.0)^2 - log(5.0) - log(2*pi)^0.5
-    logLi <- logLi - 0.5*(abs((pred$delta.Cbg - 0.0))/5.0)^2 - log(5.0) - log(2*pi)^0.5
+    #logLi <- logLi - 0.5*(abs((pred$delta.Cbg - 0.0))/5.0)^2 - log(5.0) - log(2*pi)^0.5
     
     
     ### Rhet
