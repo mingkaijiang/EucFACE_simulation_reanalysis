@@ -108,6 +108,7 @@ MCMC_model_fitting_2 <- function(params,
             out.cand <- EucFACE_C_budget_model_2(params=candidatepValues, 
                                                obs=obs)
             
+            #browser()
             
             # Calculate log likelihood
             logL1 <- log_likelihood_2(obs = obs, pred = out.cand) 
@@ -117,7 +118,12 @@ MCMC_model_fitting_2 <- function(params,
 
             # Accepting or rejecting the candidate vector
             if ( log(runif(1, min = 0, max =1)) < logalpha && candidatepValues[1] + candidatepValues[2] + candidatepValues[3] <= 1
-                 && candidatepValues[1] >= 0 && candidatepValues[2] >= 0 && candidatepValues[3] >= 0) {
+                 && abs(out.cand$delta.Cleaf) <= obs$C.leaf.mean 
+                 && abs(out.cand$delta.Cfroot) <= obs$C.froot.mean 
+                 #&& abs(out.cand$delta.Cmyco) <= obs$C.myco.mean 
+                 && abs(out.cand$delta.Cmicr) <= obs$C.micr.mean 
+                 && abs(out.cand$delta.Csoil) <= (obs$C.soil.mean * 0.1)
+                 && candidatepValues[3] >= 0) {
                 
                 params <- candidatepValues
                 logPrior0 <- logPrior1

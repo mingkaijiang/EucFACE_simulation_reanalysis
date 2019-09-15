@@ -36,14 +36,14 @@ params.eCO2.lower <- c(0.3,
 
 
 params.eCO2.upper <- c(0.6,
-                       0.2,
+                       0.35,
                        0.3,
                        1.5,          # tau leaf
                        2.0,          # tau froot
-                       40.0,         # tau myco
+                       50.0,         # tau myco
                        8.0,          # tau.bg.lit
                        40.0,         # tau.micr.lit
-                       0.2,         # tau.soil.lit
+                       0.20,         # tau.soil.lit
                        150.0,        # C.ag.lit
                        20.0,          # C.bg.lit
                        0.9,          # frac.myco
