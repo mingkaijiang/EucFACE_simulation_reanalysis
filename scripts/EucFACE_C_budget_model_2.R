@@ -9,11 +9,6 @@ EucFACE_C_budget_model_2 <- function(params,
   alloc.froot <- params[3]
   alloc.myco <- 1 - alloc.leaf - alloc.froot - alloc.wood
   
-  #if (alloc.myco < 0) {
-  #  alloc.myco <- 0
-  #  alloc.wood <- 1 - alloc.leaf - alloc.froot
-  #} 
-  
   tau.leaf <- params[4]
   tau.froot <- params[5]
   tau.myco <- params[6]

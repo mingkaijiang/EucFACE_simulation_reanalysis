@@ -19,7 +19,7 @@ set.seed(15)
 chainLength <- 5000
 
 ### set up step size for aCO2 
-step.size.aCO2 <- 0.1 # 0.004
+step.size.aCO2 <- 0.004 # 0.004
 
 ### set up distribution type for parameter space
 dist.type <- "uniform"
@@ -37,57 +37,58 @@ obsDF <- initialize_obs_amb_dataframe_2()
 ### step 3:
 ### Run MCMC - at aCO2 for each ring
 ## Ring 2
-pChain_aCO2_1 <- MCMC_model_fitting_2(params = params.aCO2, 
-                                      params.lower = params.aCO2.lower,
-                                      params.upper = params.aCO2.upper,
-                                      obs=obsDF[1,],
-                                      chainLength=chainLength,
-                                      dist.type=dist.type,
-                                      step.size=step.size.aCO2)
-
-
-generate_most_likely_outcome(inDF=pChain_aCO2_1,
-                             obs=obsDF[1,])
-
-summary(pChain_aCO2_1)
-
-plot_parameter_trace_within_parameter_space(params= params.aCO2, 
-                                            params.lower = params.aCO2.lower,
-                                            params.upper = params.aCO2.upper,
-                                            inDF = pChain_aCO2_1,
-                                            dist.type=dist.type,
-                                            step.size=step.size.aCO2,
-                                            chainLength=chainLength,
-                                            Trt = "aCO2_1")
-
-
-# Ring 3
-pChain_aCO2_2 <- MCMC_model_fitting_2(params = params.aCO2, 
-                                      params.lower = params.aCO2.lower,
-                                      params.upper = params.aCO2.upper,
-                                      obs=obsDF[2,],
-                                      chainLength=chainLength,
-                                      dist.type=dist.type,
-                                      step.size=step.size.aCO2)
-
-generate_most_likely_outcome(inDF=pChain_aCO2_2,
-                             obs=obsDF[2,])
-
-summary(pChain_aCO2_2)
-
-plot_parameter_trace_within_parameter_space(params= params.aCO2, 
-                                            params.lower = params.aCO2.lower,
-                                            params.upper = params.aCO2.upper,
-                                            inDF = pChain_aCO2_2,
-                                            dist.type=dist.type,
-                                            step.size=step.size.aCO2,
-                                            chainLength=chainLength,
-                                            Trt = "aCO2_2")
-
+#pChain_aCO2_1 <- MCMC_model_fitting_2(params = params.aCO2.R2, 
+#                                      params.lower = params.aCO2.lower.R2,
+#                                      params.upper = params.aCO2.upper.R2,
+#                                      obs=obsDF[1,],
+#                                      chainLength=chainLength,
+#                                      dist.type=dist.type,
+#                                      step.size=step.size.aCO2)
+#
+#
+#generate_most_likely_outcome(inDF=pChain_aCO2_1,
+#                             obs=obsDF[1,])
+#
+#
+#plot_parameter_trace_within_parameter_space(params= params.aCO2.R2, 
+#                                            params.lower = params.aCO2.lower.R2,
+#                                            params.upper = params.aCO2.upper.R2,
+#                                            inDF = pChain_aCO2_1,
+#                                            dist.type=dist.type,
+#                                            step.size=step.size.aCO2,
+#                                            chainLength=chainLength,
+#                                            Trt = "aCO2_1")
+#
+#
+## Ring 3
+#step.size.aCO2 <- 0.002 # 0.004
+#pChain_aCO2_2 <- MCMC_model_fitting_2(params = params.aCO2.R3, 
+#                                      params.lower = params.aCO2.lower.R3,
+#                                      params.upper = params.aCO2.upper.R3,
+#                                      obs=obsDF[2,],
+#                                      chainLength=chainLength,
+#                                      dist.type=dist.type,
+#                                      step.size=step.size.aCO2)
+#
+#generate_most_likely_outcome(inDF=pChain_aCO2_2,
+#                             obs=obsDF[2,])
+#
+#summary(pChain_aCO2_2)
+#
+#plot_parameter_trace_within_parameter_space(params= params.aCO2.R3, 
+#                                            params.lower = params.aCO2.lower.R3,
+#                                            params.upper = params.aCO2.upper.R3,
+#                                            inDF = pChain_aCO2_2,
+#                                            dist.type=dist.type,
+#                                            step.size=step.size.aCO2,
+#                                            chainLength=chainLength,
+#                                            Trt = "aCO2_2")
+#
 # Ring 6
-pChain_aCO2_3 <- MCMC_model_fitting_2(params = params.aCO2, 
-                                      params.lower = params.aCO2.lower,
-                                      params.upper = params.aCO2.upper,
+step.size.aCO2 <- 0.004 # 0.004
+pChain_aCO2_3 <- MCMC_model_fitting_2(params = params.aCO2.R6, 
+                                      params.lower = params.aCO2.lower.R6,
+                                      params.upper = params.aCO2.upper.R6,
                                       obs=obsDF[3,],
                                       chainLength=chainLength,
                                       dist.type=dist.type,
@@ -97,12 +98,11 @@ pChain_aCO2_3 <- MCMC_model_fitting_2(params = params.aCO2,
 generate_most_likely_outcome(inDF=pChain_aCO2_3,
                              obs=obsDF[3,])
 
-summary(pChain_aCO2_3)
 
 
-plot_parameter_trace_within_parameter_space(params= params.aCO2, 
-                                            params.lower = params.aCO2.lower,
-                                            params.upper = params.aCO2.upper,
+plot_parameter_trace_within_parameter_space(params= params.aCO2.R6, 
+                                            params.lower = params.aCO2.lower.R6,
+                                            params.upper = params.aCO2.upper.R6,
                                             inDF = pChain_aCO2_3,
                                             dist.type=dist.type,
                                             step.size=step.size.aCO2,
