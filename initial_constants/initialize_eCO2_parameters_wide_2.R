@@ -52,7 +52,3 @@ params.eCO2.upper <- c(0.6,
                        0.9)          # frac.micr
                            
 
-### set number of parameter variables
-no.var <- length(params.eCO2)
-
-

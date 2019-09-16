@@ -7,25 +7,25 @@ EucFACE_C_budget_model_2 <- function(params,
   alloc.leaf <- params[1]
   alloc.wood <- params[2]
   alloc.froot <- params[3]
-  alloc.myco <- 1 - alloc.leaf - alloc.froot - alloc.wood
+  alloc.myco <- params[4]
   
-  tau.leaf <- params[4]
-  tau.froot <- params[5]
-  tau.myco <- params[6]
+  tau.leaf <- params[5]
+  tau.froot <- params[6]
+  tau.myco <- params[7]
   
   tau.ag.lit <- obs$tau.ag.lit.mean
   
-  tau.bg.lit <- params[7]
-  tau.micr <- params[8] 
-  tau.soil <- params[9]
+  tau.bg.lit <- params[8]
+  tau.micr <- params[9] 
+  tau.soil <- params[10]
   
-  C.ag.lit <- params[10]
-  C.bg.lit <- params[11]
+  C.ag.lit <- params[11]
+  C.bg.lit <- params[12]
 
-  frac.myco <- params[12]
-  frac.ag <- params[13]
-  frac.bg <- params[14]
-  frac.micr <- params[15]
+  frac.myco <- params[13]
+  frac.ag <- params[14]
+  frac.bg <- params[15]
+  frac.micr <- params[16]
   
   ### get total NPP
   NPP.tot <- obs$GPP.mean - obs$Ra.mean

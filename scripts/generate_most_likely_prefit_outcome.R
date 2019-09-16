@@ -39,6 +39,10 @@ generate_most_likely_prefit_outcome <- function(inDF, obs) {
     outDF$NPP.myco[outDF$Cat=="Observed"] <- obs$GPP.mean - obs$Ra.mean - obs$NPP.leaf.mean - obs$NPP.wood.mean - obs$NPP.froot.mean
     outDF$NPP[outDF$Cat=="Observed"] <- outDF$NPP.leaf[outDF$Cat=="Observed"] + outDF$NPP.wood[outDF$Cat=="Observed"] + outDF$NPP.froot[outDF$Cat=="Observed"] + outDF$NPP.myco[outDF$Cat=="Observed"]
     
+    outDF$delta.Cleaf[outDF$Cat=="Observed"] <- obs$delta.C.leaf.mean
+    outDF$delta.Cfroot[outDF$Cat=="Observed"] <- obs$delta.C.froot.mean
+    outDF$delta.Cmyco[outDF$Cat=="Observed"] <- obs$delta.C.myco.mean
+    
     outDF$CUE[outDF$Cat=="Observed"] <- 1 - (obs$Ra.mean/obs$GPP.mean) 
     
     

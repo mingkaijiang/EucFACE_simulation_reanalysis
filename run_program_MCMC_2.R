@@ -29,31 +29,39 @@ eco2DF <- initialize_obs_ele_dataframe_2()
 
 ### step 2:
 ## this initial parameters explore prefit parameter space
-alloc.parameters <- run_prefit_program_MCMC(dist.type=dist.type, 
+init.parameters <- run_prefit_program_MCMC(dist.type=dist.type, 
                                             obsDF=obsDF,
                                             eco2DF=eco2DF,
                                             range.option="sd")
 
-### step 3: assign prefit parameters to the input df
+### step 3: initialize parameters the remaining parameters
+source("initial_constants/initialize_aCO2_parameters_wide_2.R")
+source("initial_constants/initialize_eCO2_parameters_wide_2.R")
 
 
+########################################################################################
+#### B. Estimate remaining parameter uncertainties for ambient CO2 treatment
+### step 1: set up 
 
+### Assign chain length for MCMC parameter fitting
+chainLength <- 5000
 
+### set up step size for aCO2 and eCO2
+step.size.aCO2 <- 0.004 # 0.004
+step.size.eCO2 <- 0.15 # 0.004
 
-
-### step 3:
-### Run MCMC for prefit parameters - at aCO2 for each ring
+### step 2: fitting
 ## Ring 2
-prefit_pChain_aCO2_1 <- MCMC_model_fitting_2(params = prefit.params.aCO2, 
-                                      params.lower = params.aCO2.lower,
-                                      params.upper = params.aCO2.upper,
+pChain_aCO2_1 <- MCMC_model_fitting_2(params = params.aCO2.R2, 
+                                      params.lower = params.aCO2.lower.R2,
+                                      params.upper = params.aCO2.upper.R2,
                                       obs=obsDF[1,],
                                       chainLength=chainLength,
                                       dist.type=dist.type,
                                       step.size=step.size.aCO2)
 
 
-generate_most_likely_outcome(inDF=prefit_pChain_aCO2_1,
+generate_most_likely_outcome(inDF=pChain_aCO2_1,
                              obs=obsDF[1,])
 
 
@@ -72,6 +80,8 @@ step.size.aCO2 <- 0.002 # 0.004
 pChain_aCO2_2 <- MCMC_model_fitting_2(params = params.aCO2.R3, 
                                       params.lower = params.aCO2.lower.R3,
                                       params.upper = params.aCO2.upper.R3,
+                                      alloc.params = alloc.parameters[2,],
+                                      
                                       obs=obsDF[2,],
                                       chainLength=chainLength,
                                       dist.type=dist.type,
@@ -96,6 +106,8 @@ step.size.aCO2 <- 0.004 # 0.004
 pChain_aCO2_3 <- MCMC_model_fitting_2(params = params.aCO2.R6, 
                                       params.lower = params.aCO2.lower.R6,
                                       params.upper = params.aCO2.upper.R6,
+                                      alloc.params = alloc.parameters[2,],
+                                      
                                       obs=obsDF[3,],
                                       chainLength=chainLength,
                                       dist.type=dist.type,
