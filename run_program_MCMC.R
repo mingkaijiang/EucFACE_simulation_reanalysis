@@ -239,7 +239,14 @@ predict_final_output(pChain = pChain.eCO2,
 
 
 ########################################################################################
-#### D: Make aCO2 and eCO2 summary and comparison summaries
+#### D: Make aCO2 and eCO2 comparison summaries
 ### step 1:
 ### compute a output table to summarize parameters and their uncertainties
 make_parameter_summary_table()
+
+### step 2: read in Medlyn 2016 modeling results
+combine_all_model_output()
+cablDF <- read_in_cabl()
+
+########################################################################################
+#### E: 

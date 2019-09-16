@@ -1,16 +1,15 @@
-read_in_gday <- function() {
+read_in_lpjx <- function() {
 
     ##################################################
     ##Read in output data and prepare data format
     ##################################################
     ## read cn amb obs
-    inDF1 <- read.csv("model_output/GDAY/D1GDAYEUCAMBAVG.csv", skip=3)
+    inDF1 <- read.csv("model_output/LPJX/D1LPJXEUCAMBAVG.csv", skip=2)
     
-    inDF2 <- read.csv("model_output/GDAY/D1GDAYEUCELEAVG.csv", skip=3)
+    inDF2 <- read.csv("model_output/LPJX/D1LPJXEUCELEAVG.csv", skip=2)
     
-    
-    inDF1[inDF1<=-999] <- 0
-    inDF2[inDF2<=-999] <- 0
+    inDF1[inDF1=="-9999"] <- 0
+    inDF2[inDF2=="-9999"] <- 0
     
     ### prepare a output df
     yr <- unique(inDF1$YEAR)
@@ -102,10 +101,10 @@ read_in_gday <- function() {
     annDF2$delta_CSOIL[annDF2$YEAR == i] <- inDF2$CSOIL[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$CSOIL[inDF2$YEAR==i&inDF2$DOY==1]
     annDF2$delta_TNC[annDF2$YEAR == i] <- inDF2$TNC[inDF2$YEAR==i&inDF2$DOY==365]-inDF2$TNC[inDF2$YEAR==i&inDF2$DOY==1]
     
-    
     ### assign CO2 treatment
     annDF1$CO2 <- "aCO2"
     annDF2$CO2 <- "eCO2"
+    
     
     outDF1 <- rbind(annDF1, annDF2)
     
@@ -115,16 +114,18 @@ read_in_gday <- function() {
     outDF1$AFROOT <- round(outDF1$GR / outDF1$NPP,3)
     outDF1$ACROOT <- round(outDF1$GCR / outDF1$NPP,3)
     outDF1$AOTHER <- round(1 - outDF1$ALEAF - outDF1$AWOOD - outDF1$AFROOT - outDF1$ACROOT, 2)
-
+    
     ### turnover rates
     outDF1$tau_LEAF <- round(outDF1$GL/outDF1$CL,3)
     outDF1$tau_WOOD <- round(outDF1$GW/outDF1$CW,3)
     outDF1$tau_FROOT <- round(outDF1$GR/outDF1$CFR,3)
     outDF1$tau_CROOT <- round(outDF1$GCR/outDF1$CCR,3)
     outDF1$tau_LIT <- round(outDF1$CLLFALL/outDF1$CFLIT, 3)
+    outDF1$tau_CFLITA <- round(outDF1$CLLFALL/outDF1$CFLITA, 3)
+    outDF1$tau_CFLITB <- round(outDF1$CFRLIN/outDF1$CFLITB, 3)
+    
     outDF1$tau_SOIL <- round(outDF1$RHET/outDF1$CSOIL, 3)
     
-    ### calculate long-term means
     outDF2 <- summaryBy(.~CO2, keep.names=T, data=outDF1, FUN=mean)
     
     outDF2$YEAR <- NULL

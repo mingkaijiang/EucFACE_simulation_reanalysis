@@ -1,12 +1,12 @@
-read_in_lpjx <- function() {
+read_in_lpjw <- function() {
 
     ##################################################
     ##Read in output data and prepare data format
     ##################################################
     ## read cn amb obs
-    inDF1 <- read.csv("model_output/LPJX/D1LPJXEUCAMBAVG.csv", skip=2)
+    inDF1 <- read.csv("model_output/LPJW/D1LPJWEUCAMBAVG.csv", skip=2)
     
-    inDF2 <- read.csv("model_output/LPJX/D1LPJXEUCELEAVG.csv", skip=2)
+    inDF2 <- read.csv("model_output/LPJW/D1LPJWEUCELEAVG.csv", skip=2)
     
     inDF1[inDF1=="-9999"] <- 0
     inDF2[inDF2=="-9999"] <- 0
@@ -105,7 +105,6 @@ read_in_lpjx <- function() {
     annDF1$CO2 <- "aCO2"
     annDF2$CO2 <- "eCO2"
     
-    
     outDF1 <- rbind(annDF1, annDF2)
     
     ### allocation coefficients
@@ -121,6 +120,9 @@ read_in_lpjx <- function() {
     outDF1$tau_FROOT <- round(outDF1$GR/outDF1$CFR,3)
     outDF1$tau_CROOT <- round(outDF1$GCR/outDF1$CCR,3)
     outDF1$tau_LIT <- round(outDF1$CLLFALL/outDF1$CFLIT, 3)
+    outDF1$tau_CFLITA <- round(outDF1$CLLFALL/outDF1$CFLITA, 3)
+    outDF1$tau_CFLITB <- round(outDF1$CFRLIN/outDF1$CFLITB, 3)
+    
     outDF1$tau_SOIL <- round(outDF1$RHET/outDF1$CSOIL, 3)
     
     outDF2 <- summaryBy(.~CO2, keep.names=T, data=outDF1, FUN=mean)

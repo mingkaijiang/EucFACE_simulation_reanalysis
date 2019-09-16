@@ -1,5 +1,20 @@
 combine_all_model_output <- function() {
     
+    
+    ### read in model output
+    cablDF <- read_in_cabl()
+    clm4DF <- read_in_clm4()
+    clmpDF <- read_in_clmp()
+    gdayDF <- read_in_gday()
+    lpjwDF <- read_in_lpjw()
+    lpjxDF <- read_in_lpjx()
+    
+    ocnxDF <- read_in_ocnx()
+    sdvmDF <- read_in_sdvm()
+    
+    eucDF <- read_in_EucFACE_output()
+    
+    ### assign names
     cablDF$model <- "CABL"
     clm4DF$model <- "CLM4"
     clmpDF$model <- "CLMP"

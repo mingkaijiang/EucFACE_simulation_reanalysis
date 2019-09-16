@@ -121,6 +121,10 @@ read_in_clm4 <- function() {
     outDF1$tau_FROOT <- round(outDF1$GR/outDF1$CFR,3)
     outDF1$tau_CROOT <- round(outDF1$GCR/outDF1$CCR,3)
     outDF1$tau_LIT <- round(outDF1$CLLFALL/outDF1$CFLIT, 3)
+    
+    outDF1$tau_CFLITA <- round(outDF1$CLLFALL/outDF1$CFLITA, 3)
+    outDF1$tau_CFLITB <- round(outDF1$CFRLIN/outDF1$CFLITB, 3)
+    
     outDF1$tau_SOIL <- round(outDF1$RHET/outDF1$CSOIL, 3)
     
     outDF2 <- summaryBy(.~CO2, keep.names=T, data=outDF1, FUN=mean)
