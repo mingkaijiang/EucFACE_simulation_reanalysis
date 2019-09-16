@@ -65,7 +65,7 @@ run_prefit_program_MCMC <- function(dist.type, obsDF, eco2DF,
     ### step 4:
     ### fit the model with eCO2 parameter space to get parameter uncertainties
     # Ring 1
-    step.size.eCO2 <- 0.006 # 0.004
+    step.size.eCO2 <- 0.0004
     pChain_eCO2_1 <- prefit_MCMC_model_fitting_2(params = prefit.params.eCO2.R1, 
                                                  params.lower = prefit.params.eCO2.lower.R1,
                                                  params.upper = prefit.params.eCO2.upper.R1,
@@ -80,6 +80,7 @@ run_prefit_program_MCMC <- function(dist.type, obsDF, eco2DF,
     
     
     ## ring 4
+    step.size.eCO2 <- 0.0004
     pChain_eCO2_2 <- prefit_MCMC_model_fitting_2(params = prefit.params.eCO2.R4, 
                                                  params.lower = prefit.params.eCO2.lower.R4,
                                                  params.upper = prefit.params.eCO2.upper.R4,
@@ -95,6 +96,7 @@ run_prefit_program_MCMC <- function(dist.type, obsDF, eco2DF,
     
     
     # ring 5
+    step.size.eCO2 <- 0.001
     pChain_eCO2_3 <- prefit_MCMC_model_fitting_2(params = prefit.params.eCO2.R5, 
                                                  params.lower = prefit.params.eCO2.lower.R5,
                                                  params.upper = prefit.params.eCO2.upper.R5,
@@ -108,50 +110,62 @@ run_prefit_program_MCMC <- function(dist.type, obsDF, eco2DF,
     
     
     ########################################################################################
-    outDF <- data.frame(c(1:6), NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
-    colnames(outDF) <- c("Ring", "alloc.leaf", "alloc.wood", "alloc.froot", "alloc.myco",
-                         "sd.leaf", "sd.wood", "sd.froot", "sd.myco",
-                         "pos.leaf", "pos.wood", "pos.froot", "pos.myco",
-                         "neg.leaf", "neg.wood", "neg.froot", "neg.myco")
+    outDF <- data.frame(c(1:6), NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+                        NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA)
+    colnames(outDF) <- c("Ring", "alloc.leaf", "alloc.wood", "alloc.froot", "tau.leaf", "tau.froot", "tau.myco", "alloc.myco", 
+                         "alloc.sd.leaf", "alloc.sd.wood", "alloc.sd.froot", "tau.sd.leaf", "tau.sd.froot", "tau.sd.myco", "alloc.sd.myco", 
+                         "alloc.pos.leaf", "alloc.pos.wood", "alloc.pos.froot", "tau.pos.leaf", "tau.pos.froot", "tau.pos.myco", "alloc.pos.myco", 
+                         "alloc.neg.leaf", "alloc.neg.wood", "alloc.neg.froot", "tau.neg.leaf", "tau.neg.froot", "tau.neg.myco", "alloc.neg.myco")
     
     ### ring 1
     outDF[outDF$Ring=="1", 2:(no.var+2)] <- colMeans(pChain_eCO2_1[, 1:(no.var+1)])
-    outDF[outDF$Ring=="1", 6:9] <- apply(pChain_eCO2_1[, 1:(no.var+1)], 2, sd)
+    outDF[outDF$Ring=="1", 9:15] <- apply(pChain_eCO2_1[, 1:(no.var+1)], 2, sd)
     
     ### ring 4
     outDF[outDF$Ring=="4", 2:(no.var+2)] <- colMeans(pChain_eCO2_2[, 1:(no.var+1)])
-    outDF[outDF$Ring=="4", 6:9] <- apply(pChain_eCO2_2[, 1:(no.var+1)], 2, sd)
+    outDF[outDF$Ring=="4", 9:15] <- apply(pChain_eCO2_2[, 1:(no.var+1)], 2, sd)
     
     ### ring 5
     outDF[outDF$Ring=="5", 2:(no.var+2)] <- colMeans(pChain_eCO2_3[, 1:(no.var+1)])
-    outDF[outDF$Ring=="5", 6:9] <- apply(pChain_eCO2_3[, 1:(no.var+1)], 2, sd)
+    outDF[outDF$Ring=="5", 9:15] <- apply(pChain_eCO2_3[, 1:(no.var+1)], 2, sd)
     
     ### ring 2
     outDF[outDF$Ring=="2", 2:(no.var+2)] <- colMeans(pChain_aCO2_1[, 1:(no.var+1)])
-    outDF[outDF$Ring=="2", 6:9] <- apply(pChain_aCO2_1[, 1:(no.var+1)], 2, sd)
+    outDF[outDF$Ring=="2", 9:15] <- apply(pChain_aCO2_1[, 1:(no.var+1)], 2, sd)
     
     ### ring 3
     outDF[outDF$Ring=="3", 2:(no.var+2)] <- colMeans(pChain_aCO2_2[, 1:(no.var+1)])
-    outDF[outDF$Ring=="3", 6:9] <- apply(pChain_aCO2_2[, 1:(no.var+1)], 2, sd)
+    outDF[outDF$Ring=="3", 9:15] <- apply(pChain_aCO2_2[, 1:(no.var+1)], 2, sd)
     
     ### ring 6
     outDF[outDF$Ring=="6", 2:(no.var+2)] <- colMeans(pChain_aCO2_3[, 1:(no.var+1)])
-    outDF[outDF$Ring=="6", 6:9] <- apply(pChain_aCO2_3[, 1:(no.var+1)], 2, sd)
+    outDF[outDF$Ring=="6", 9:15] <- apply(pChain_aCO2_3[, 1:(no.var+1)], 2, sd)
     
     
     ## assign range
     if (range.option == "sd") {
-        outDF$pos.leaf <- outDF$alloc.leaf + outDF$sd.leaf
-        outDF$neg.leaf <- outDF$alloc.leaf - outDF$sd.leaf
+        outDF$alloc.pos.leaf <- outDF$alloc.leaf + outDF$alloc.sd.leaf
+        outDF$alloc.neg.leaf <- outDF$alloc.leaf - outDF$alloc.sd.leaf
         
-        outDF$pos.wood <- outDF$alloc.wood + outDF$sd.wood
-        outDF$neg.wood <- outDF$alloc.wood - outDF$sd.wood
+        outDF$alloc.pos.wood <- outDF$alloc.wood + outDF$alloc.sd.wood
+        outDF$alloc.neg.wood <- outDF$alloc.wood - outDF$alloc.sd.wood
         
-        outDF$pos.froot <- outDF$alloc.froot + outDF$sd.froot
-        outDF$neg.froot <- outDF$alloc.froot - outDF$sd.froot
+        outDF$alloc.pos.froot <- outDF$alloc.froot + outDF$alloc.sd.froot
+        outDF$alloc.neg.froot <- outDF$alloc.froot - outDF$alloc.sd.froot
         
-        outDF$pos.myco <- outDF$alloc.myco + outDF$sd.myco
-        outDF$neg.myco <- outDF$alloc.myco - outDF$sd.myco
+        outDF$alloc.pos.myco <- outDF$alloc.myco + outDF$alloc.sd.myco
+        outDF$alloc.neg.myco <- outDF$alloc.myco - outDF$alloc.sd.myco
+        
+        
+        outDF$tau.pos.leaf <- outDF$tau.leaf + outDF$tau.sd.leaf
+        outDF$tau.neg.leaf <- outDF$tau.leaf - outDF$tau.sd.leaf
+        
+        outDF$tau.pos.froot <- outDF$tau.froot + outDF$tau.sd.froot
+        outDF$tau.neg.froot <- outDF$tau.froot - outDF$tau.sd.froot
+        
+        outDF$tau.pos.myco <- outDF$tau.myco + outDF$tau.sd.myco
+        outDF$tau.neg.myco <- outDF$tau.myco - outDF$tau.sd.myco
+        
     } else if (range.option == "minmax") {
         print("not written yet")
     }

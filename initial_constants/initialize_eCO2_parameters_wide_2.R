@@ -2,7 +2,7 @@
 
 ### parameter space
 
-params.eCO2 <- c(0.3,          # alloc leaf
+params.eCO2.R1 <- c(0.3,          # alloc leaf
                  0.2,          # alloc wood 
                  0.1,          # alloc froot
                  1.1,          # tau leaf
@@ -18,7 +18,7 @@ params.eCO2 <- c(0.3,          # alloc leaf
                  0.6,          # frac.bg
                  0.8)          # frac.micr
 
-params.eCO2.lower <- c(0.3,
+params.eCO2.lower.R1 <- c(0.3,
                        0.1,
                        0.05,
                        1.0,          # tau leaf
@@ -35,7 +35,7 @@ params.eCO2.lower <- c(0.3,
                        0.5)          # frac.micr
 
 
-params.eCO2.upper <- c(0.6,
+params.eCO2.upper.R1 <- c(0.6,
                        0.35,
                        0.3,
                        1.5,          # tau leaf
