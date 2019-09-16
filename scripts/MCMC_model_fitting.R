@@ -1,10 +1,10 @@
-MCMC_model_fitting_2 <- function(params,
-                                 params.lower,
-                                 params.upper,
-                                 obs,
-                                 chainLength,
-                                 dist.type,
-                                 step.size) {
+MCMC_model_fitting <- function(params,
+                               params.lower,
+                               params.upper,
+                               obs,
+                               chainLength,
+                               dist.type,
+                               step.size) {
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 
@@ -24,7 +24,7 @@ MCMC_model_fitting_2 <- function(params,
     
     vcovProposal <-  vcov 
     
-
+    
     ### Find the Prior probability density
     if (dist.type == "normal") {
         ### normal gaussian distribution
@@ -45,12 +45,12 @@ MCMC_model_fitting_2 <- function(params,
     
     ### Run the model, with initial parameter settings
     ### return initial output
-    out.init <- EucFACE_C_budget_model_2(params=params, 
-                                         obs=obs)
+    out.init <- EucFACE_C_budget_model(params=params, 
+                                       obs=obs)
     
     
     #### Calculate log likelihood of starting point of the chain
-    logL0 <- log_likelihood_2(obs = obs, pred = out.init) 
+    logL0 <- log_likelihood(obs = obs, pred = out.init) 
     
     #browser()
     
@@ -58,7 +58,7 @@ MCMC_model_fitting_2 <- function(params,
     bic <- -2*logL0 + k2*npar
     
     pChain[1,] <- c(params, logL0, as.numeric(out.init), Prior0, aic, bic)
-
+    
     
     ### Calculating the next candidate parameter vector, 
     ### as a multivariate normal jump away from the current point
@@ -67,7 +67,7 @@ MCMC_model_fitting_2 <- function(params,
         
         for (i in 1:no.var) {
             candidatepValues[i] = rmvnorm(n=1, mean=params[i],
-                                           sigma=diag(vcovProposal[i],1)) 
+                                          sigma=diag(vcovProposal[i],1)) 
         }
         
         ### Reflected back to generate another candidate value
@@ -105,17 +105,17 @@ MCMC_model_fitting_2 <- function(params,
         ### Calculating the outputs for the candidate parameter vector and then log likelihood
         if (Prior1 > 0) {
             
-            out.cand <- EucFACE_C_budget_model_2(params=candidatepValues, 
+            out.cand <- EucFACE_C_budget_model(params=candidatepValues, 
                                                obs=obs)
             
             #browser()
             
             # Calculate log likelihood
-            logL1 <- log_likelihood_2(obs = obs, pred = out.cand) 
+            logL1 <- log_likelihood(obs = obs, pred = out.cand) 
             
             # Calculating the logarithm of the Metropolis ratio
             logalpha <- (logPrior1+logL1) - (logPrior0+logL0) 
-
+            
             # Accepting or rejecting the candidate vector
             if ( log(runif(1, min = 0, max =1)) < logalpha && candidatepValues[1] + candidatepValues[2] + candidatepValues[3] <= 1
                  #&& abs(out.cand$delta.Cleaf) <= obs$C.leaf.mean 
@@ -128,7 +128,7 @@ MCMC_model_fitting_2 <- function(params,
                 params <- candidatepValues
                 logPrior0 <- logPrior1
                 logL0 <- logL1
-        
+                
                 aic <- -2*logL1 + k1*npar
                 bic <- -2*logL1 + k2*npar
             }
@@ -155,7 +155,7 @@ MCMC_model_fitting_2 <- function(params,
                        "delta.Cmicr", "delta.Csoil", "Rhet", 
                        "Prior","aic", "bic")
     
-
+    
     nAccepted <- length(unique(pChain[,1]))
     
     acceptance = (paste("Total accepted: ", nAccepted, 

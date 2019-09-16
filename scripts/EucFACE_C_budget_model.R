@@ -1,5 +1,5 @@
-EucFACE_C_budget_model_2 <- function(params, 
-                                     obs) {
+EucFACE_C_budget_model <- function(params, 
+                                   obs) {
   
   ######################################################################
   #### read in params and data
@@ -21,7 +21,7 @@ EucFACE_C_budget_model_2 <- function(params,
   
   C.ag.lit <- params[11]
   C.bg.lit <- params[12]
-
+  
   frac.myco <- params[13]
   frac.ag <- params[14]
   frac.bg <- params[15]
@@ -61,7 +61,7 @@ EucFACE_C_budget_model_2 <- function(params,
   delta.C.bg.lit <- tau.froot * C.froot - tau.bg.lit * C.bg.lit
   
   delta.C.micr <- frac.ag * tau.ag.lit * C.ag.lit + frac.bg * tau.bg.lit * C.bg.lit + frac.myco * tau.myco * C.myco - tau.micr * C.micr
-
+  
   delta.C.soil <- frac.micr * tau.micr * C.micr - tau.soil * C.soil
   
   #browser()

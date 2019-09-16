@@ -23,8 +23,8 @@ dist.type <- "uniform"
 
 ### step 1: 
 ### prepare the input dataframe for aCO2 and eCO2 treatment
-obsDF <- initialize_obs_amb_dataframe_2()
-eco2DF <- initialize_obs_ele_dataframe_2()
+obsDF <- initialize_obs_amb_dataframe()
+eco2DF <- initialize_obs_ele_dataframe()
 
 
 ### step 2:

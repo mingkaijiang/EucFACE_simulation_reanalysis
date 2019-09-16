@@ -1,4 +1,4 @@
-predict_final_output_2 <- function(pChain, 
+predict_final_output <- function(pChain, 
                                  obs, 
                                  return.option) {
     
@@ -27,7 +27,7 @@ predict_final_output_2 <- function(pChain,
     
     
     # Calculate final output set from the predicted parameter set
-    output.final.set <- EucFACE_C_budget_model_2(params=param.set, 
+    output.final.set <- EucFACE_C_budget_model(params=param.set, 
                                                  obs=obs)
     
     if (return.option == "Check result") {

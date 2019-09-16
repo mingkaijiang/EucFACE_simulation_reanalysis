@@ -1,4 +1,4 @@
-initialize_obs_amb_dataframe_2 <- function() {
+initialize_obs_amb_dataframe <- function() {
     #### This script reads in csv files from C budget
     #### and make them into the format ready for MCMC modeling
     

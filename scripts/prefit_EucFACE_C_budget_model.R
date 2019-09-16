@@ -1,5 +1,5 @@
-prefit_EucFACE_C_budget_model_2 <- function(params, 
-                                            obs) {
+prefit_EucFACE_C_budget_model <- function(params, 
+                                          obs) {
   
   ######################################################################
   #### read in params and data

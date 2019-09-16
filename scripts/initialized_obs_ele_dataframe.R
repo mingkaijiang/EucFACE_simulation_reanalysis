@@ -1,4 +1,4 @@
-initialize_obs_ele_dataframe_2 <- function() {
+initialize_obs_ele_dataframe <- function() {
     #### This script reads in csv files from C budget
     #### and make them into the format ready for MCMC modeling
     

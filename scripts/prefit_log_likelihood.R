@@ -1,4 +1,4 @@
-prefit_log_likelihood_2 <- function(obs, pred) {
+prefit_log_likelihood <- function(obs, pred) {
     
     #browser()
     

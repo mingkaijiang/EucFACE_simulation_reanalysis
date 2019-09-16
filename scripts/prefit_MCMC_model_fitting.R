@@ -1,10 +1,10 @@
-prefit_MCMC_model_fitting_2 <- function(params,
-                                        params.lower,
-                                        params.upper,
-                                        obs,
-                                        chainLength,
-                                        dist.type,
-                                        step.size) {
+prefit_MCMC_model_fitting <- function(params,
+                                      params.lower,
+                                      params.upper,
+                                      obs,
+                                      chainLength,
+                                      dist.type,
+                                      step.size) {
     
     ### Discard the first 10% iterations for Burn-IN in MCMC (According to Oijen, 2008)
     burn_in <- chainLength * 0.1 
@@ -45,12 +45,12 @@ prefit_MCMC_model_fitting_2 <- function(params,
     
     ### Run the model, with initial parameter settings
     ### return initial output
-    out.init <- prefit_EucFACE_C_budget_model_2(params=params, 
-                                                obs=obs)
+    out.init <- prefit_EucFACE_C_budget_model(params=params, 
+                                              obs=obs)
     
     
     #### Calculate log likelihood of starting point of the chain
-    logL0 <- prefit_log_likelihood_2(obs = obs, pred = out.init) 
+    logL0 <- prefit_log_likelihood(obs = obs, pred = out.init) 
     
     #browser()
     
@@ -105,13 +105,13 @@ prefit_MCMC_model_fitting_2 <- function(params,
         ### Calculating the outputs for the candidate parameter vector and then log likelihood
         if (Prior1 > 0) {
             
-            out.cand <- prefit_EucFACE_C_budget_model_2(params=candidatepValues, 
-                                                        obs=obs)
+            out.cand <- prefit_EucFACE_C_budget_model(params=candidatepValues, 
+                                                      obs=obs)
             
             #browser()
             
             # Calculate log likelihood
-            logL1 <- prefit_log_likelihood_2(obs = obs, pred = out.cand) 
+            logL1 <- prefit_log_likelihood(obs = obs, pred = out.cand) 
             
             # Calculating the logarithm of the Metropolis ratio
             logalpha <- (logPrior1+logL1) - (logPrior0+logL0) 
