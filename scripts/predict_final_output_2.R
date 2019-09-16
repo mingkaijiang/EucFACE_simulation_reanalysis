@@ -7,13 +7,13 @@ predict_final_output_2 <- function(pChain,
     param.SD = apply(pChain[ , 1:no.var], 2, sd)
     param.final = data.frame(matrix(ncol = (no.var)*2, nrow = 1))
     
-    names(param.final) <- c("alloc.leaf", "alloc.wood", "alloc.froot",
-                            "tau.leaf", "tau.froot", "tau.myco",
+    names(param.final) <- c("alloc.leaf", "alloc.wood", "alloc.froot","alloc.myco",
+                            "tau.leaf", "tau.froot", "tau.myco", 
                             "tau.bg.lit", 
                             "tau.micr", "tau.soil", 
                             "C.ag.lit", "C.bg.lit",
                             "frac.myco", "frac.ag.lit", "frac.bg.lit", "frac.micr",
-                            "alloc.leaf.sd", "alloc.wood.sd", "alloc.froot.sd",
+                            "alloc.leaf.sd", "alloc.wood.sd", "alloc.froot.sd","alloc.myco.sd",
                             "tau.leaf.sd", "tau.froot.sd", "tau.myco.sd",
                             "tau.bg.lit.sd", 
                             "tau.micr.sd", "tau.soil.sd", 
@@ -24,6 +24,7 @@ predict_final_output_2 <- function(pChain,
     param.final[,(no.var+1):(no.var*2)] = param.SD
     
     param.set <- round(as.numeric(param.set),3)
+    
     
     # Calculate final output set from the predicted parameter set
     output.final.set <- EucFACE_C_budget_model_2(params=param.set, 

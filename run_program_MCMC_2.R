@@ -96,7 +96,7 @@ plot_parameter_trace_within_parameter_space(params= params.aCO2.R3,
                                             Trt = "aCO2_2")
 
 # Ring 6
-step.size.aCO2 <- 0.05 
+step.size.aCO2 <- 0.008 
 pChain_aCO2_3 <- MCMC_model_fitting_2(params = params.aCO2.R6, 
                                       params.lower = params.aCO2.lower.R6,
                                       params.upper = params.aCO2.upper.R6,
@@ -121,14 +121,14 @@ plot_parameter_trace_within_parameter_space(params= params.aCO2.R6,
                                             Trt = "aCO2_3")
 
 
-### step 5: 
+### step 3: 
 ### combine the results, and make some plots
 pChain.aCO2 <- rbind(pChain_aCO2_1, pChain_aCO2_2, pChain_aCO2_3)
 
 plot_posterior(inDF = pChain.aCO2, Trt = "aCO2", dist.type = dist.type,
                chainLength = chainLength)
 
-### step 6: 
+### step 4: 
 ### predict final output, at mean aCO2
 ### print out the final predicted results 
 ### check if the Rhet is OKish?
@@ -141,32 +141,21 @@ predict_final_output_2(pChain = pChain.aCO2,
 ########################################################################################
 #### C: Check what parameters are needed for the eCO2 response
 ### step 1: 
-### check if the aCO2 parameters can be directly applied to get the correct Rhet at eCO2
-eco2DF <- initialize_obs_ele_dataframe_2()
-
 predict_final_output_2(pChain = pChain.aCO2, 
                        obs = eco2DF[4,],
                        return.option = "Check result")
 
-# answer: no.
-# allocation does not change, and therefore the predicted Rhet is the same as aCO2 Rhet
-
-
 ### step 2: 
-### read in parameter space for eCO2 treatment
-source("initial_constants/initialize_eCO2_parameters_wide_2.R")
-
 ### set up step size for aCO2 and eCO2 
 chainLength <- 5000
-step.size.eCO2 <- 0.1 #0.0004
-dist.type <- "uniform"
 
 ### step 3:
 ### fit the model with eCO2 parameter space to get parameter uncertainties
 # Ring 1
-pChain_eCO2_1 <- MCMC_model_fitting_2(params = params.eCO2, 
-                                      params.lower = params.eCO2.lower,
-                                      params.upper = params.eCO2.upper,
+step.size.eCO2 <- 0.006 
+pChain_eCO2_1 <- MCMC_model_fitting_2(params = params.eCO2.R1, 
+                                      params.lower = params.eCO2.lower.R1,
+                                      params.upper = params.eCO2.upper.R1,
                                       obs=eco2DF[1,],
                                       chainLength=chainLength,
                                       dist.type=dist.type,
@@ -175,9 +164,9 @@ pChain_eCO2_1 <- MCMC_model_fitting_2(params = params.eCO2,
 generate_most_likely_outcome(inDF=pChain_eCO2_1,
                              obs=eco2DF[1,])
 
-plot_parameter_trace_within_parameter_space(params= params.eCO2, 
-                                            params.lower = params.eCO2.lower,
-                                            params.upper = params.eCO2.upper,
+plot_parameter_trace_within_parameter_space(params= params.eCO2.R1, 
+                                            params.lower = params.eCO2.lower.R1,
+                                            params.upper = params.eCO2.upper.R1,
                                             inDF = pChain_eCO2_1,
                                             dist.type=dist.type,
                                             step.size=step.size.eCO2,
@@ -186,11 +175,10 @@ plot_parameter_trace_within_parameter_space(params= params.eCO2,
 
 
 # ring 4
-step.size.eCO2 <- 0.05 #0.0004
-chainLength <- 50000
-pChain_eCO2_2 <- MCMC_model_fitting_2(params = params.eCO2, 
-                                      params.lower = params.eCO2.lower,
-                                      params.upper = params.eCO2.upper,
+step.size.eCO2 <- 0.002 
+pChain_eCO2_2 <- MCMC_model_fitting_2(params = params.eCO2.R4, 
+                                      params.lower = params.eCO2.lower.R4,
+                                      params.upper = params.eCO2.upper.R4,
                                       obs=eco2DF[2,],
                                       chainLength=chainLength,
                                       dist.type=dist.type,
@@ -200,9 +188,9 @@ generate_most_likely_outcome(inDF=pChain_eCO2_2,
                              obs=eco2DF[2,])
 
 
-plot_parameter_trace_within_parameter_space(params= params.eCO2, 
-                                            params.lower = params.eCO2.lower,
-                                            params.upper = params.eCO2.upper,
+plot_parameter_trace_within_parameter_space(params= params.eCO2.R4, 
+                                            params.lower = params.eCO2.lower.R4,
+                                            params.upper = params.eCO2.upper.R4,
                                             inDF = pChain_eCO2_1,
                                             dist.type=dist.type,
                                             step.size=step.size.eCO2,
@@ -211,9 +199,10 @@ plot_parameter_trace_within_parameter_space(params= params.eCO2,
 
 
 # ring 5
-pChain_eCO2_3 <- MCMC_model_fitting_2(params = params.eCO2, 
-                                      params.lower = params.eCO2.lower,
-                                      params.upper = params.eCO2.upper,
+step.size.eCO2 <- 0.01 
+pChain_eCO2_3 <- MCMC_model_fitting_2(params = params.eCO2.R5, 
+                                      params.lower = params.eCO2.lower.R5,
+                                      params.upper = params.eCO2.upper.R5,
                                       obs=eco2DF[3,],
                                       chainLength=chainLength,
                                       dist.type=dist.type,
@@ -222,9 +211,9 @@ pChain_eCO2_3 <- MCMC_model_fitting_2(params = params.eCO2,
 generate_most_likely_outcome(inDF=pChain_eCO2_3,
                              obs=eco2DF[3,])
 
-plot_parameter_trace_within_parameter_space(params= params.eCO2, 
-                                            params.lower = params.eCO2.lower,
-                                            params.upper = params.eCO2.upper,
+plot_parameter_trace_within_parameter_space(params= params.eCO2.R5, 
+                                            params.lower = params.eCO2.lower.R5,
+                                            params.upper = params.eCO2.upper.R5,
                                             inDF = pChain_eCO2_1,
                                             dist.type=dist.type,
                                             step.size=step.size.eCO2,

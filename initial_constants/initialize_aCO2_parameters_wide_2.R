@@ -119,7 +119,7 @@ params.aCO2.R6 <- c(init.parameters$alloc.leaf[init.parameters$Ring=="6"],
                     init.parameters$tau.froot[init.parameters$Ring=="6"],
                     init.parameters$tau.myco[init.parameters$Ring=="6"],
                     1.5,          # tau.bg.lit
-                    5.5,          # tau.micr
+                    10.0,          # tau.micr
                     0.1,         # tau.soil
                     91.0,         # C.ag.lit
                     100.0,         # C.bg.lit
@@ -136,10 +136,10 @@ params.aCO2.lower.R6 <- c(init.parameters$alloc.neg.leaf[init.parameters$Ring=="
                           init.parameters$tau.neg.froot[init.parameters$Ring=="6"],
                           init.parameters$tau.neg.myco[init.parameters$Ring=="6"],
                           1.0,          # tau.bg.lit
-                          2.0,          # tau.micr.lit
+                          4.5,          # tau.micr.lit
                           0.01,         # tau.soil.lit
                           10.0,         # C.ag.lit
-                          0.0,         # C.bg.lit
+                          0.0,          # C.bg.lit
                           0.3,          # frac.myco
                           0.3,          # frac.ag
                           0.3,          # frac.bg
