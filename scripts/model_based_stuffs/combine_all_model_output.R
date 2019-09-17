@@ -8,7 +8,6 @@ combine_all_model_output <- function() {
     gdayDF <- read_in_gday()
     lpjwDF <- read_in_lpjw()
     lpjxDF <- read_in_lpjx()
-    
     ocnxDF <- read_in_ocnx()
     sdvmDF <- read_in_sdvm()
     
@@ -25,9 +24,15 @@ combine_all_model_output <- function() {
     sdvmDF$model <- "SDVM"
     
     ### we can effectively ignore lpjw because it's not included in the Medlyn 2016 paper
-    #outDF <- rbind(cablDF, clm4DF, clmpDF, gdayDF, lpjwDF, lpjxDF, ocnxDF, sdvmDF)
     outDF <- rbind(cablDF, clm4DF, clmpDF, gdayDF, lpjxDF, ocnxDF, sdvmDF)
     
+    
+    ### grouping allocation
+    outDF$AWOOD_2 <- outDF$AWOOD + outDF$ACROOT  # CABLE has a large Froot pool, so Croot is part of it!
+    outDF$tau_MYCO <- NA
+    outDF$tau_MICR <- NA
+    
+    outDF[mapply(is.infinite, outDF)] <- NA
 
     ### summary of problems:
     ### 1. we need to group coarseroot and stem together,
@@ -38,51 +43,77 @@ combine_all_model_output <- function() {
     ### 4. Csoil and Cwood are large in all model output, and therefore tau soil and tau wood is problematic. 
     ### 5. The simulated GPP is overstorey only (in theory). 
     
+    ### calculate multi-model mean
+    subDF1 <- subset(outDF, CO2=="aCO2")
+    subDF2 <- subset(outDF, CO2=="eCO2")
+    
+    subDF1 <- subDF1[,c("ALEAF", "AWOOD_2", "AFROOT", "AOTHER", 
+                        "tau_LEAF", "tau_FROOT", "tau_MYCO",
+                        "tau_CFLITA", "tau_CFLITB", "tau_MICR",
+                        "tau_SOIL", "model")]
+    
+    subDF2 <- subDF2[,c("ALEAF", "AWOOD_2", "AFROOT", "AOTHER", 
+                        "tau_LEAF", "tau_FROOT", "tau_MYCO",
+                        "tau_CFLITA", "tau_CFLITB", "tau_MICR",
+                        "tau_SOIL", "model")]
+    
+    mmDF1 <- colMeans(subDF1[,1:11], na.rm=T)
+    mmDF2 <- colMeans(subDF2[,1:11], na.rm=T)
+    
+    sdDF1 <- apply(subDF1[ ,1:11], 2, sd, na.rm=T)
+    sdDF2 <- apply(subDF2[ ,1:11], 2, sd, na.rm=T)
+    
+    mmDF <- as.data.frame(rbind(mmDF1, mmDF2))
+    mmDF$Source <- "multi-mean"
+    mmDF$CO2 <- c("aCO2", "eCO2")
+    
+    rsDF <- melt(mmDF, id.vars = c("Source", "CO2"))
+    
+    sdDF <- as.data.frame(rbind(sdDF1, sdDF2))
+    sdDF$Source <- "multi-model"
+    sdDF$CO2 <- c("aCO2", "eCO2")
+    
+    tDF <- melt(sdDF, id.vars = c("Source", "CO2"))
+    
+    rsDF$sd <- tDF$value
+    
+    ### eucDF
+    eucDF$Source <- "data"
+    rsDF$variable <- gsub("AWOOD_2", "AWOOD", rsDF$variable)
+    rsDF <- rsDF[,c("CO2", "variable", "value", "sd", "Source")]
+    
+    plotDF <- rbind(rsDF, eucDF)
+    plotDF <- subset(plotDF, CO2 != "pct")
+    
     
     ### get the dataframes
-    plotDF1 <- outDF[outDF$CO2 == "aCO2",c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER", "model")]
-    #plotDF2 <- outDF[outDF$CO2 == "aCO2",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_LIT", "tau_SOIL", "model")]
-    plotDF2 <- outDF[outDF$CO2 == "aCO2",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL", "model")]
+    plotDF1 <- plotDF[plotDF$CO2 == "aCO2" & plotDF$variable %in%c("ALEAF", "AWOOD", "AFROOT", "AOTHER"), ]
+    plotDF2 <- plotDF[plotDF$CO2 == "aCO2" & plotDF$variable %in%c("tau_LEAF", "tau_FROOT", #"tau_MYCO", 
+                                                                   "tau_CFLITA", "tau_CFLITB", #"tau_MICR", 
+                                                                   "tau_SOIL"), ]
     
-    plotDF3 <- outDF[outDF$CO2 == "eCO2",c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER", "model")]
-    #plotDF4 <- outDF[outDF$CO2 == "eCO2",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_LIT", "tau_SOIL", "model")]
-    plotDF4 <- outDF[outDF$CO2 == "eCO2",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL", "model")]
+    plotDF3 <- plotDF[plotDF$CO2 == "eCO2" & plotDF$variable %in%c("ALEAF", "AWOOD", "AFROOT", "AOTHER"), ]
+    plotDF4 <- plotDF[plotDF$CO2 == "eCO2" & plotDF$variable %in%c("tau_LEAF", "tau_FROOT", #"tau_MYCO", 
+                                                                   "tau_CFLITA", "tau_CFLITB", #"tau_MICR", 
+                                                                   "tau_SOIL"), ]
     
-    plotDF5 <- outDF[outDF$CO2 == "pct",c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER", "model")]
-    #plotDF6 <- outDF[outDF$CO2 == "pct",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_LIT", "tau_SOIL", "model")]
-    plotDF6 <- outDF[outDF$CO2 == "pct",c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL", "model")]
-    
-    ### reshape
-    plotDF1 <- melt(plotDF1, id.vars = "model")
-    plotDF2 <- melt(plotDF2, id.vars = "model")
-    plotDF3 <- melt(plotDF3, id.vars = "model")
-    plotDF4 <- melt(plotDF4, id.vars = "model")
-    plotDF5 <- melt(plotDF5, id.vars = "model")
-    plotDF6 <- melt(plotDF6, id.vars = "model")
-    
-    
-    ### EucFACE outputs
-    eucDF1 <- eucDF[eucDF$CO2=="aCO2"&eucDF$variable%in%c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER"),]
-    eucDF3 <- eucDF[eucDF$CO2=="eCO2"&eucDF$variable%in%c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER"),]
-    eucDF5 <- eucDF[eucDF$CO2=="pct"&eucDF$variable%in%c("ALEAF", "AWOOD", "AFROOT", "ACROOT", "AOTHER"),]
-    
-    eucDF2 <- eucDF[eucDF$CO2=="aCO2"&eucDF$variable%in%c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL"),]
-    eucDF4 <- eucDF[eucDF$CO2=="eCO2"&eucDF$variable%in%c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL"),]
-    eucDF6 <- eucDF[eucDF$CO2=="pct"&eucDF$variable%in%c("tau_LEAF", "tau_WOOD", "tau_FROOT", "tau_CROOT", "tau_SOIL"),]
+    plotDF2$value[plotDF2$variable=="tau_SOIL"] <- plotDF2$value[plotDF2$variable=="tau_SOIL"] * 10
+    plotDF4$value[plotDF4$variable=="tau_SOIL"] <- plotDF4$value[plotDF4$variable=="tau_SOIL"] * 10
     
     
     ### make the bar plot
     p1 <- ggplot(plotDF1,
-                 aes(variable, value)) + 
-        geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
-        geom_point(mapping=aes(x=variable, y=value, fill=model), 
+                 aes(x=variable, y=value, fill=Source)) + 
+        geom_point(aes(x=variable, y=value, fill=Source), 
                    size=4, shape=21,position = position_dodge(0.6))+
-        geom_point(data=eucDF1, aes(variable, value), color="black", size = 4, shape=19)+
+        geom_errorbar(aes(x=variable, ymin=value-sd, ymax=value+sd), 
+                   position = position_dodge(0.6), width=0.2)+
         xlab("") + ylab(expression(aCO[2]))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=16), 
-              axis.text.x = element_blank(),
+              #axis.text.x = element_blank(),
+              axis.text.x = element_text(size=14),
               axis.text.y=element_text(size=14),
               axis.title.y=element_text(size=16),
               legend.text=element_text(size=14),
@@ -92,84 +123,64 @@ combine_all_model_output <- function() {
               plot.title = element_text(hjust = 0.5),
               axis.title = element_text(size = 20, face="bold"))+
         scale_x_discrete("",  
+                         limits=c("ALEAF",
+                                  "AWOOD",
+                                  "AFROOT",
+                                  "AOTHER"),
                          labels=c("Leaf",
-                                  "Stem",
+                                  "Wood",
                                   "Froot",
-                                  "Croot",
                                   "Other"))+
-        scale_y_continuous(limits=c(0, 0.8), 
-                           breaks=c(0.2, 0.4, 0.6, 0.8),
-                           labels=c(0.2, 0.4, 0.6, 0.8))+
+        scale_y_continuous(limits=c(-0.02, 0.8), 
+                           breaks=c(0.0, 0.2, 0.4, 0.6, 0.8),
+                           labels=c(0.0, 0.2, 0.4, 0.6, 0.8))+
         ggtitle("Allocation coefficients")
     
-    
     p3 <- ggplot(plotDF3,
-                 aes(variable, value)) + 
-        geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
-        geom_point(mapping=aes(x=variable, y=value, fill=model), 
+                 aes(x=variable, y=value, fill=Source)) + 
+        geom_point(aes(x=variable, y=value, fill=Source), 
                    size=4, shape=21,position = position_dodge(0.6))+
-        geom_point(data=eucDF3, aes(variable, value), color="black", size = 4, shape=19)+
+        geom_errorbar(aes(x=variable, ymin=value-sd, ymax=value+sd), 
+                      position = position_dodge(0.6), width=0.2)+
         xlab("") + ylab(expression(eCO[2]))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=16), 
-              axis.text.x = element_blank(),
-              axis.text.y=element_text(size=14),
-              axis.title.y=element_text(size=16),
-              legend.text=element_text(size=14),
-              legend.title=element_text(size=16),
-              panel.grid.major=element_blank(),
-              legend.position="none")+
-        scale_x_discrete("",  
-                         labels=c("Leaf",
-                                  "Stem",
-                                  "Froot",
-                                  "Croot",
-                                  "Other"))+
-        #theme(legend.justification=c(1,0), legend.position=c(0.9,0.7))+
-        scale_y_continuous(limits=c(0, 0.8), 
-                           breaks=c(0.2, 0.4, 0.6, 0.8),
-                           labels=c(0.2, 0.4, 0.6, 0.8))
-    
-    
-    p5 <- ggplot(plotDF5,
-                 aes(variable, value)) + 
-        geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
-        geom_point(mapping=aes(x=variable, y=value, fill=model), 
-                   size=4, shape=21,position = position_dodge(0.6))+
-        geom_point(data=eucDF5, aes(variable, value), color="black", size = 4, shape=19)+
-        xlab("") + ylab(expression(eCO[2] * " / " * aCO[2]))+
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.title.x = element_text(size=16), 
+              #axis.text.x = element_blank(),
               axis.text.x = element_text(size=14),
               axis.text.y=element_text(size=14),
               axis.title.y=element_text(size=16),
               legend.text=element_text(size=14),
               legend.title=element_text(size=16),
               panel.grid.major=element_blank(),
-              legend.position="none")+
+              legend.position="none",
+              plot.title = element_text(hjust = 0.5),
+              axis.title = element_text(size = 20, face="bold"))+
         scale_x_discrete("",  
+                         limits=c("ALEAF",
+                                  "AWOOD",
+                                  "AFROOT",
+                                  "AOTHER"),
                          labels=c("Leaf",
-                                  "Stem",
+                                  "Wood",
                                   "Froot",
-                                  "Croot",
                                   "Other"))+
-        #theme(legend.justification=c(1,0), legend.position=c(0.9,0.7))+
-        scale_y_continuous(limits=c(0.75, 1.22))
+        scale_y_continuous(limits=c(-0.02, 0.8), 
+                           breaks=c(0.0, 0.2, 0.4, 0.6, 0.8),
+                           labels=c(0.0, 0.2, 0.4, 0.6, 0.8))
     
-
+    
     p2 <- ggplot(plotDF2,
-                 aes(variable, value)) + 
-        geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
-        geom_point(mapping=aes(x=variable, y=value, fill=model), 
+                 aes(x=variable, y=value, fill=Source)) + 
+        geom_point(aes(x=variable, y=value, fill=Source), 
                    size=4, shape=21,position = position_dodge(0.6))+
-        geom_point(data=eucDF2, aes(variable, value), color="black", size = 4, shape=19)+
+        geom_errorbar(aes(x=variable, ymin=value-sd, ymax=value+sd), 
+                      position = position_dodge(0.6), width=0.2)+
         xlab("") + ylab(expression(aCO[2]))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=16), 
-              axis.text.x = element_blank(),
+              axis.text.x = element_text(size=14),
               axis.text.y=element_text(size=14),
               axis.title.y=element_blank(),
               legend.text=element_text(size=14),
@@ -179,51 +190,29 @@ combine_all_model_output <- function() {
               plot.title = element_text(hjust = 0.5),
               axis.title = element_text(size = 20, face="bold"))+
         scale_x_discrete("",  
+                         limits=c("tau_LEAF",
+                                  "tau_FROOT",
+                                  "tau_CFLITA",
+                                  "tau_CFLITB",
+                                  "tau_SOIL"),
                          labels=c("Leaf",
-                                  "Stem",
                                   "Froot",
-                                  "Croot",
-                                  "Soil"))+
-        scale_y_continuous(limits=c(0, 1.4), 
-                           breaks=c(0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4),
-                           labels=c(0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4))+
+                                  "Aglit",
+                                  "Bglit",
+                                  "Soil*10"))+
+        scale_y_continuous(limits=c(0, 5), 
+                           breaks=c(0, 2.5, 5.0),
+                           labels=c(0, 2.5, 5.0))+
         ggtitle(expression("Turnover rates ( " * yr^-1 * " )"))
     
+
     p4 <- ggplot(plotDF4,
-                 aes(variable, value)) + 
-        geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
-        geom_point(mapping=aes(x=variable, y=value, fill=model), 
+                 aes(x=variable, y=value, fill=Source)) + 
+        geom_point(aes(x=variable, y=value, fill=Source), 
                    size=4, shape=21,position = position_dodge(0.6))+
-        geom_point(data=eucDF4, aes(variable, value), color="black", size = 4, shape=19)+
+        geom_errorbar(aes(x=variable, ymin=value-sd, ymax=value+sd), 
+                      position = position_dodge(0.6), width=0.2)+
         xlab("") + ylab(expression(eCO[2]))+
-        theme_linedraw() +
-        theme(panel.grid.minor=element_blank(),
-              axis.title.x = element_text(size=16), 
-              axis.text.x = element_blank(),
-              axis.text.y=element_text(size=14),
-              axis.title.y=element_blank(),
-              legend.text=element_text(size=14),
-              legend.title=element_text(size=16),
-              panel.grid.major=element_blank(),
-              legend.position="none")+
-        scale_x_discrete("",  
-                         labels=c("Leaf",
-                                  "Stem",
-                                  "Froot",
-                                  "Croot",
-                                  "Soil"))+
-        scale_y_continuous(limits=c(0, 1.4), 
-                           breaks=c(0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4),
-                           labels=c(0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4))
-    
-    
-    p6 <- ggplot(plotDF6,
-                 aes(variable, value)) + 
-        geom_boxplot(fill="grey", outlier.size = 0, outlier.color="white") +
-        geom_point(mapping=aes(x=variable, y=value, fill=model), 
-                   size=4, shape=21,position = position_dodge(0.6))+
-        geom_point(data=eucDF6, aes(variable, value), color="black", size = 4, shape=19)+
-        xlab("") + ylab(expression(eCO[2] * " / " * aCO[2]))+
         theme_linedraw() +
         theme(panel.grid.minor=element_blank(),
               axis.title.x = element_text(size=16), 
@@ -233,14 +222,24 @@ combine_all_model_output <- function() {
               legend.text=element_text(size=14),
               legend.title=element_text(size=16),
               panel.grid.major=element_blank(),
-              legend.position="none")+
+              legend.position="none",
+              plot.title = element_text(hjust = 0.5),
+              axis.title = element_text(size = 20, face="bold"))+
         scale_x_discrete("",  
+                         limits=c("tau_LEAF",
+                                  "tau_FROOT",
+                                  "tau_CFLITA",
+                                  "tau_CFLITB",
+                                  "tau_SOIL"),
                          labels=c("Leaf",
-                                  "Stem",
                                   "Froot",
-                                  "Croot",
-                                  "Soil"))+
-        scale_y_continuous(limits=c(0.8, 1.3))
+                                  "Aglit",
+                                  "Bglit",
+                                  "Soil*10"))+
+        scale_y_continuous(limits=c(0, 5), 
+                           breaks=c(0, 2.5, 5.0),
+                           labels=c(0, 2.5, 5.0))
+    
     
     
     ### combined plots + shared legend
@@ -248,12 +247,12 @@ combine_all_model_output <- function() {
                                            legend.box = 'vertical',
                                            legend.box.just = 'left'))
     
-    combined_plots <- plot_grid(p1, p2, p3, p4, p5, p6, 
+    combined_plots <- plot_grid(p1, p2, p3, p4,
                                 labels="AUTO", ncol=2, align="v", axis = "l")
     
     
     ### output
-    pdf("output/all_model_allocation_turnover_plot.pdf", width=8, height=10)
+    pdf("output/model_data_comparison.pdf", width=8, height=10)
     plot_grid(combined_plots, legend_shared, ncol=1, rel_heights=c(1,0.1))
     dev.off()    
     
