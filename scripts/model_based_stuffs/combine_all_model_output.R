@@ -87,13 +87,14 @@ combine_all_model_output <- function() {
     
     plotDF <- rbind(mmDF, eucDF)
     plotDF$sd <- as.numeric(plotDF$sd)
+    colnames(plotDF) <- c("Model", "variable", "value", "Trt", "sd", "Source")
     
     ### get the dataframes
-    plotDF1 <- plotDF[plotDF$CO2%in%c("aCO2", "eCO2") & plotDF$variable %in%c("ALEAF", "AWOOD", "AFROOT", "AOTHER"), ]
-    plotDF2 <- plotDF[plotDF$CO2%in%c("aCO2", "eCO2") & plotDF$variable %in%c("tau_LEAF", "tau_FROOT", #"tau_MYCO", 
+    plotDF1 <- plotDF[plotDF$Trt%in%c("aCO2", "eCO2") & plotDF$variable %in%c("ALEAF", "AWOOD", "AFROOT", "AOTHER"), ]
+    plotDF2 <- plotDF[plotDF$Trt%in%c("aCO2", "eCO2") & plotDF$variable %in%c("tau_LEAF", "tau_FROOT", #"tau_MYCO", 
                                                                    "tau_CFLITA", "tau_CFLITB"), ]
     
-    plotDF3 <- plotDF[plotDF$CO2%in%c("aCO2", "eCO2") & plotDF$variable=="tau_SOIL", ]
+    plotDF3 <- plotDF[plotDF$Trt%in%c("aCO2", "eCO2") & plotDF$variable=="tau_SOIL", ]
     
     #plotDF5 <- plotDF[plotDF$CO2 == "pct" & plotDF$variable %in%c("ALEAF", "AWOOD", "AFROOT", "AOTHER"), ]
     #plotDF6 <- plotDF[plotDF$CO2 == "pct" & plotDF$variable %in%c("tau_LEAF", "tau_FROOT", #"tau_MYCO", 
@@ -108,10 +109,10 @@ combine_all_model_output <- function() {
 
     ### make the bar plot
     p1 <- ggplot(plotDF1,
-                 aes(x=variable, y=value, group=CO2)) + 
+                 aes(x=variable, y=value, group=Trt)) + 
         geom_errorbar(aes(x=variable, ymin=value-sd, ymax=value+sd), 
                       position = position_dodge(0.6), width=0.2)+
-        geom_point(aes(x=variable, y=value, shape=CO2, fill=Model), 
+        geom_point(aes(x=variable, y=value, shape=Trt, fill=Model), 
                    size=4,position = position_dodge(0.6))+
         xlab("") + ylab("Allocation coefficients")+
         theme_linedraw() +
@@ -137,17 +138,17 @@ combine_all_model_output <- function() {
                            breaks=c(0.0, 0.2, 0.4, 0.6, 0.8),
                            labels=c(0.0, 0.2, 0.4, 0.6, 0.8))+
         scale_fill_manual(values=c("CABL"=cols[1], "CLM4"=cols[2],"CLMP"=cols[3],
-                                   "GDAY"=cols[3], "LPJX"=cols[5],"OCNX"=cols[6],
+                                   "GDAY"=cols[4], "LPJX"=cols[5],"OCNX"=cols[6],
                                    "SDVM"=cols[7], "Data"=cols[8]))+
         scale_shape_manual(values=c(21,23))+
         guides(fill = guide_legend(override.aes = list(shape=21)))
 
     
     p2 <- ggplot(plotDF2,
-                 aes(x=variable, y=value, group=CO2)) + 
+                 aes(x=variable, y=value, group=Trt)) + 
         geom_errorbar(aes(x=variable, ymin=value-sd, ymax=value+sd), 
                       position = position_dodge(0.6), width=0.2)+
-        geom_point(aes(x=variable, y=value, shape=CO2, fill=Model), 
+        geom_point(aes(x=variable, y=value, shape=Trt, fill=Model), 
                    size=4,position = position_dodge(0.6))+
         xlab("") + ylab(expression("Turnover rates ( " * yr^-1 * " )"))+
         theme_linedraw() +
@@ -173,16 +174,16 @@ combine_all_model_output <- function() {
                            breaks=c(0, 1, 2, 3, 4),
                            labels=c(0, 1, 2, 3, 4))+
         scale_fill_manual(values=c("CABL"=cols[1], "CLM4"=cols[2],"CLMP"=cols[3],
-                                   "GDAY"=cols[3], "LPJX"=cols[5],"OCNX"=cols[6],
+                                   "GDAY"=cols[4], "LPJX"=cols[5],"OCNX"=cols[6],
                                    "SDVM"=cols[7], "Data"=cols[8]))+
         scale_shape_manual(values=c(21,23))
 
 
     p3 <- ggplot(plotDF3,
-                 aes(x=variable, y=value, group=CO2)) + 
+                 aes(x=variable, y=value, group=Trt)) + 
         geom_errorbar(aes(x=variable, ymin=value-sd, ymax=value+sd), 
                       position = position_dodge(0.6), width=0.2)+
-        geom_point(aes(x=variable, y=value, shape=CO2, fill=Model), 
+        geom_point(aes(x=variable, y=value, shape=Trt, fill=Model), 
                    size=4,position = position_dodge(0.6))+
         xlab("") + ylab(expression("Turnover rates ( " * yr^-1 * " )"))+
         theme_linedraw() +
@@ -204,7 +205,7 @@ combine_all_model_output <- function() {
                            breaks=c(0, 0.1, 0.2),
                            labels=c(0, 0.1, 0.2))+
         scale_fill_manual(values=c("CABL"=cols[1], "CLM4"=cols[2],"CLMP"=cols[3],
-                                   "GDAY"=cols[3], "LPJX"=cols[5],"OCNX"=cols[6],
+                                   "GDAY"=cols[4], "LPJX"=cols[5],"OCNX"=cols[6],
                                    "SDVM"=cols[7], "Data"=cols[8]))+
         scale_shape_manual(values=c(21,23))
     

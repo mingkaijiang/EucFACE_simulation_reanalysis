@@ -1,4 +1,5 @@
-traceability_framework_CABLE <- function(CN.couple) {
+traceability_framework_CABLE <- function(NPP,
+                                         CN.couple) {
     
     #### data below is based on Xia et al. 2013 Supplementary Materials
     #### based on Table S5. PFT evergreen broadleaf forest
@@ -42,7 +43,7 @@ traceability_framework_CABLE <- function(CN.couple) {
         tauE <- solve(E2) %*% tauE_t
         
         ### U: NPP input at ambient CO2
-        U <- 608.7
+        U <- NPP
         
         ### ecosystem carbon storage capacity
         Xss <- tauE * U
@@ -93,7 +94,7 @@ traceability_framework_CABLE <- function(CN.couple) {
         tauE <- solve(E2) %*% tauE_t
         
         ### U: NPP input at ambient CO2
-        U <- 608.7
+        U <- NPP
         
         ### ecosystem carbon storage capacity
         Xss <- tauE * U
@@ -104,8 +105,9 @@ traceability_framework_CABLE <- function(CN.couple) {
         
         tot_tau <- round(sum(tauE),2)
         print(paste0("C residence time = ", tot_tau, " yr" ))
+        
     }
     
-    
+    return(cbind(tot_C, tot_tau))
     
 }

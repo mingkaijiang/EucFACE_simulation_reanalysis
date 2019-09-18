@@ -240,13 +240,59 @@ predict_final_output(pChain = pChain.eCO2,
 
 ########################################################################################
 #### D: Make aCO2 and eCO2 comparison summaries
-### step 1:
 ### compute a output table to summarize parameters and their uncertainties
 make_parameter_summary_table()
 
-### step 2: read in Medlyn 2016 modeling results
-combine_all_model_output()
-cablDF <- read_in_cabl()
 
 ########################################################################################
-#### E: 
+#### E: generate model-data comparison on allocation and turnover coefficients
+combine_all_model_output()
+
+
+########################################################################################
+#### F: model-data comparison based on traceability framework
+### step 1: prepare NPP at ambient CO2 as input
+NPP.aCO2 <- obsDF$GPP.mean[4] - obsDF$Ra.mean[4]
+NPP.eCO2 <- eco2DF$GPP.mean[4] - eco2DF$Ra.mean[4]
+
+### step 2: run traceability for CABLE at aCO2 and eCO2 NPP
+traceability_framework_CABLE(NPP=NPP.aCO2,
+                             CN.couple="CN model")
+
+traceability_framework_CABLE(NPP=NPP.eCO2,
+                             CN.couple="CN model")
+
+### step 3: run traceability for EucFACE data, based on treatment mean
+inDF <- prepare_coef_for_traceability_treatment_mean()
+
+traceability_framework_EucFACE_data(NPP=NPP.aCO2,
+                                    coefDF=inDF[1,])
+
+traceability_framework_EucFACE_data(NPP=NPP.eCO2,
+                                    coefDF=inDF[2,])
+
+
+### step 4: run traceability for EucFACE data, based on individual ring
+inDF <- prepare_coef_for_traceability()
+
+## aCO2
+traceability_framework_EucFACE_data(NPP=(obsDF$GPP.mean[1] - obsDF$Ra.mean[1]),
+                                    coefDF=inDF[1,])
+
+traceability_framework_EucFACE_data(NPP=(obsDF$GPP.mean[2] - obsDF$Ra.mean[2]),
+                                    coefDF=inDF[2,])
+
+traceability_framework_EucFACE_data(NPP=(obsDF$GPP.mean[3] - obsDF$Ra.mean[3]),
+                                    coefDF=inDF[3,])
+
+## eCO2 
+traceability_framework_EucFACE_data(NPP=(eco2DF$GPP.mean[1] - eco2DF$Ra.mean[1]),
+                                    coefDF=inDF[4,])
+
+traceability_framework_EucFACE_data(NPP=(eco2DF$GPP.mean[2] - eco2DF$Ra.mean[2]),
+                                    coefDF=inDF[5,])
+
+traceability_framework_EucFACE_data(NPP=(eco2DF$GPP.mean[3] - eco2DF$Ra.mean[3]),
+                                    coefDF=inDF[6,])
+
+
